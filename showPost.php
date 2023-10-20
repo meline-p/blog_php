@@ -1,4 +1,4 @@
-
+<?php session_start(); ?>
 <?php include_once('parts/header.php'); ?>
 <?php include_once('parts/navbar.php'); ?>
 

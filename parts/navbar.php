@@ -1,16 +1,32 @@
-
 <?php
+include_once('php/variables.php');
+include_once('php/functions.php');
 
 $email = "";
-$password = "";
+$surname = "";
+$loggedIn = false;
 
 if(isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) &&
    isset($_POST['password']) && !empty($_POST['password'])) 
 {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-}
+    $loggedIn = false;
+    foreach ($users as $user) {
+        if ($user['email'] === $_POST['email'] && $user['password'] === $_POST['password']) {
+            $loggedUser = [
+                'email' => $user['email'],
+                'surname' => $user['surname'],
+            ];
+            $loggedIn = true; 
+            $_SESSION['LOGGED_USER'] = $user['surname'];
+            break;
+        }
+    }
 
+    if ($loggedIn) {
+        $email = $loggedUser['email'];
+        $surname = $loggedUser['surname'];
+    }
+}
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -30,8 +46,8 @@ if(isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) 
                         <a class="nav-link" href="postsList.php">Posts</a>
                     </li>
                     <li class="nav-item">
-                        <?php if($email != ""): ?>
-                            <p class="nav-link"><?php echo $email ?> <span> / <a id="logout" href="#">Se déconnecter</a></span></p>
+                        <?php if(isset($_SESSION['LOGGED_USER'])): ?>
+                            <p class="nav-link"><?php echo $_SESSION['LOGGED_USER'] ?> <span> <a id="logout" class="btn btn-dark btn-sm" href="logout.php">Se déconnecter</a></span></p>
                         <?php else: ?>
                             <a class="nav-link" href="login.php">S'inscire / Se connecter</a>
                         <?php endif; ?>

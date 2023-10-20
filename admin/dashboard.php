@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <?php include_once('../parts/header.php'); ?>
 
 <div class="col-lg-12 row">

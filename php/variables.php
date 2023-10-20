@@ -30,6 +30,19 @@ $posts = [
     ],
 ];
 
+$users = [
+    [
+        'email' => 'meline.pischedda@gmail.com',
+        'password' => '123456',
+        'surname' => 'meline'
+    ],
+    [
+        'email' => 'test@gmail.com',
+        'password' => '987654321',
+        'surname' => 'test'
+    ],
+];
+
 foreach ($posts as &$post) {
     if (isset($post['content']) && strlen($post['content']) > 140) {
         $post['chapo'] = substr($post['content'], 0, 140) . '...';

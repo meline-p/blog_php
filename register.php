@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <?php include_once('parts/header.php'); ?>
 <?php include_once('parts/navbar.php'); ?>
 
@@ -5,6 +6,10 @@
 
 <h3>S'inscrire</h3>
 <form action="index.php" method="POST">
+<div class="mb-3">
+        <label for="surname" class="form-label">Pseudo</label>
+        <input type="surname" class="form-control" id="surname" name="surname" aria-describedby="surname-help">
+    </div>
     <div class="mb-3">
         <label for="email" class="form-label">Email</label>
         <input type="email" class="form-control" id="email" name="email" aria-describedby="email-help">
