@@ -17,10 +17,10 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title"><?php echo $post['title']; ?></h5>
-                        <h6 class="card-subtitle mb-2 text-body-secondary">publié le <?php echo $post['created_at']; ?></h6>
-                        <p class="card-text"><?php echo $post['chapo']; ?></p>
-                        <a class="btn btn-outline-dark btn-sm" href="showPost.php?id=<?php echo $post['id']; ?>">voir la suite</a>
+                        <h5 class="card-title"><?= $post['title']; ?></h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">publié le <?= $post['created_at']; ?></h6>
+                        <p class="card-text"><?= $post['chapo']; ?></p>
+                        <a class="btn btn-outline-dark btn-sm" href="showPost.php?id=<?= $post['id']; ?>">voir la suite</a>
                     </div>
                 </div>
 
