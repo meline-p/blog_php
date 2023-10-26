@@ -7,9 +7,7 @@
     </div>
 
     <div id="content" class="container col-lg-9">
-        <h1>Posts</h1>
-        <a class="btn btn-primary btn-sm" href="add_post.php"><i class="fa-solid fa-plus"></i> Ajouter un post</a>
-
+        <h1>Utilisateurs</h1>
         <?php
         include_once('../php/functions.php');
         include_once('../sql/pdo.php');
@@ -20,33 +18,29 @@
             <table class="table text-center">
                 <thead>
                     <tr>
-                        <th scope="col">Titre</th>
-                        <th scope="col">Auteur</th>
-                        <th scope="col">Publié</th>
-                        <th scope="col">Date de création</th>
-                        <th scope="col">Date de Modification</th>
+                        <th scope="col">Rôle</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Prénom</th>
+                        <th scope="col">Pseudo</th>
+                        <th scope="col">Email</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($allPosts as $allPost) : ?>
+                    <?php foreach ($users as $user) : ?>
                         <tr>
-                            <td><a target="_blank" href="../showPost.php?id=<?= $allPost['id']; ?>"><?= $allPost['title'] ?></a></td>
-                            <td><?= $allPost['user_id'] ?></td>
-                            <td class='<?= $allPost['is_published'] ? 'text-success' : 'text-danger' ?>'>
-                                <strong><?= $allPost['is_published'] ? 'Oui' : 'Non' ?></strong>
-                            </td>
-                            <td><?= $allPost['created_at'] ?></td>
-                            <td><?= $allPost['updated_at'] ? $allPost['updated_at'] : '-' ?></td>
+                            <td><?= $user['role_id'] ?></td>
+                            <td><?= $user['last_name'] ?></td>
+                            <td><?= $user['first_name'] ?></td>
+                            <td><?= $user['surname'] ?></td>
+                            <td><?= $user['email'] ?></td>
+
                             <td>
-                                <?php if ($allPost['deleted_at']) : ?>
+                                <?php if ($user['deleted_at']) : ?>
                                     <a href="#" class="btn btn-secondary btn-sm">
                                         <i class="fa-solid fa-rotate-left"></i>
                                     </a>
                                 <?php else : ?>
-                                    <a href="#" class="btn btn-primary btn-sm">
-                                        <i class="fa-solid fa-pen"></i>
-                                    </a>
                                     <a href="#" class="btn btn-danger btn-sm">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>
