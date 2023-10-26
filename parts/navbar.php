@@ -47,7 +47,7 @@ if(isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) 
                     </li>
                     <li class="nav-item">
                         <?php if(isset($_SESSION['LOGGED_USER'])): ?>
-                            <p class="nav-link"><?php echo $_SESSION['LOGGED_USER'] ?> <span> <a id="logout" class="btn btn-dark btn-sm" href="logout.php">Se déconnecter</a></span></p>
+                            <p class="nav-link"><?= $_SESSION['LOGGED_USER'] ?> <span> <a id="logout" class="btn btn-dark btn-sm" href="logout.php">Se déconnecter</a></span></p>
                         <?php else: ?>
                             <a class="nav-link" href="login.php">S'inscire / Se connecter</a>
                         <?php endif; ?>

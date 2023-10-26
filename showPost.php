@@ -5,8 +5,8 @@
 <div id="content" class="container">
 
     <?php 
-    include_once('php/variables.php');
     include_once('php/functions.php');
+    include_once('sql/pdo.php');
 
     if (isset($_GET['id'])) {
         $postId = $_GET['id'];
@@ -15,9 +15,9 @@
         if($post) {
     ?>
         <div>
-            <h3><?php echo $post['title']; ?></h3>
-            <p><i>publié le <?php echo $post['created_at']; ?></i></p>
-            <p><?php echo $post['content']; ?></p>
+            <h3><?= $post['title']; ?></h3>
+            <p><i>publié le <?= $post['created_at']; ?></i></p>
+            <p><?= $post['content']; ?></p>
             <a class="btn btn-dark" href="postsList.php">Retour à la liste des posts</a>
         </div>
 

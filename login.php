@@ -4,8 +4,8 @@
 
 <?php
 
-include_once('php/variables.php');
 include_once('php/functions.php');
+include_once('sql/pdo.php');
 
 // Validation du formulaire
 if(isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) &&
@@ -18,7 +18,7 @@ if(isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) 
                 'email' => $user['email'],
                 'surname' => $user['surname'],
             ];
-            $loggedIn = true; 
+            $loggedIn = true;
             $_SESSION['LOGGED_USER'] = $user['surname'];
             break;
         }
@@ -35,7 +35,7 @@ if(isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) 
 
     <?php if(isset($errorMessage)): ?>
         <div class="alert alert-danger">
-            <?php echo $errorMessage ?>
+            <?= $errorMessage ?>
         </div>
     <?php endif; ?>
 
@@ -56,7 +56,7 @@ if(isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) 
 
 <?php else: ?>
     <div class="alert alert-success" role="alert">
-        Bonjour <strong><?php echo $_SESSION['LOGGED_USER']; ?></strong> et bienvenue sur le site !
+        Bonjour <strong><?= $_SESSION['LOGGED_USER']; ?></strong> et bienvenue sur le site !
     </div>
 <?php endif; ?>
 

@@ -7,14 +7,12 @@
     <h1>Affichage des posts</h1>
 
     <?php 
-    include_once('php/variables.php');
     include_once('php/functions.php');
+    include_once('sql/pdo.php');
     ?>
 
-    <?php foreach(getPosts($posts) as $post): ?>
-        <?php if(array_key_exists('is_published', $post) && $post['is_published'] == true): ?>
+    <?php foreach ($posts as $post): ?>
             <div>
-
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title"><?= $post['title']; ?></h5>
@@ -23,9 +21,7 @@
                         <a class="btn btn-outline-dark btn-sm" href="showPost.php?id=<?= $post['id']; ?>">voir la suite</a>
                     </div>
                 </div>
-
             </div>
-        <?php endif; ?>
     <?php endforeach; ?>
 
 </div>

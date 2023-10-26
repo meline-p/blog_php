@@ -3,8 +3,8 @@
 <?php include_once('parts/navbar.php'); ?>
 
 <?php
-include_once('php/variables.php');
 include_once('php/functions.php');
+include_once('sql/pdo.php');
 
 $email = "";
 $surname = "";
