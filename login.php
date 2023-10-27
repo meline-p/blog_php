@@ -17,9 +17,11 @@ if(isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) 
             $loggedUser = [
                 'email' => $user['email'],
                 'surname' => $user['surname'],
+                'id' => $user['id']
             ];
             $loggedIn = true;
             $_SESSION['LOGGED_USER'] = $user['surname'];
+            $_SESSION['USER_ID'] = $user['id'];
             break;
         }
     }

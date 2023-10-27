@@ -11,6 +11,24 @@
         <?php
         include_once('../php/functions.php');
         include_once('../sql/pdo.php');
+
+        $sqlQuery = "SELECT c.*, u.surname AS user_surname, p.title AS post_title
+            FROM comments c
+            INNER JOIN users u ON u.id = c.user_id
+            INNER JOIN posts p ON p.id = c.post_id
+            ORDER BY 
+            CASE
+                WHEN c.deleted_at IS NOT NULL THEN 3
+                WHEN c.is_enabled = 0 THEN 2
+                ELSE 1
+            END,
+            CASE
+                WHEN c.deleted_at IS NOT NULL THEN c.deleted_at
+                ELSE c.created_at
+            END DESC";
+        $commentsStatement = $db->prepare($sqlQuery);
+        $commentsStatement->execute();
+        $allComments = $commentsStatement->fetchAll();
         ?>
 
         <div class="col-lg-12 row">
@@ -32,27 +50,27 @@
                                 <?= $allComment['content'] ?>
                             </td>
                             <td class='<?= $allComment['is_enabled'] === null ? "table-active" : '' ?>'>
-                                <?= $allComment['user_id'] ?></td>
+                                <?= $allComment['user_surname'] ?></td>
                             <td class='<?= $allComment['is_enabled'] === null ? "table-active" : '' ?>'>
-                                <?= $allComment['post_id'] ?>
+                                <a href="../showPost.php?id=<?= $allComment['post_id'] ?>"><?= $allComment['post_title'] ?></a>
                             </td>
                             <td class='<?= $allComment['is_enabled'] === null ? "table-active" : '' ?>'>
                                 <?= $allComment['created_at'] ?>
                             </td>
                             <td class='<?= $allComment['is_enabled'] === null ? "table-active" : '' ?>'>
                                 <?php if ($allComment['is_enabled'] === null) : ?>
-                                    <a href="#" class="btn btn-success btn-sm">
+                                    <a href="comments/valid_comments.php?id=<?= $allComment['id'] ?>" class="btn btn-success btn-sm">
                                         <i class="fa-solid fa-check"></i>
                                     </a>
-                                    <a href="#" class="btn btn-danger btn-sm">
+                                    <a href="comments/delete_comments.php?id=<?= $allComment['id'] ?>" class="btn btn-danger btn-sm">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>
                                 <?php elseif (!$allComment['is_enabled']) : ?>
-                                    <a href="#" class="btn btn-secondary btn-sm">
+                                    <a href="comments/restore_comments.php?id=<?= $allComment['id'] ?>" class="btn btn-secondary btn-sm">
                                         <i class="fa-solid fa-rotate-left"></i>
                                     </a>
                                 <?php else : ?>
-                                    <a href="#" class="btn btn-danger btn-sm">
+                                    <a href="comments/delete_comments.php?id=<?= $allComment['id'] ?>" class="btn btn-danger btn-sm">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>
                                 <?php endif; ?>
