@@ -1,29 +1,28 @@
-<?php session_start(); ?>
-<?php include_once('../../parts/header.php'); ?>
-
 <?php 
+    session_start();
+    include_once('../../parts/header.php'); 
     include_once('../../php/functions.php');
     include_once('../../sql/pdo.php');
 
-if (isset($_GET['id'])) {
+    if (isset($_GET['id'])) {
+        $commentId = $_GET['id'];
+    } else {
+        echo "L'ID n'a pas été transmis dans l'URL.";
+        return;
+    }
+
     $commentId = $_GET['id'];
-} else {
-    echo "L'ID n'a pas été transmis dans l'URL.";
-    return;
-}
 
-$commentId = $_GET['id'];
+    $enableComment = $db->prepare('UPDATE comments 
+    SET is_enabled = :is_enabled
+    WHERE id = :id ');
 
-$enableComment = $db->prepare('UPDATE comments 
-SET is_enabled = :is_enabled
-WHERE id = :id ');
+    $is_enabled = true;
 
-$is_enabled = true;
-
-$enableComment->execute([
-    'id' => $commentId,
-    'is_enabled' => $is_enabled,
-]);
+    $enableComment->execute([
+        'id' => $commentId,
+        'is_enabled' => $is_enabled,
+    ]);
 ?>
 
 <div class="col-lg-12 row">

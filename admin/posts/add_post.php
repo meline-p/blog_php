@@ -1,7 +1,6 @@
-<?php session_start(); ?>
-<?php include_once('../../parts/header.php'); ?>
-
 <?php 
+    session_start();
+    include_once('../../parts/header.php');
     include_once('../../php/functions.php');
     include_once('../../sql/pdo.php');
 ?>

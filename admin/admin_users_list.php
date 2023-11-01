@@ -1,5 +1,17 @@
-<?php session_start(); ?>
-<?php include_once('../parts/header.php'); ?>
+<?php 
+    session_start();
+    include_once('../parts/header.php'); 
+    include_once('../php/functions.php');
+    include_once('../sql/pdo.php');
+
+    $sqlQuery = "SELECT u.*, r.name AS role_name
+            FROM users u
+            LEFT JOIN roles r ON u.role_id = r.id
+            ORDER BY COALESCE(u.deleted_at, u.created_at) ASC";
+    $rolesStatement = $db->prepare($sqlQuery);
+    $rolesStatement->execute();
+    $users = $rolesStatement->fetchAll();
+?>
 
 <div class="col-lg-12 row">
     <div class="col-lg-3">
@@ -8,18 +20,6 @@
 
     <div id="content" class="container col-lg-9">
         <h1>Utilisateurs</h1>
-        <?php
-        include_once('../php/functions.php');
-        include_once('../sql/pdo.php');
-
-        $sqlQuery = "SELECT u.*, r.name AS role_name
-             FROM users u
-             LEFT JOIN roles r ON u.role_id = r.id
-             ORDER BY COALESCE(u.deleted_at, u.created_at) ASC";
-        $rolesStatement = $db->prepare($sqlQuery);
-        $rolesStatement->execute();
-        $users = $rolesStatement->fetchAll();
-        ?>
 
         <div class="col-lg-12 row">
             <div>Filter</div>

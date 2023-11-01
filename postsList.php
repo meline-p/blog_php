@@ -1,12 +1,7 @@
-<?php session_start(); ?>
-<?php include_once('parts/header.php'); ?>
-<?php include_once('parts/navbar.php'); ?>
-
-<div id="content" class="container">
-
-    <h1>Affichage des posts</h1>
-
-    <?php 
+<?php 
+    session_start();
+    include_once('parts/header.php');
+    include_once('parts/navbar.php'); 
     include_once('php/functions.php');
     include_once('sql/pdo.php');
 
@@ -16,7 +11,11 @@
     $postsStatement = $db->prepare($sqlQuery);
     $postsStatement->execute();
     $posts = $postsStatement->fetchAll();
-    ?>
+ ?>
+
+<div id="content" class="container">
+
+    <h1>Affichage des posts</h1>
 
     <div class="card-deck">
         <?php foreach ($posts as $post): ?>

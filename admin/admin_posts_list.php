@@ -1,5 +1,23 @@
-<?php session_start(); ?>
-<?php include_once('../parts/header.php'); ?>
+<?php 
+    session_start();
+    include_once('../parts/header.php');
+    include_once('../php/functions.php');
+    include_once('../sql/pdo.php');
+
+    $sqlQuery = "SELECT p.*, u.surname AS user_surname
+            FROM posts p
+            LEFT JOIN users u ON p.user_id = u.id
+            ORDER BY 
+            CASE
+                WHEN p.deleted_at IS NOT NULL THEN 2
+                WHEN p.updated_at IS NOT NULL THEN 0
+                ELSE 1
+            END, 
+            COALESCE(p.updated_at, p.deleted_at, p.created_at) DESC";
+    $usersStatement = $db->prepare($sqlQuery);
+    $usersStatement->execute();
+    $allPosts = $usersStatement->fetchAll(); 
+?>
 
 <div class="col-lg-12 row">
     <div class="col-lg-3">
@@ -8,26 +26,7 @@
 
     <div id="content" class="container col-lg-9">
         <h1>Posts</h1>
-        <a class="btn btn-primary btn-sm" href="add_post.php"><i class="fa-solid fa-plus"></i> Ajouter un post</a>
-
-        <?php
-        include_once('../php/functions.php');
-        include_once('../sql/pdo.php');
-
-        $sqlQuery = "SELECT p.*, u.surname AS user_surname
-             FROM posts p
-             LEFT JOIN users u ON p.user_id = u.id
-             ORDER BY 
-                CASE
-                    WHEN p.deleted_at IS NOT NULL THEN 2
-                    WHEN p.updated_at IS NOT NULL THEN 0
-                    ELSE 1
-                END, 
-                COALESCE(p.updated_at, p.deleted_at, p.created_at) DESC";
-        $usersStatement = $db->prepare($sqlQuery);
-        $usersStatement->execute();
-        $allPosts = $usersStatement->fetchAll();
-        ?>
+        <a class="btn btn-primary btn-sm" href="posts/add_post.php"><i class="fa-solid fa-plus"></i> Ajouter un post</a>
 
         <div class="col-lg-12 row">
             

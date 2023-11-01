@@ -1,15 +1,7 @@
-<?php session_start(); ?>
-<?php include_once('../parts/header.php'); ?>
-
-<div class="col-lg-12 row">
-    <div class="col-lg-3">
-        <?php include_once('parts/sidebar.php'); ?>
-    </div>
-
-    <div id="content" class="container col-lg-9">
-        <h1>Commentaires</h1>
-        <?php
-        include_once('../php/functions.php');
+<?php 
+    session_start();
+    include_once('../parts/header.php'); 
+    include_once('../php/functions.php');
         include_once('../sql/pdo.php');
 
         $sqlQuery = "SELECT c.*, u.surname AS user_surname, p.title AS post_title
@@ -29,8 +21,16 @@
         $commentsStatement = $db->prepare($sqlQuery);
         $commentsStatement->execute();
         $allComments = $commentsStatement->fetchAll();
-        ?>
+?>
 
+<div class="col-lg-12 row">
+    <div class="col-lg-3">
+        <?php include_once('parts/sidebar.php'); ?>
+    </div>
+
+    <div id="content" class="container col-lg-9">
+        <h1>Commentaires</h1>
+      
         <div class="col-lg-12 row">
             <div>Filter</div>
             <table class="table text-center">

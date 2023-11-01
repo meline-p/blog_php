@@ -1,20 +1,23 @@
-<?php session_start(); ?>
-<?php include_once('parts/header.php'); ?>
-<?php include_once('parts/navbar.php'); ?>
+<?php 
+    session_start(); 
+    include_once('parts/header.php'); 
+    include_once('parts/navbar.php'); 
+?>
 
 <div id="content" class="container">
 
-<?php if(
-     (!isset($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
-     || (!isset($_POST['message']) || empty($_POST['message']))
-    ) 
-{
-    echo ('Il faut un email et un message pour soumettre le formulaire.');
-    return;
-}
+<?php 
+    if(
+        (!isset($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
+        || (!isset($_POST['message']) || empty($_POST['message']))
+        ) 
+    {
+        echo ('Il faut un email et un message pour soumettre le formulaire.');
+        return;
+    }
 
-$email = $_POST['email'];
-$message = $_POST['message']
+    $email = $_POST['email'];
+    $message = $_POST['message']
 ?>
 
     <h1>Message bien reçu !</h1>

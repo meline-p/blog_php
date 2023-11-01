@@ -1,13 +1,27 @@
-<?php session_start(); ?>
-<?php include_once('parts/header.php'); ?>
-<?php include_once('parts/navbar.php'); ?>
+<?php 
+    session_start(); 
+    include_once('parts/header.php');
+    include_once('parts/navbar.php'); 
+    include_once('php/functions.php');
+    include_once('sql/pdo.php');
+
+    $sqlQuery = 'SELECT c.*, u.surname AS user_surname
+        FROM comments c 
+        INNER JOIN posts p ON p.id = c.post_id
+        INNER JOIN users u ON u.id = c.user_id
+        WHERE is_enabled = :is_enabled 
+        AND c.post_id = :post_id';
+    $commentsStatement = $db->prepare($sqlQuery);
+    $commentsStatement->execute([
+        'is_enabled' => true,
+        'post_id' => $post['id']
+    ]);
+    $comments = $commentsStatement->fetchAll(); 
+?>
 
 <div id="content" class="container">
 
     <?php 
-    include_once('php/functions.php');
-    include_once('sql/pdo.php');
-
     if (isset($_GET['id'])) {
         $postId = $_GET['id'];
         $post = getPostById($postId, $posts);
@@ -36,25 +50,11 @@
         echo "ID non défini.";
     }
     ?>
-<br>
-<hr>
+    <br>
+    <hr>
 
     <h4>Commentaires</h4>
     <br>
-    <?php 
-        $sqlQuery = 'SELECT c.*, u.surname AS user_surname
-        FROM comments c 
-        INNER JOIN posts p ON p.id = c.post_id
-        INNER JOIN users u ON u.id = c.user_id
-        WHERE is_enabled = :is_enabled 
-        AND c.post_id = :post_id';
-        $commentsStatement = $db->prepare($sqlQuery);
-        $commentsStatement->execute([
-            'is_enabled' => true,
-            'post_id' => $post['id']
-        ]);
-        $comments = $commentsStatement->fetchAll(); 
-        ?>
 
         <div class="card-deck">
             <?php foreach($comments as $comment): ?>
