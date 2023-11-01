@@ -1,14 +1,7 @@
 <?php 
     session_start();
-    include_once('../../php/functions.php');
-    include_once('../../sql/pdo.php');
-
-    if (isset($_GET['id'])) {
-        $postId = $_GET['id'];
-    } else {
-        echo "L'ID n'a pas été transmis dans l'URL.";
-        return;
-    }
+    require('../../sql/pdo.php');
+    require('../../src/models/post.php');
 
     if (
         !isset($_POST['title']) || empty($_POST['title']) ||
@@ -18,30 +11,25 @@
         return;
     }
 
-    $postId = $_GET['id'];
-    $title = $_POST['title'];
-    $chapo = $_POST['chapo'];
-    $content = $_POST['content'];
-    $user_id = $_POST['author'];
-    $is_published = isset($_POST['is_published']) ? 1 : 0;
+    if (isset($_GET['id'])) {
+        $postId = $_GET['id'];
 
-    $insertPost = $db->prepare('UPDATE posts 
-    SET user_id = :user_id, title = :title, chapo = :chapo, content = :content, is_published = :is_published, updated_at = :updated_at
-    WHERE id = :id ');
+        if (ctype_digit($postId)) {
+            $postId = intval($postId); 
 
-    $currentTime = date('Y-m-d H:i:s');
+            $title = $_POST['title'];
+            $chapo = $_POST['chapo'];
+            $content = $_POST['content'];
+            $user_id = $_POST['author'];
+            $is_published = isset($_POST['is_published']) ? 1 : 0;
+        
+            $post_id = editPost($db, $postId, $user_id, $title, $chapo, $content, $is_published);
+    
+            $updated_at = $currentTime;
+        }
+    }
 
-    $insertPost->execute([
-        'id' => $postId,
-        'user_id' => $user_id,
-        'title' => $title,
-        'chapo' => $chapo,
-        'content' => $content,
-        'is_published' => $is_published,
-        'updated_at' => $currentTime
-    ]);
-    $updated_at = $currentTime;
-
+  
     require('../../templates/admin/posts/post_edit_page.php');
 ?>
         

@@ -7,7 +7,7 @@
 
 <?php if(!isset($_SESSION['LOGGED_USER'])): ?>
 
-    <?php if(isset($errorMessage)): ?>
+    <?php if($errorMessage !== ''): ?>
         <div class="alert alert-danger">
             <?= $errorMessage ?>
         </div>

@@ -1,8 +1,8 @@
 <?php
     session_start(); 
-    include_once('php/functions.php');
-    include_once('sql/pdo.php');
-    include_once('parts/navbar.php');
+
+    require('sql/pdo.php');
+    require('src/models/user.php');
 
     if (
         !isset($_POST['surname']) || empty($_POST['surname']) ||
@@ -13,6 +13,7 @@
     ) {
         echo "Veuillez remplir tous les champs.";
         return;
+
     } elseif (isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
         $email = $_POST['email'];
         $surname = $_POST['surname'];
@@ -23,17 +24,7 @@
         $currentTime = date('Y-m-d H:i:s');
         $created_at = $currentTime;
 
-        $insertUser = $db->prepare('INSERT INTO users(role_id, last_name, first_name, surname, email, password, created_at)
-        VALUES (:role_id, :last_name, :first_name, :surname, :email, :password, :created_at)');
-        $insertUser->execute([
-            'role_id' => $role_id,
-            'last_name' => $last_name,
-            'first_name' => $first_name,
-            'surname' => $surname,
-            'email' => $email,
-            'password' => $password,
-            'created_at' =>$created_at
-        ]);
+        $userId = addUser($db, $role_id, $last_name, $first_name, $surname, $email, $password);
 
         $loggedIn = true;
         $_SESSION['LOGGED_USER'] = $surname;

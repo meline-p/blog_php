@@ -1,26 +1,26 @@
 <?php 
     session_start();
-    include_once('../../php/functions.php');
-    include_once('../../sql/pdo.php');
+
+    require('../../sql/pdo.php');
+    require('src/models/user.php');
 
     if (isset($_GET['id'])) {
         $userId = $_GET['id'];
 
         if (ctype_digit($userId)) {
             $userId = intval($userId); 
-    
-            $query = $db->prepare('SELECT * FROM users WHERE id = :userId');
-            $query->execute(['userId' => $userId]);
-    
-            if ($query->rowCount() > 0) {
-                $user = $query->fetch();
+
+            $user = getUserById($db, $userId, $users);
+
+            if ($user) {
+                require('../../templates/admin/users/delete_users_page.php');
             } else {
                 echo "L'utilisateur avec l'ID $userId n'a pas été trouvé.";
             }
         } else {
             echo "ID non valide.";
         }
+    } else {
+        echo "L'ID n'a pas été transmis dans l'URL.";
     }
-
-    require('../../templates/admin/users/delete_users_page.php');
 ?>

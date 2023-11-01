@@ -1,15 +1,18 @@
 <?php 
-    session_start(); 
-    include_once('php/functions.php');
-    include_once('sql/pdo.php');
-    include_once('parts/navbar.php');
 
-    $sqlQuery = "SELECT * FROM posts
-    WHERE is_published = 1 
-    ORDER BY created_at DESC";
-    $postsStatement = $db->prepare($sqlQuery);
-    $postsStatement->execute();
-    $posts = $postsStatement->fetchAll();
+    session_start(); 
+
+    require('sql/pdo.php');
+    require('src/models/post.php');
+
+    $db = new PDO(
+        'mysql:host=localhost;dbname=blog_php;charset=utf8', 
+        'root', 
+        'root',
+        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+    );
+
+    $posts = getPublishedPosts($db);
 
     require('templates/posts_list_page.php');
 ?>

@@ -1,29 +1,20 @@
 <?php 
-    session_start();  
-    include_once('php/functions.php');
-    include_once('sql/pdo.php');
-    include_once('parts/navbar.php');
+
+    session_start(); 
+
+    require('sql/pdo.php');
+    require('src/models/post.php');
+    require('src/models/comment.php');
+
+    $posts = getPublishedPosts($db);
 
     if (isset($_GET['id'])) {
         $postId = $_GET['id'];
-        $post = getPostById($postId, $posts);
+        $post = getPostById($db, $postId, $posts);
+        $comments = getValidComments($db, $postId);
+        require('templates/show_post_page.php');
     } else {
         echo "ID non défini.";
     }
-
-    $sqlQuery = 'SELECT c.*, u.surname AS user_surname
-        FROM comments c 
-        INNER JOIN posts p ON p.id = c.post_id
-        INNER JOIN users u ON u.id = c.user_id
-        WHERE is_enabled = :is_enabled 
-        AND c.post_id = :post_id';
-    $commentsStatement = $db->prepare($sqlQuery);
-    $commentsStatement->execute([
-        'is_enabled' => true,
-        'post_id' => $post['id']
-    ]);
-    $comments = $commentsStatement->fetchAll(); 
-
-    require('templates/show_post_page.php');
 ?>
 

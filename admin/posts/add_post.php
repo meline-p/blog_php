@@ -1,7 +1,7 @@
 <?php 
     session_start();
-    include_once('../../php/functions.php');
-    include_once('../../sql/pdo.php');
+    require('../../sql/pdo.php');
+    require('../../src/models/post.php');
 
     require('../../templates/admin/posts/add_post_page.php');
 ?>

@@ -1,7 +1,7 @@
 <?php 
     session_start(); 
-    include_once('../../php/functions.php');
-    include_once('../../sql/pdo.php');
+    require('../../sql/pdo.php');
+    require('../../src/models/post.php');
 
     if (
         !isset($_POST['title']) || empty($_POST['title']) ||
@@ -17,16 +17,7 @@
     $user_id = $_POST['author'];
     $is_published = isset($_POST['is_published']) ? 1 : 0;
 
-    $insertPost = $db->prepare('INSERT INTO posts(user_id, title, chapo, content, is_published) 
-        VALUES (:user_id, :title, :chapo, :content, :is_published)');
-
-    $insertPost->execute([
-        'user_id' => $user_id,
-        'title' => $title,
-        'chapo' => $chapo,
-        'content' => $content,
-        'is_published' => $is_published
-    ]);
+    $post_id = addPost($db, $user_id, $title, $chapo, $content, $is_published);
 
     require('../../templates/admin/posts/post_add_page.php');
 ?>

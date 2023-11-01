@@ -1,8 +1,9 @@
 <?php 
     session_start(); 
-    include_once('../sql/pdo.php');
-    include_once('../php/variables.php');
-    include_once('../php/functions.php');
+    require('../sql/pdo.php');
+    // require('../src/models/comment.php');
+    // require('../src/models/user.php');
+    // require('../src/models/post.php');
 
     $email = "";
     $surname = "";

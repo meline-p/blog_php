@@ -1,7 +1,7 @@
 <?php 
     session_start();
-    include_once('../../php/functions.php');
-    include_once('../../sql/pdo.php');
+    include('../../sql/pdo.php');
+    require('../../src/models/post.php');
 
     if (isset($_GET['id'])) {
         $postId = $_GET['id'];
@@ -9,18 +9,20 @@
         if (ctype_digit($postId)) {
             $postId = intval($postId); 
     
-            $query = $db->prepare('SELECT * FROM posts WHERE id = :postId');
-            $query->execute(['postId' => $postId]);
+            $posts = getAllPosts($db);
+            $post = getPostById($db, $postId, $posts);
     
-            if ($query->rowCount() > 0) {
-                $allPost = $query->fetch();
+            if ($post) {
+                require('../../templates/admin/posts/restore_post_page.php');
             } else {
                 echo "Le post avec l'ID $postId n'a pas été trouvé.";
             }
         } else {
             echo "ID non valide.";
         }
-    }
 
-    require('../../templates/admin/posts/restore_post_page.php');
+    }  else {
+        echo "L'ID n'a pas été transmis dans l'URL.";
+    }
+   
 ?>

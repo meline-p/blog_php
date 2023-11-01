@@ -1,38 +1,34 @@
 <?php 
+
     session_start(); 
-    include_once('php/functions.php');
-    include_once('sql/pdo.php');
-    include_once('parts/navbar.php');
 
-    $sqlQuery = 'SELECT * FROM users u
-        ORDER BY COALESCE(deleted_at, created_at) DESC';
-    $usersStatement = $db->prepare($sqlQuery);
-    $usersStatement->execute();
-    $users = $usersStatement->fetchAll();
+    require('sql/pdo.php');
+    require('src/models/user.php');
 
-    // Validation du formulaire
+    $email = "";
+    $surname = "";
+    $loggedIn = false;
+    $errorMessage = "";
+
     if(isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) &&
     isset($_POST['password']) && !empty($_POST['password'])) 
     {
-        $loggedIn = false;
-        foreach ($users as $user) {
-            if ($user['email'] === $_POST['email'] && $user['password'] === $_POST['password']) {
-                $loggedUser = [
-                    'email' => $user['email'],
-                    'surname' => $user['surname'],
-                ];
-                if (isset($user['id'])) {
-                    $loggedUser['id'] = $user['id'];
-                    $_SESSION['USER_ID'] = $user['id'];
-                }
-                $loggedIn = true;
-                $_SESSION['LOGGED_USER'] = $user['surname'];
-                break;
-            }
-        }
-        if (!$loggedIn) {
+        $email= $_POST['email'];
+        $password = $_POST['password'];
+
+        $loggedIn = login($db, $email, $password);
+
+        if ($loggedIn) {
+            $userId = $_SESSION['USER_ID'];
+            $user = getUserById($db, $userId, $users);
+
+            if($user){
+                $surname = $user['surname'];
+                $_SESSION['LOGGED_USER'] = $surname;
+            } else {
             $errorMessage = 'Les informations envoyées ne permettent pas de vous identifier.';
-        }
+            }
+        } 
     }
 
     require('templates/login_page.php');
