@@ -1,9 +1,8 @@
 <?php
     session_start(); 
-    include_once('parts/header.php');
-    include_once('parts/navbar.php'); 
     include_once('php/functions.php');
     include_once('sql/pdo.php');
+    include_once('parts/navbar.php');
 
     if (
         !isset($_POST['surname']) || empty($_POST['surname']) ||
@@ -40,7 +39,7 @@
         $_SESSION['LOGGED_USER'] = $surname;
         $_SESSION['USER_ID'] = $db->lastInsertId();
     }
+
+    require('templates/post_add_users_page.php');
 ?>
-    <div id="content" class="container col-lg-9">
-        <h1>Bienvenue, <?= $_SESSION['LOGGED_USER'] ?></h1>
-    </div>
+ 

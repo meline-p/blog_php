@@ -1,0 +1,57 @@
+<?php     
+    include_once('templates/parts/header_page.php');
+    include_once('templates/parts/navbar_page.php'); 
+?>
+
+<div id="content" class="container">
+
+    <?php 
+        if($post) {
+    ?>
+        <div>
+            <h3><?= $post['title']; ?></h3>
+            <p><i>
+                <?php if($post['updated_at'] === null):?>
+                    publié le <?= date_format(date_create($post['created_at']), "d/m/Y à H:i");?>
+                <?php else:?>
+                    mis à jour le <?= date_format(date_create($post['updated_at']), "d/m/Y à H:i");?>
+                <?php endif; ?> 
+            </i></p>
+            <p><?= $post['content']; ?></p>
+            <a class="btn btn-dark" href="postsList.php">Retour à la liste des posts</a>
+        </div>
+
+    <?php
+        } else { 
+            echo "Aucun post trouvé pour cet ID.";
+        }
+    ?>
+    <br>
+    <hr>
+
+    <h4>Commentaires</h4>
+    <br>
+
+        <div class="card-deck">
+            <?php foreach($comments as $comment): ?>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2"><?= $comment['user_surname']; ?></h6>
+                        <h6 class="card-subtitle mb-2 text-muted" style="font-weight:normal;"><i>
+                            publié le <?= date_format(date_create($comment['created_at']), "d/m/Y à H:i"); ?>
+                        </i></h6>
+                        <p class="card-text"><?= $comment['content']; ?></p>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <hr>
+        <div>
+            <?php include_once('components/comments_form_page.php'); ?>
+        </div>
+</div>
+
+<?php 
+    include_once('parts/footer.php');
+    include_once('templates/parts/footer_page.php'); 
+?>

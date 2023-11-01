@@ -1,7 +1,3 @@
-<?php 
-    include_once('sql/pdo.php');
-?>
-
 <h5>Laisser un commentaire</h5>
 <?php if(isset($_SESSION['LOGGED_USER'])): ?>
 <form action="parts/post_add_comments.php?id=<?= $post['id'] ?>" method="POST">

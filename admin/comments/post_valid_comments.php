@@ -1,6 +1,5 @@
 <?php 
     session_start();
-    include_once('../../parts/header.php'); 
     include_once('../../php/functions.php');
     include_once('../../sql/pdo.php');
 
@@ -23,18 +22,6 @@
         'id' => $commentId,
         'is_enabled' => $is_enabled,
     ]);
+
+    require('../../templates/admin/comments/post_valid_comments_page.php');
 ?>
-
-<div class="col-lg-12 row">
-    <div class="col-lg-3">
-        <?php include_once('../parts/sidebar.php'); ?>
-    </div>
-
-    <div id="content" class="container col-lg-9">
-        <h1>Commentaire validé</h1>
-        <br>
-        <a class="btn btn-secondary btn-sm" href="../admin_comments_list.php">Revenir aux commentaires</a>
-
-    </div>
-</div>
-        

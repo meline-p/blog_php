@@ -1,5 +1,5 @@
 <!-- footer.php -->
-<?php 
+<?php  
     include_once('sql/pdo.php');
 
     $email = "";
@@ -15,9 +15,10 @@
                 $loggedUser = [
                     'email' => $user['email'],
                     'surname' => $user['surname'],
+                    'role_id' => $user['role_id'],
                 ];
                 $loggedIn = true; 
-                if($user['role_id'] === 1) {
+                if(isset($user['role_id']) && $user['role_id'] === 1) {
                     $_SESSION['LOGGED_ADMIN'] = $user['surname'];  
                 } else {
                     $_SESSION['LOGGED_USER'] = $user['surname'];
@@ -32,18 +33,7 @@
             $surname = $loggedUser['surname'];
         }
     }
+
+    require('templates/parts/footer_page.php');
 ?>
 
-<footer class="bg-light text-center text-lg-start mt-auto">
-  <div class="text-center p-3">
-
-  <?php if(isset($_SESSION['LOGGED_ADMIN'])): ?>
-    <a href="admin/dashboard.php">Administration</a>
-  <?php endif ?>
-
-  <p class="text-dark">©<?= date("Y") ?> Copyright: Méline Pischedda</p>
-  </div>
-</footer>
-
-</body>
-</html>

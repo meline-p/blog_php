@@ -1,9 +1,8 @@
 <?php 
     session_start(); 
-    include_once('parts/header.php');
-    include_once('parts/navbar.php');
     include_once('php/functions.php');
     include_once('sql/pdo.php');
+    include_once('parts/navbar.php');
 
     $email = "";
     $surname = "";
@@ -33,17 +32,6 @@
             $id = $loggedUser['id'];
         }
     }
+
+    require('templates/homepage.php');
 ?>
-
-<div id="content" class="container">
-    <h1>Bienvenue, <?php if(isset($_SESSION['LOGGED_USER'])) echo $_SESSION['LOGGED_USER']; ?></h1>
-
-    <h3>Méline Pischedda</h3>
-    <img>
-    <p>Je suis une phrase d'accroche</p>
-
-    <?php include_once('parts/contact.php') ?>
-
-</div>
-
-<?php include_once('parts/footer.php') ?>
