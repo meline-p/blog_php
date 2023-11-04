@@ -45,5 +45,5 @@
 
   
     require('../../templates/admin/posts/post_edit_page.php');
-?>
+
         

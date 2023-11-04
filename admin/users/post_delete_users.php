@@ -15,7 +15,7 @@
     }
 
     require('../../templates/admin/users/post_delete_users.php');
-?>
+
 
 
         

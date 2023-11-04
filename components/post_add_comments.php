@@ -13,7 +13,7 @@
             $postId = intval($postId);
             $userId = $_SESSION['USER_ID']; 
 
-            $content = $_POST['comment'];
+            $content =  nl2br(htmlspecialchars($_POST['comment']));
             $created_at = date('Y-m-d H:i:s');
             $insertComment = $db->prepare('INSERT INTO comments(user_id, post_id, content, created_at) 
                 VALUES (:user_id, :post_id, :content, :created_at)');
@@ -32,4 +32,4 @@
     } else {
         echo "Veuillez remplir le champ commentaire.";
     }
-?>
+

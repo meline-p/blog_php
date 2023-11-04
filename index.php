@@ -22,4 +22,4 @@
     }
 
     require('templates/homepage.php');
-?>
+

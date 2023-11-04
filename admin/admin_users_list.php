@@ -12,4 +12,4 @@
     $users = $rolesStatement->fetchAll();
 
     require('../templates/admin/admin_users_list_page.php');
-?>
+

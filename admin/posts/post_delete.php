@@ -14,4 +14,4 @@
     }
 
     require('../../templates/admin/posts/post_delete_page.php');
-?>
+

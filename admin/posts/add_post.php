@@ -7,4 +7,3 @@
     $admins = getAdmins($db);
 
     require('../../templates/admin/posts/add_post_page.php');
-?>

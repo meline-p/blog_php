@@ -28,4 +28,3 @@
         echo "L'ID n'a pas été transmis dans l'URL.";
     }
     
-?>

@@ -40,4 +40,3 @@
     }
 
     require('../../templates/admin/comments/valid_comments_page.php');
-?>

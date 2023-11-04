@@ -12,7 +12,7 @@
            
                 <div class="card mb-3">
                     <div class="card-body">
-                        <h5 class="card-title"><?= $post['title']; ?></h5>
+                        <h5 class="card-title"><?= htmlspecialchars($post['title']); ?></h5>
                         <h6 class="card-subtitle mb-2 text-muted" style="font-weight:normal;"><i>
                             <?php if($post['updated_at'] === null):?>
                                publié le <?= date_format(date_create($post['created_at']), "d/m/Y à H:i");?>
@@ -20,8 +20,8 @@
                                 mis à jour le <?= date_format(date_create($post['updated_at']), "d/m/Y à H:i");?>
                             <?php endif; ?>  
                         </i></h6>
-                        <p class="card-text"><i><?= $post['chapo']; ?></i></p>
-                        <p class="card-text"><?= (strlen($post['content']) > 300) ? substr($post['content'], 0, 300) . '...' : $post['content']; ?></p>
+                        <p class="card-text"><i><?= htmlspecialchars($post['chapo']); ?></i></p>
+                        <p class="card-text"><?= (strlen($post['content']) > 300) ?  htmlspecialchars(substr($post['content'], 0, 300)) . '...' :  htmlspecialchars($post['content']); ?></p>
                         <a class="btn btn-outline-dark btn-sm" href="showPost.php?id=<?= $post['id']; ?>">voir la suite</a>
                     </div>
                 </div>

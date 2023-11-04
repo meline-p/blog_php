@@ -28,7 +28,7 @@
                     <label for="user_id">Auteur</label>
                     <select id="user_id" name="user_id" class="form-control">
                         <?php foreach($admins as $admin): ?>
-                            <option value="<?= $admin['id'] ?>" <?php echo ($admin['id'] === $post['user_id']) ? 'selected' : ''; ?>><?= $admin['first_name'].' '.$admin['last_name'] ?></option>
+                            <option value="<?= $admin['id'] ?>" <?= ($admin['id'] === $post['user_id']) ? 'selected' : ''; ?>><?= $admin['first_name'].' '.$admin['last_name'] ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>

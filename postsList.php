@@ -15,5 +15,5 @@
     $posts = getPublishedPosts($db);
 
     require('templates/posts_list_page.php');
-?>
+
 

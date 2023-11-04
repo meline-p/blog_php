@@ -39,5 +39,3 @@
     }
 
     require('templates/login_page.php');
-?>
-

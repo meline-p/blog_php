@@ -15,8 +15,8 @@
         return;
     }
 
-    $email = $_POST['email'];
-    $message = $_POST['message']
+    $email = htmlspecialchars($_POST['email']);
+    $message =  nl2br(htmlspecialchars($_POST['message']));
 ?>
 
     <h1>Message bien reçu !</h1>

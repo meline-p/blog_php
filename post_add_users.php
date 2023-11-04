@@ -32,5 +32,5 @@
     }
 
     require('templates/post_add_users_page.php');
-?>
+
  

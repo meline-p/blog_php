@@ -16,5 +16,5 @@
     } else {
         echo "ID non défini.";
     }
-?>
+
 
