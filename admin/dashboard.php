@@ -1,9 +1,13 @@
 <?php 
     session_start(); 
     require('../sql/pdo.php');
-    // require('../src/models/comment.php');
-    // require('../src/models/user.php');
-    // require('../src/models/post.php');
+    require('../src/models/comment.php');
+    require('../src/models/user.php');
+    require('../src/models/post.php');
+
+    $posts = getAllPosts($db);
+    $comments = getAllComments($db);
+    $users = getUsers($db);
 
     $email = "";
     $surname = "";

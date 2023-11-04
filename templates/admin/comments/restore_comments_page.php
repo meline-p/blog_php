@@ -15,8 +15,8 @@
                 <div class="card-body">
                     <h5 class="card-title">Commentaire</h5>
                     <p class="card-text"><b>Contenu</b> : <?= $allComment['content'] ?></p>
-                    <p class="card-text"><b>Auteur du commentaire</b> : <?= $allComment['user_id'] ?></p>
-                    <p class="card-text"><b>Post</b> : <?= $allComment['post_id'] ?></p>
+                    <p class="card-text"><b>Auteur du commentaire</b> : <?= $user_surname ?></p>
+                    <p class="card-text"><b>Titre du Post</b> : <?= $post_title?></p>
                 </div>
             </div>
         </div>

@@ -24,7 +24,11 @@
                     <?php foreach ($allComments as $allComment) : ?>
                         <tr>
                             <td class='<?= $allComment['is_enabled'] === null ? "table-active" : '' ?>'>
-                                <?= $allComment['content'] ?>
+                                <?php if(strlen($allComment['content']) > 30 ): ?>
+                                   <?= $allComment['content'] = substr($allComment['content'], 0, 30) . '...'; ?>
+                                <?php else: ?>
+                                    <?= $allComment['content'] ?>
+                                <?php  endif;?>
                             </td>
                             <td class='<?= $allComment['is_enabled'] === null ? "table-active" : '' ?>'>
                                 <?= $allComment['user_surname'] ?></td>

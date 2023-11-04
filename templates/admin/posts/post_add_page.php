@@ -11,7 +11,7 @@
                     <h5 class="card-title"><?= $title ?></h5>
                     <p class="card-text"><b>Chapo</b> : <?= $chapo ?></p>
                     <p class="card-text"><b>Contenu</b> : <?= strip_tags($content); ?></p>
-                    <p class="card-text"><b>Auteur</b> : <?= $user_id ?></p>
+                    <p class="card-text"><b>Auteur</b> : <?= $user_surname ?></p>
                     <p class="card-text"><b>Publié</b> : <?= $is_published === 1 ? 'Oui' : 'Non' ?></p>
                 </div>
             </div>

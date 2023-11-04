@@ -1,7 +1,5 @@
 <?php
 
-require('sql/pdo.php');
-
 function getUsers($db){
     $sqlQuery = 'SELECT * FROM users u
         ORDER BY COALESCE(deleted_at, created_at) DESC';
@@ -11,6 +9,20 @@ function getUsers($db){
 
     return $users;
 }
+
+function getAdmins($db) {
+    $sqlQuery = 'SELECT id, first_name, last_name, surname 
+        FROM users 
+        WHERE role_id = :role_id';
+    $adminStatement = $db->prepare($sqlQuery);
+    $adminStatement->execute([
+        'role_id' => 1
+    ]);
+    $admins = $adminStatement->fetchAll();
+
+    return $admins;
+}
+
 
 function getUserById($db, $userId, $users) {
 

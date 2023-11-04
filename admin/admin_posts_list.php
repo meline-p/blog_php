@@ -13,9 +13,9 @@
                 ELSE 1
             END, 
             COALESCE(p.updated_at, p.deleted_at, p.created_at) DESC";
-    $usersStatement = $db->prepare($sqlQuery);
-    $usersStatement->execute();
-    $allPosts = $usersStatement->fetchAll(); 
+    $statement = $db->prepare($sqlQuery);
+    $statement->execute();
+    $allPosts = $statement->fetchAll(); 
 
     require('../templates/admin/admin_posts_list_page.php');
 ?>

@@ -14,7 +14,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Utilisateur :</h5>
-                    <p class="card-text"><b>Rôle</b> : <?= $user['role_id'] ?></p>
+                    <p class="card-text"><b>Rôle</b> : <?= $userRoleName ?></p>
                     <p class="card-text"><b>pseudo</b> : <?= $user['surname'] ?></p>
                     <p class="card-text"><b>Nom</b> : <?= $user['last_name'] ?></p>
                     <p class="card-text"><b>Prénom</b> : <?= $user['first_name'] ?></p>

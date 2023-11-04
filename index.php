@@ -4,6 +4,8 @@
     require('sql/pdo.php');
     require('src/models/user.php');
 
+    $users = getUsers($db);
+
     $surname = "";
     $loggedIn = false;
 

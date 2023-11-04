@@ -1,7 +1,7 @@
 <footer class="bg-light text-center text-lg-start mt-auto">
   <div class="text-center p-3">
 
-  <?php if(isset($_SESSION['LOGGED_ADMIN'])): ?>
+  <?php if (isset($_SESSION['IS_ADMIN']) && $_SESSION['IS_ADMIN']) : ?>
     <a href="admin/dashboard.php">Administration</a>
   <?php endif ?>
 

@@ -5,6 +5,8 @@
     require('sql/pdo.php');
     require('src/models/user.php');
 
+    $users = getUsers($db);
+
     $email = "";
     $surname = "";
     $loggedIn = false;
@@ -25,6 +27,11 @@
             if($user){
                 $surname = $user['surname'];
                 $_SESSION['LOGGED_USER'] = $surname;
+
+                // Vérifie si l'utilisateur est un administrateur
+                if (isset($user['role_id']) && $user['role_id'] === 1) {
+                    $_SESSION['IS_ADMIN'] = true;
+                }
             } else {
             $errorMessage = 'Les informations envoyées ne permettent pas de vous identifier.';
             }

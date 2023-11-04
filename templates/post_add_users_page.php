@@ -9,6 +9,5 @@
 
 
 <?php 
-    include_once('parts/footer.php');
     include_once('templates/parts/footer_page.php'); 
 ?>

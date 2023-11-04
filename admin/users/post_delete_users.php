@@ -2,7 +2,7 @@
     session_start();
 
     require('../../sql/pdo.php');
-    require('src/models/user.php');
+    require('../../src/models/user.php');
 
     if (isset($_GET['id'])) {
         $userId = $_GET['id'];

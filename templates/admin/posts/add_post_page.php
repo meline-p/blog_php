@@ -25,10 +25,12 @@
             <div class="col-lg-4">
 
                 <div class="form-group">
-                    <label for="author">Auteur</label>
-                    <select id="author" name="author" class="form-control">
-                        <?php foreach($admins as $admin): ?>
-                            <option value="<?= $admin['id'] ?>"><?= $admin['first_name'].' '.$admin['last_name'] ?></option>
+                    <label for="user_id">Auteur :</label>
+                    <select name="user_id" id="user_id">
+                        <?php foreach ($admins as $admin): ?>
+                            <option value="<?php echo $admin['id']; ?>"<?php echo ($_SESSION['LOGGED_USER'] === $admin['surname']) ? ' selected' : ''; ?>>
+                                <?php echo $admin['first_name'] . ' ' . $admin['last_name']; ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
