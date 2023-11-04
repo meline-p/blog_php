@@ -1,7 +1,6 @@
-<?php     
-    include_once('templates/parts/header_page.php');
-    include_once('templates/parts/navbar_page.php'); 
-?>
+<?php $title = "Bienvenue !" ?>
+
+<?php ob_start(); ?>
 
 <div id="content" class="container">
     <h1>Bienvenue, <?php if(isset($_SESSION['LOGGED_USER'])) echo $_SESSION['LOGGED_USER']; ?></h1>
@@ -13,6 +12,6 @@
     <?php include_once('templates/components/contact_form_page.php') ?>
 
 </div>
-<?php 
-    include_once('templates/parts/footer_page.php'); 
-?>
+<?php $content = ob_get_clean(); ?>
+
+<?php require('parts/layout.php') ?>

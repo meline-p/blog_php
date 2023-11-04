@@ -1,7 +1,6 @@
-<?php     
-    include_once('templates/parts/header_page.php');
-    include_once('templates/parts/navbar_page.php'); 
-?>
+<?php $title = "Votre message a bien été envoyé" ?>
+
+<?php ob_start(); ?>
 
 <div id="content" class="container">
 
@@ -30,6 +29,7 @@
     </div>
 
 </div>
-<?php 
-    include_once('templates/parts/footer_page.php'); 
-?>
+
+<?php $content = ob_get_clean(); ?>
+
+<?php require('parts/layout.php') ?>

@@ -1,11 +1,11 @@
-<?php include_once('../../templates/parts/header_page.php'); ?>
+<?php $title = "Admin - Utilisateur désactivé" ?>
 
-<div class="col-lg-12 row">
+<?php ob_start(); ?>
 
-    <div id="content" class="container col-lg-9">
-        <h1>Utilisateur désactivé</h1>
-        <br>
-        <a class="btn btn-secondary btn-sm" href="../admin_users_list.php">Revenir aux utilisateurs</a>
+<h1>Utilisateur désactivé</h1>
+<br>
+<a class="btn btn-secondary btn-sm" href="../admin_users_list.php">Revenir aux utilisateurs</a>
 
-    </div>
-</div>
+<?php $content = ob_get_clean(); ?>
+
+<?php require('../../templates/admin/parts/admin_layout.php') ?>

@@ -1,7 +1,6 @@
-<?php     
-    include_once('templates/parts/header_page.php');
-    include_once('templates/parts/navbar_page.php'); 
-?>
+<?php $title = htmlspecialchars($post['title']); ?>
+
+<?php ob_start(); ?>
 
 <div id="content" class="container">
 
@@ -9,7 +8,7 @@
         if($post) {
     ?>
         <div>
-            <h3><?=  htmlspecialchars($post['title']); ?></h3>
+            <h3><?= htmlspecialchars($post['title']); ?></h3>
             <p><i>
                 <?php if($post['updated_at'] === null):?>
                     publié le <?= date_format(date_create($post['created_at']), "d/m/Y à H:i");?>
@@ -51,6 +50,6 @@
         </div>
 </div>
 
-<?php 
-    include_once('templates/parts/footer_page.php'); 
-?>
+<?php $content = ob_get_clean(); ?>
+
+<?php require('parts/layout.php') ?>
