@@ -21,7 +21,7 @@
                         </i></h6>
                         <p class="card-text"><i><?= htmlspecialchars($post['chapo']); ?></i></p>
                         <p class="card-text"><?= (strlen($post['content']) > 300) ?  htmlspecialchars(substr($post['content'], 0, 300)) . '...' :  htmlspecialchars($post['content']); ?></p>
-                        <a class="btn btn-outline-dark btn-sm" href="showPost.php?id=<?= $post['id']; ?>">voir la suite</a>
+                        <a class="btn btn-outline-dark btn-sm" href="index.php?action=post&id=<?= $post['id']; ?>">voir la suite</a>
                     </div>
                 </div>
          

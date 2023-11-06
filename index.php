@@ -2,22 +2,31 @@
     session_start(); 
 
     require('sql/pdo.php');
-    require('src/models/user.php');
+    require_once('src/controllers/homepage.php');
+    require_once('src/controllers/post.php');
+    require_once('src/models/user.php');
 
-    $surname = "";
-    $loggedIn = false;
+    $routes = array(
+        '/' => "src/controllers/homepage.php",
+        '/se-connecter'=> ''
+    );
 
-    if (isset($_SESSION['USER_ID'])) {
-        $userId = $_SESSION['USER_ID'];
-        $user = getUserById($db, $userId, $users);
-        if ($user) {
-            $surname = $user['surname'];
-            $_SESSION['LOGGED_USER'] = $surname;
-            $loggedIn = true;
+    if (isset($_GET['action']) && $_GET['action'] !== '') {
+        if ($_GET['action'] === 'post') {
+            if (isset($_GET['id']) && $_GET['id'] > 0) {
+                $id = $_GET['id'];
+
+                post($db, $id);
+            } else {
+                echo 'Erreur : aucun post à afficher';
+    
+                die;
+            }
         } else {
-            $errorMessage = 'Les informations envoyées ne permettent pas de vous identifier.';
+            echo "Erreur 404 : la page que vous recherchez n'existe pas.";
         }
+    } else {
+        $users = getUsers($db);
+        homepage($db, $users);
     }
 
-    require('templates/homepage.php');
-?>
