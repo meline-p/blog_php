@@ -3,6 +3,7 @@
 namespace Repository;
 
 use DatabaseConnection;
+use Entity\User;
 
 class UserRepository
 {
@@ -55,18 +56,18 @@ class UserRepository
         return false;
     }
 
-    public function addUser($role_id, $last_name, $first_name, $surname, $email, $password)
+    public function addUser(User $user)
     {
         $currentTime = date('Y-m-d H:i:s');
         $insertUser = $this->connection->getConnection()->prepare('INSERT INTO users(role_id, last_name, first_name, surname, email, password, created_at)
             VALUES (:role_id, :last_name, :first_name, :surname, :email, :password, :created_at)');
         $insertUser->execute([
-            'role_id' => $role_id,
-            'last_name' => $last_name,
-            'first_name' => $first_name,
-            'surname' => $surname,
-            'email' => $email,
-            'password' => $password,
+            'role_id' => $user->getRoleId(),
+            'last_name' => $user->getLastName(),
+            'first_name' => $user->getFirstName(),
+            'surname' => $user->getSurname(),
+            'email' => $user->getEmail(),
+            'password' => $user->getPassword(),
             'created_at' => $currentTime
         ]);
 

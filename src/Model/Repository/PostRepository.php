@@ -3,6 +3,7 @@
 namespace Repository;
 
 use DatabaseConnection;
+use Entity\Post;
 
 class PostRepository
 {
@@ -18,16 +19,13 @@ class PostRepository
         $statement = $this->connection->getConnection()->prepare("SELECT * FROM posts ORDER BY created_at DESC");
         $statement->execute();
         $posts = $statement->fetchAll();
-
-        return $posts;
     }
 
     public function getPublishedPosts()
     {
         $statement = $this->connection->getConnection()->prepare("SELECT * FROM posts WHERE is_published = 1 ORDER BY created_at DESC");
         $statement->execute();
-        $posts = $statement->fetchAll();
-        return $posts;
+        return $statement->fetchAll();
     }
 
     public function getPostById($postId)
@@ -38,60 +36,57 @@ class PostRepository
         return $post;
     }
 
-    public function addPost($user_id, $title, $chapo, $content, $is_published)
+    public function addPost(Post $post)
     {
-        $currentTime = date('Y-m-d H:i:s');
         $insertPost = $this->connection->getConnection()->prepare('INSERT INTO posts(user_id, title, chapo, content, is_published, created_at) 
             VALUES (:user_id, :title, :chapo, :content, :is_published, :created_at)');
         $insertPost->execute([
-            'user_id' => $user_id,
-            'title' => $title,
-            'chapo' => $chapo,
-            'content' => $content,
-            'is_published' => $is_published,
-            'created_at' => $currentTime,
+            'user_id' => $post->getAuthor(),
+            'title' => $post->getTitle(),
+            'chapo' => $post->getChapo(),
+            'content' => $post->getContent(),
+            'is_published' => $post->getIsPublished(),
+            'created_at' => $post->getCreatedAt(),
         ]);
     }
 
-    public function editPost($postId, $user_id, $title, $chapo, $content, $is_published)
+
+    public function editPost(Post $post)
     {
-        $currentTime = date('Y-m-d H:i:s');
-        $insertPost = $this->connection->getConnection()->prepare('UPDATE posts 
+        $editPost = $this->connection->getConnection()->prepare('UPDATE posts 
             SET user_id = :user_id, title = :title, chapo = :chapo, content = :content, is_published = :is_published, updated_at = :updated_at
             WHERE id = :id ');
-        $insertPost->execute([
-            'id' => $postId,
-            'user_id' => $user_id,
-            'title' => $title,
-            'chapo' => $chapo,
-            'content' => $content,
-            'is_published' => $is_published,
-            'updated_at' => $currentTime
+        $editPost->execute([
+            'id' => $post->getPostId(),
+            'user_id' => $post->getAuthor(),
+            'title' => $post->getTitle(),
+            'chapo' => $post->getChapo(),
+            'content' => $post->getContent(),
+            'is_published' => $post->getIsPublished(),
+            'updated_at' => $post->getUpdatedAt()
         ]);
     }
 
-    public function deletePost($postId)
+    public function deletePost(Post $post)
     {
-        $currentTime = date('Y-m-d H:i:s');
         $deletePost = $this->connection->getConnection()->prepare('UPDATE posts 
             SET deleted_at = :deleted_at, is_published = 0, updated_at = :updated_at
             WHERE id = :id ');
         $deletePost->execute([
-            'id' => $postId,
-            'deleted_at' => $currentTime,
-            'updated_at' => $currentTime
+            'id' => $post->getPostId(),
+            'deleted_at' => $post->getDeletedAt(),
+            'updated_at' => $post->getUpdatedAt()
         ]);
     }
 
-    public function restorePost($postId)
+    public function restorePost(Post $post)
     {
-        $currentTime = date('Y-m-d H:i:s');
-        $deletePost = $this->connection->getConnection()->prepare('UPDATE posts 
+        $restorePost = $this->connection->getConnection()->prepare('UPDATE posts 
             SET deleted_at = NULL, updated_at = :updated_at
             WHERE id = :id ');
-        $deletePost->execute([
-            'id' => $postId,
-            'updated_at' => $currentTime
+        $restorePost->execute([
+            'id' => $post->getPostId(),
+            'updated_at' => $post->getUpdatedAt()
         ]);
     }
 }
