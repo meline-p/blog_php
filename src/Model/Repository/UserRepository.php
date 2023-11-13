@@ -1,15 +1,15 @@
 <?php
 
-namespace Repository;
+namespace App\Model\Repository;
 
-use DatabaseConnection;
-use Entity\User;
+use App\lib\DatabaseConnection;
+use App\Model\Entity\User;
 
 class UserRepository
 {
-    private \DatabaseConnection $connection;
+    private DatabaseConnection $connection;
 
-    public function __construct(\DatabaseConnection $connection)
+    public function __construct(DatabaseConnection $connection)
     {
         $this->connection = $connection;
     }

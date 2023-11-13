@@ -1,16 +1,13 @@
 <?php
 
-require_once('lib/database.php');
-require_once('Model/Repository/UserRepository.php');
-require_once('Model/Repository/PostRepository.php');
-
 use App\Controllers\HomeController;
 use App\Controllers\LoginController;
 use App\controllers\PostsController;
-use Repository\UserRepository;
-use Repository\PostRepository;
+use App\lib\DatabaseConnection;
+use App\Model\Repository\PostRepository;
+use App\Model\Repository\UserRepository;
 
-$databaseConnection = new \DatabaseConnection();
+$databaseConnection = new DatabaseConnection();
 
 // Création des instances de UserRepository et PostRepository
 $userRepository = new UserRepository($databaseConnection);
@@ -22,11 +19,9 @@ if ($uri === '/') {
     $homeController = new HomeController($userRepository, $postRepository);
     $homeController->home();
 } elseif($uri === '/posts') {
-
     $postsController = new PostsController($databaseConnection);
-
     $postsController->getPublishedPosts();
-    var_dump($postsController);
+
 } elseif ($uri === '/se-connecter') {
     $loginController = new LoginController($userRepository);
     $loginController->login();

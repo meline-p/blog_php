@@ -2,15 +2,11 @@
 
 namespace App\controllers;
 
-use Repository\CommentRepository;
-use Repository\UserRepository;
-use Repository\PostRepository;
-use DatabaseConnection;
-use Entity\Comment;
-
-require_once('src/lib/database.php');
-require_once('src/Model/post.php');
-require_once('src/Model/comment.php');
+use App\Model\Repository\CommentRepository;
+use App\Model\Repository\UserRepository;
+use App\Model\Repository\PostRepository;
+use App\lib\DatabaseConnection;
+use App\Model\Entity\Comment;
 
 class CommentsController
 {
@@ -19,7 +15,7 @@ class CommentsController
     private $postRepository;
     private $currentTime;
 
-    public function __construct(\DatabaseConnection $connection)
+    public function __construct(DatabaseConnection $connection)
     {
         $this->commentRepository = new CommentRepository($connection);
         $this->userRepository = new UserRepository($connection);

@@ -1,14 +1,14 @@
 <?php
 
-namespace Repository;
+namespace App\Model\Repository;
 
-use DatabaseConnection;
+use App\lib\DatabaseConnection;
 
 class RoleRepository
 {
-    private \DatabaseConnection $connection;
+    private DatabaseConnection $connection;
 
-    public function __construct(\DatabaseConnection $connection)
+    public function __construct(DatabaseConnection $connection)
     {
         $this->connection = $connection;
     }

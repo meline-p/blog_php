@@ -2,19 +2,16 @@
 
 namespace App\controllers;
 
-use Repository\UserRepository;
-use DatabaseConnection;
-use Entity\User;
-
-require_once('src/lib/database.php');
-require_once('src/Model/user.php');
+use App\Model\Repository\UserRepository;
+use App\lib\DatabaseConnection;
+use App\Model\Entity\User;
 
 class UsersController
 {
     private $userRepository;
     private $currentTime;
 
-    public function __construct(\DatabaseConnection $connection)
+    public function __construct(DatabaseConnection $connection)
     {
         $this->userRepository = new UserRepository($connection);
         $this->currentTime = date('Y-m-d H:i:s');

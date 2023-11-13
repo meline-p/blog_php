@@ -2,16 +2,16 @@
 
 namespace App\controllers;
 
-use Repository\PostRepository;
-use DatabaseConnection;
-use Entity\Post;
+use App\Model\Repository\PostRepository;
+use App\lib\DatabaseConnection;
+use App\Model\Entity\Post;
 
 class PostsController
 {
     private $postRepository;
     private $currentTime;
 
-    public function __construct(\DatabaseConnection $connection)
+    public function __construct(DatabaseConnection $connection)
     {
         $this->postRepository = new PostRepository($connection);
         $this->currentTime = date('Y-m-d H:i:s');

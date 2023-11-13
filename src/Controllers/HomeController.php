@@ -2,8 +2,8 @@
 
 namespace App\controllers;
 
-use Repository\UserRepository;
-use Repository\PostRepository;
+use App\Model\Repository\UserRepository;
+use App\Model\Repository\PostRepository;
 
 class HomeController
 {

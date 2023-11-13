@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use Repository\UserRepository;
+use App\Model\Repository\UserRepository;
 
 class LoginController
 {
