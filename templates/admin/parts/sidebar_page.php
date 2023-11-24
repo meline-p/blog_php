@@ -1,50 +1,49 @@
-
 <div class="sticky-top">
-  <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="height:100vh;">
-  <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-    <span class="fs-4"> Admin</span>
-    <br>
-    <a class="btn btn-secondary btn-sm" href="../index.php">Retour sur le site</a>
-  </a>
-  <hr>
-  <ul class="nav nav-pills flex-column mb-auto">
-    <li class="nav-item">
-      <a href="dashboard.php" class="nav-link text-white active" aria-current="page">
-        <i class="fa-solid fa-chart-simple"></i> Dashboard
-      </a>
-    </li>
+	<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="height:100vh;">
+		<a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+			<span class="fs-4"> Admin</span>
+			<br>
+			<a class="btn btn-secondary btn-sm" href="../index.php">Retour sur le site</a>
+		</a>
+		<hr>
+		<ul class="nav nav-pills flex-column mb-auto">
+			<li class="nav-item">
+				<a href="/admin/dashboard" class="nav-link text-white active" aria-current="page">
+					<i class="fa-solid fa-chart-simple"></i> Dashboard
+				</a>
+			</li>
 
-    <hr>
+			<hr>
 
-    <li class="nav-item">
-      <a href="admin_posts_list.php" class="nav-link text-white" aria-current="page">
-        <i class="fa-solid fa-folder"></i> Posts
-      </a>
-    </li>
+			<li class="nav-item">
+				<a href="/admin/publications" class="nav-link text-white" aria-current="page">
+					<i class="fa-solid fa-folder"></i> Posts
+				</a>
+			</li>
 
-    <li class="nav-item">
-      <a href="admin_comments_list.php" class="nav-link text-white" aria-current="page">
-        <i class="fa-solid fa-comment"></i> Commentaires
-      </a>
-    </li>
+			<li class="nav-item">
+				<a href="/admin/commentaires" class="nav-link text-white" aria-current="page">
+					<i class="fa-solid fa-comment"></i> Commentaires
+				</a>
+			</li>
 
-    <hr>
+			<hr>
 
-    <li class="nav-item">
-      <a href="admin_users_list.php" class="nav-link text-white" aria-current="page">
-        <i class="fa-solid fa-user"></i> Utilisateurs
-      </a>
-    </li>
-  </ul>
+			<li class="nav-item">
+				<a href="/admin/utilisateurs" class="nav-link text-white" aria-current="page">
+					<i class="fa-solid fa-user"></i> Utilisateurs
+				</a>
+			</li>
+		</ul>
 
-  <hr>
+		<hr>
 
-  <div>
-    <a href="../logout.php" class="d-flex align-items-center text-white text-decoration-none justify-content-around">
-      <i class="fa-solid fa-right-to-bracket"></i>
-      <strong>Se déconnecter</strong>
-    </a>
-  </div>
+		<div>
+			<a href="../deconnexion" class="d-flex align-items-center text-white text-decoration-none justify-content-around">
+				<i class="fa-solid fa-right-to-bracket"></i>
+				<strong>Se déconnecter</strong>
+			</a>
+		</div>
 
-  </div>
+	</div>
 </div>

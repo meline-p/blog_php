@@ -8,4 +8,4 @@
 
 <?php $content = ob_get_clean(); ?>
 
-<?php require('../../templates/admin/parts/admin_layout.php') ?>
+<?php require('../templates/admin/parts/admin_layout.php') ?>

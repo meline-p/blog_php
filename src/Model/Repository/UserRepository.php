@@ -16,8 +16,10 @@ class UserRepository
 
     public function getUsers()
     {
-        $statement = $this->connection->getConnection()->prepare('SELECT * FROM users 
-            ORDER BY COALESCE(deleted_at, created_at) DESC');
+        $statement = $this->connection->getConnection()->prepare("SELECT u.*, r.name AS role_name
+        FROM users u
+        LEFT JOIN roles r ON u.role_id = r.id
+        ORDER BY COALESCE(u.deleted_at, u.created_at) ASC");
         $statement->execute();
         $users = $statement->fetchAll();
         return $users;

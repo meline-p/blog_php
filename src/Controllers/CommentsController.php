@@ -26,13 +26,13 @@ class CommentsController
 
     public function getComments()
     {
-        $this->commentRepository->getComments();
-        require('templates/admin/admin_comments_list_page.php');
+        $allComments = $this->commentRepository->getComments();
+        require(__DIR__.'/../../templates/admin/admin_comments_list_page.php');
     }
 
     public function getValidComments($postId)
     {
-        $this->commentRepository->getValidComments($postId);
+        $comments = $this->commentRepository->getValidComments($postId);
     }
 
 
@@ -69,7 +69,7 @@ class CommentsController
     public function getConfirmComment($commentId)
     {
         $comment = $this->commentRepository->getCommentById($commentId);
-        require('templates/admin/comments/valid_comment_page.php');
+        require(__DIR__.'/../../templates/admin/comments/valid_comment_page.php');
     }
 
     public function postConfirmComment($commentId)
@@ -82,7 +82,7 @@ class CommentsController
 
             $this->commentRepository->editComment($comment);
 
-            require('templates/admin/admin_comments_list_page.php');
+            require(__DIR__.'/../../templates/admin/admin_comments_list_page.php');
 
         } else {
             echo 'Ce commentaire n\'existe pas';
@@ -94,7 +94,7 @@ class CommentsController
     {
 
         $comment = $this->commentRepository->getCommentById($commentId);
-        require('templates/admin/comments/delete_comment_page.php');
+        require(__DIR__.'/../../templates/admin/comments/delete_comment_page.php');
     }
 
     public function postDeleteComment($commentId)
@@ -107,7 +107,7 @@ class CommentsController
 
             $this->commentRepository->editComment($comment);
 
-            require('templates/admin/admin_comments_list_page.php');
+            require(__DIR__.'/../../templates/admin/admin_comments_list_page.php');
 
         } else {
             echo 'Ce commentaire n\'existe pas';
@@ -118,7 +118,7 @@ class CommentsController
     public function getRestoreComment($commentId)
     {
         $comment = $this->commentRepository->getCommentById($commentId);
-        require('templates/admin/comments/restore_comment_page.php');
+        require(__DIR__.'/../../templates/admin/comments/restore_comment_page.php');
     }
 
     public function postRestoreComment($commentId)
@@ -131,7 +131,7 @@ class CommentsController
 
             $this->commentRepository->editComment($comment);
 
-            require('templates/admin/admin_comments_list_page.php');
+            require(__DIR__.'/../../templates/admin/admin_comments_list_page.php');
 
         } else {
             echo 'Ce commentaire n\'existe pas';

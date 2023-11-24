@@ -2,18 +2,21 @@
 
 namespace App\Model\Entity;
 
+use DateTime;
+
 class User
 {
     // properties
-    private $id;
-    private $role_id;
-    private $last_name;
-    private $first_name;
-    private $surname;
-    private $email;
-    private $password;
-    private $created_at;
-    private $deleted_at;
+    private int $id;
+    private int $role_id;
+    public Role $role;
+    private string $last_name;
+    private string $first_name;
+    private string $surname;
+    private string $email;
+    private string $password;
+    private \DateTime $created_at;
+    private \DateTime $deleted_at;
 
     // getters and setters
 

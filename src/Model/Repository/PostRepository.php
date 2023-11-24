@@ -16,9 +16,18 @@ class PostRepository
 
     public function getAllPosts()
     {
-        $statement = $this->connection->getConnection()->prepare("SELECT * FROM posts ORDER BY created_at DESC");
+        $statement = $this->connection->getConnection()->prepare("SELECT p.*, u.surname AS user_surname
+        FROM posts p
+        LEFT JOIN users u ON p.user_id = u.id
+        ORDER BY 
+        CASE
+            WHEN p.deleted_at IS NOT NULL THEN 2
+            WHEN p.updated_at IS NOT NULL THEN 0
+            ELSE 1
+        END, 
+        COALESCE(p.updated_at, p.deleted_at, p.created_at) DESC");
         $statement->execute();
-        $posts = $statement->fetchAll();
+        return $statement->fetchAll();
     }
 
     public function getPublishedPosts()

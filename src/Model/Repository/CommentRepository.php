@@ -16,14 +16,24 @@ class CommentRepository
 
     public function getComments()
     {
-        $statement = $this->connection->getConnection()->prepare('SELECT c.*, u.surname AS user_surname
-        FROM comments c 
+        $statement = $this->connection->getConnection()->prepare("SELECT c.*, u.surname AS user_surname, p.title AS post_title
+        FROM comments c
+        INNER JOIN users u ON u.id = c.user_id
         INNER JOIN posts p ON p.id = c.post_id
-        INNER JOIN users u ON u.id = c.user_id');
+        ORDER BY 
+        CASE
+            WHEN c.deleted_at IS NOT NULL THEN 3
+            WHEN c.is_enabled = 0 THEN 2
+            ELSE 1
+        END,
+        CASE
+            WHEN c.deleted_at IS NOT NULL THEN c.deleted_at
+            ELSE c.created_at
+        END DESC");
         $statement->execute();
-        $comments = $statement->fetchAll();
+        return $statement->fetchAll();
 
-        return $comments;
+
     }
 
     public function getValidComments($postId)
