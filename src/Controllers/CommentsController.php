@@ -23,7 +23,6 @@ class CommentsController
         $this->currentTime = date('Y-m-d H:i:s');
     }
 
-
     public function getComments()
     {
         $comments = $this->commentRepository->getComments();
