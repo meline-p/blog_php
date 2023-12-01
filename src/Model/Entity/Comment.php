@@ -12,7 +12,6 @@ class Comment
     public $is_enabled;
     public $created_at;
     public $deleted_at;
-
     public $user_surname;
     public $post_title;
 
