@@ -26,7 +26,7 @@ class CommentsController
 
     public function getComments()
     {
-        $allComments = $this->commentRepository->getComments();
+        $comments = $this->commentRepository->getComments();
         require(__DIR__.'/../../templates/admin/admin_comments_list_page.php');
     }
 
@@ -35,8 +35,7 @@ class CommentsController
         $comments = $this->commentRepository->getValidComments($postId);
     }
 
-
-    public function postAddComment($commentContent, $postId)
+    public function postAddComment($data)
     {
         if (!isset($_SESSION['LOGGED_USER'])) {
             echo "Vous devez être connecté pour ajouter un commentaire.";
@@ -48,17 +47,19 @@ class CommentsController
             return;
         }
 
-        if (!ctype_digit($postId)) {
+        if (!ctype_digit($data["post_id"])) {
             echo "ID non valide.";
             return;
         }
 
         $comment = new Comment();
-        $comment->setAuthor($_SESSION['USER_ID']);
-        $comment->setPostId(intval($postId));
-        $comment->setContent(nl2br(htmlspecialchars($commentContent)));
-        $comment->setCreatedAt($this->currentTime);
-        $comment->setIsEnabled(null);
+
+        $comment->init(
+            $_SESSION['USER_ID'],
+            intval($data['post_id']),
+            nl2br(htmlspecialchars($data['content'])),
+            null
+        );
 
         $this->commentRepository->addComment($comment);
 
@@ -72,15 +73,15 @@ class CommentsController
         require(__DIR__.'/../../templates/admin/comments/valid_comment_page.php');
     }
 
-    public function postConfirmComment($commentId)
+    public function postConfirmComment($data)
     {
-        $comment = $this->commentRepository->getCommentById($commentId);
+        $comment = $this->commentRepository->getCommentById($data["id"]);
 
         if($comment) {
-            $comment->setIsEnabled(1);
-            $comment->setDeletedAt(null);
 
-            $this->commentRepository->editComment($comment);
+            $comment->confirm($data["id"], 1);
+
+            $this->commentRepository->confirmComment($comment);
 
             require(__DIR__.'/../../templates/admin/admin_comments_list_page.php');
 
@@ -97,15 +98,15 @@ class CommentsController
         require(__DIR__.'/../../templates/admin/comments/delete_comment_page.php');
     }
 
-    public function postDeleteComment($commentId)
+    public function postDeleteComment($data)
     {
-        $comment = $this->commentRepository->getCommentById($commentId);
+        $comment = $this->commentRepository->getCommentById($data["id"]);
 
         if($comment) {
-            $comment->setIsEnabled(0);
-            $comment->setDeletedAt($this->currentTime);
 
-            $this->commentRepository->editComment($comment);
+            $comment->delete($data["id"], 0);
+
+            $this->commentRepository->deleteComment($comment);
 
             require(__DIR__.'/../../templates/admin/admin_comments_list_page.php');
 
@@ -121,15 +122,14 @@ class CommentsController
         require(__DIR__.'/../../templates/admin/comments/restore_comment_page.php');
     }
 
-    public function postRestoreComment($commentId)
+    public function postRestoreComment($data)
     {
-        $comment = $this->commentRepository->getCommentById($commentId);
+        $comment = $this->commentRepository->getCommentById($data["id"]);
 
         if($comment) {
-            $comment->setIsEnabled(1);
-            $comment->setDeletedAt(null);
+            $comment->confirm($data["id"], 1);
 
-            $this->commentRepository->editComment($comment);
+            $this->commentRepository->confirmComment($comment);
 
             require(__DIR__.'/../../templates/admin/admin_comments_list_page.php');
 

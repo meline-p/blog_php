@@ -3,22 +3,22 @@
 <?php ob_start(); ?>
 
 <h1>Modifier un post</h1>
-<form action="post_edit.php?id=<?= $post['id']; ?>" method="post">
+<form action="/admin/publication/modifier/confirmation/<?= $post->id; ?>" method="post">
 	<div class="row">
 		<div class="col-lg-8">
 			<div class="form-group">
 				<label for="title">Titre</label>
-				<input type="text" id="title" name="title" class="form-control" value="<?= $post['title'] ?>">
+				<input type="text" id="title" name="title" class="form-control" value="<?= $post->title ?>">
 			</div>
 			<br>
 			<div class="form-group">
 				<label for="chapo">Chapô</label>
-				<input type="text" id="chapo" name="chapo" class="form-control" value="<?= $post['chapo'] ?>">
+				<input type="text" id="chapo" name="chapo" class="form-control" value="<?= $post->chapo ?>">
 			</div>
 			<br>
 			<div class="form-group">
 				<label for="content">Contenu</label>
-				<textarea id="content" name="content" rows="15" class="form-control"><?= $post['content'] ?></textarea>
+				<textarea id="content" name="content" rows="15" class="form-control"><?= $post->content ?></textarea>
 			</div>
 		</div>
 		<div class="col-lg-4">
@@ -27,7 +27,7 @@
 				<label for="user_id">Auteur</label>
 				<select id="user_id" name="user_id" class="form-control">
 					<?php foreach($admins as $admin): ?>
-					<option value="<?= $admin['id'] ?>" <?= ($admin['id'] === $post['user_id']) ? 'selected' : ''; ?>><?= $admin['first_name'].' '.$admin['last_name'] ?>
+					<option value="<?= $admin->id ?>" <?= ($admin->id === $post->user_id) ? 'selected' : ''; ?>><?= $admin->first_name.' '.$admin->last_name ?>
 					</option>
 					<?php endforeach; ?>
 				</select>
@@ -36,7 +36,7 @@
 			<div class="form-group">
 				<label for="is_published">Publié</label>
 				<input type="checkbox" id="is_published" name="is_published" value="1"
-					<?= $post['is_published'] ? 'checked' : ''?>
+					<?= $post->is_published ? 'checked' : ''?>
 				>
 			</div>
 		</div>

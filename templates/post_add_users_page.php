@@ -1,4 +1,3 @@
-<?php session_start(); ?>
 <?php $title = "Bienvenue !" ?>
 
 <?php ob_start(); ?>

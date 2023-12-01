@@ -42,10 +42,10 @@ class UsersController
 
     public function administration()
     {
-        session_start();
-        $posts = $this->postRepository->getAllPosts();
-        $comments = $this->commentRepository->getComments();
-        $users = $this->userRepository->getUsers();
+
+        $nbPosts = $this->postRepository->countAllPosts();
+        $nbComments = $this->commentRepository->countAllComments();
+        $nbUsers = $this->userRepository->countAllUsers();
 
         $email = "";
         $surname = "";
@@ -79,7 +79,7 @@ class UsersController
 
     public function getLogin()
     {
-        session_start();
+
         $email = "";
         $surname = "";
         $loggedIn = false;
@@ -98,11 +98,11 @@ class UsersController
                 $user = $this->userRepository->getUserById($userId);
 
                 if($user) {
-                    $surname = $user['surname'];
+                    $surname = $user->surname;
                     $_SESSION['LOGGED_USER'] = $surname;
 
                     // Check if user = admin
-                    if (isset($user['role_id']) && $user['role_id'] === 1) {
+                    if (isset($user->role_id) && $user->role_id === 1) {
                         $_SESSION['IS_ADMIN'] = true;
                         $_SESSION['LOGGED_ADMIN'] = $surname;
                     }
@@ -116,7 +116,7 @@ class UsersController
 
     public function getLogout()
     {
-        session_start();
+
         session_destroy();
         require_once(__DIR__ . '/../../templates/login_page.php');
     }
@@ -124,28 +124,28 @@ class UsersController
 
     public function postLogin($email, $password)
     {
-        session_start();
+
         $this->userRepository->login($email, $password);
         require_once(__DIR__ . '/../../templates/homepage_page.php');
     }
 
     public function getRegister()
     {
-        session_start();
+
         require_once(__DIR__ . '/../../templates/register_page.php');
     }
 
-    public function postRegister($role_id, $last_name, $first_name, $surname, $email, $password)
+    public function postRegister($data)
     {
-        session_start();
         $user = new User();
-        $user->setRoleId($role_id);
-        $user->setLastName($last_name);
-        $user->setFirstName($first_name);
-        $user->setSurname($surname);
-        $user->setEmail($email);
-        $user->setPassword($password);
-        $user->setCreatedAt($this->currentTime);
+        $user->init(
+            $data['role_id'],
+            $data['last_name'],
+            $data['first_name'],
+            $data['surname'],
+            $data['email'],
+            $data['password']
+        );
 
         $this->userRepository->addUser($user);
 
@@ -158,12 +158,12 @@ class UsersController
         require('templates/admin/users/delete_user_page.php');
     }
 
-    public function postDeleteUser($userId)
+    public function postDeleteUser($data)
     {
-        $user = $this->userRepository->getUserById($userId);
+        $user = $this->userRepository->getUserById($data['id']);
 
         if($user) {
-            $user->setDeletedAt($this->currentTime);
+            $user->delete($data['id']);
 
             $this->userRepository->deleteUser($user);
 
@@ -180,12 +180,12 @@ class UsersController
         require('templates/admin/users/restore_user_page.php');
     }
 
-    public function postRestoreUser($userId)
+    public function postRestoreUser($data)
     {
-        $user = $this->userRepository->getUserById($userId);
+        $user = $this->userRepository->getUserById($data['id']);
 
         if($user) {
-            $user->setDeletedAt(null);
+            $user->restore($data['id']);
 
             $this->userRepository->restoreUser($user);
 

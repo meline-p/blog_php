@@ -1,4 +1,3 @@
-<?php session_start(); ?>
 <?php $title = "Votre message a bien été envoyé" ?>
 
 <?php ob_start(); ?>

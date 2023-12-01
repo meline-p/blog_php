@@ -1,4 +1,3 @@
-<?php session_start(); ?>
 <?php $title = "Admin - Commentaires" ?>
 
 <?php ob_start(); ?>
@@ -18,44 +17,43 @@
 			</tr>
 		</thead>
 		<tbody>
-			<?php foreach ($allComments as $allComment) : ?>
+			<?php foreach ($comments as $comment) : ?>
 			<tr>
 				<td
-					class='<?= $allComment['is_enabled'] === null ? "table-active" : '' ?>'>
-					<?php if(strlen($allComment['content']) > 30): ?>
-					<?= $allComment['content'] = substr($allComment['content'], 0, 30) . '...'; ?>
+					class='<?= $comment->is_enabled === null ? "table-active" : '' ?>'>
+					<?php if(strlen($comment->content) > 30): ?>
+					<?= $comment->content = substr($comment->content, 0, 30) . '...'; ?>
 					<?php else: ?>
-					<?= $allComment['content'] ?>
+					<?= $comment->content ?>
 					<?php  endif;?>
 				</td>
 				<td
-					class='<?= $allComment['is_enabled'] === null ? "table-active" : '' ?>'>
-					<?= $allComment['user_surname'] ?>
+					class='<?= $comment->is_enabled === null ? "table-active" : '' ?>'>
+					<?= $comment->user_surname ?>
 				</td>
 				<td
-					class='<?= $allComment['is_enabled'] === null ? "table-active" : '' ?>'>
-					<a
-						href="../showPost.php?id=<?= $allComment['post_id'] ?>"><?= $allComment['post_title'] ?></a>
+					class='<?= $comment->is_enabled === null ? "table-active" : '' ?>'>
+					<a target="_blank" style="text-decoration:none;" href="/publication/<?= $comment->post_id ?>"><?= $comment->post_title ?></a>
 				</td>
 				<td
-					class='<?= $allComment['is_enabled'] === null ? "table-active" : '' ?>'>
-					<?= $allComment['created_at'] ?>
+					class='<?= $comment->is_enabled === null ? "table-active" : '' ?>'>
+					<?= $comment->created_at ?>
 				</td>
 				<td
-					class='<?= $allComment['is_enabled'] === null ? "table-active" : '' ?>'>
-					<?php if ($allComment['is_enabled'] === null) : ?>
-					<a href="/admin/commentaire/valider/<?= $allComment['id'] ?>" class="btn btn-success btn-sm">
+					class='<?= $comment->is_enabled === null ? "table-active" : '' ?>'>
+					<?php if ($comment->is_enabled === null) : ?>
+					<a href="/admin/commentaire/valider/<?= $comment->id ?>" class="btn btn-success btn-sm">
 						<i class="fa-solid fa-check"></i>
 					</a>
-					<a href="/admin/commentaire/supprimer/<?= $allComment['id'] ?>" class="btn btn-danger btn-sm">
+					<a href="/admin/commentaire/supprimer/<?= $comment->id ?>" class="btn btn-danger btn-sm">
 						<i class="fa-solid fa-trash"></i>
 					</a>
-					<?php elseif (!$allComment['is_enabled']) : ?>
-					<a href="/admin/commentaire/restaurer/<?= $allComment['id'] ?>" class="btn btn-secondary btn-sm">
+					<?php elseif (!$comment->is_enabled) : ?>
+					<a href="/admin/commentaire/restaurer/<?= $comment->id ?>" class="btn btn-secondary btn-sm">
 						<i class="fa-solid fa-rotate-left"></i>
 					</a>
 					<?php else : ?>
-					<a href="/admin/commentaire/supprimer/<?= $allComment['id'] ?>" class="btn btn-danger btn-sm">
+					<a href="/admin/commentaire/supprimer/<?= $comment->id ?>" class="btn btn-danger btn-sm">
 						<i class="fa-solid fa-trash"></i>
 					</a>
 					<?php endif; ?>

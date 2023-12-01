@@ -1,4 +1,3 @@
-<?php session_start(); ?>
 <?php $title = "Admin - Dashboard" ?>
 
 <?php ob_start(); ?>
@@ -12,7 +11,7 @@
 		<div class="card">
 			<div class="card-body text-center">
 				<h5 class="card-title">Posts</h5>
-				<p class="card-text"></p>
+				<p class="card-text"><?= $nbPosts ?></p>
 			</div>
 		</div>
 	</div>
@@ -20,7 +19,7 @@
 		<div class="card">
 			<div class="card-body text-center">
 				<h5 class="card-title">Commentaires</h5>
-				<p class="card-text"></p>
+				<p class="card-text"><?= $nbComments ?></p>
 			</div>
 		</div>
 	</div>
@@ -28,7 +27,7 @@
 		<div class="card">
 			<div class="card-body text-center">
 				<h5 class="card-title">Utilisateurs</h5>
-				<p class="card-text"></p>
+				<p class="card-text"><?= $nbUsers ?></p>
 			</div>
 		</div>
 	</div>

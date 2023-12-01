@@ -8,10 +8,12 @@ use App\Model\Entity\Comment;
 class CommentRepository
 {
     private DatabaseConnection $connection;
+    public $current_time;
 
     public function __construct(DatabaseConnection $connection)
     {
         $this->connection = $connection;
+        $this->current_time = new \DateTime();
     }
 
     public function getComments()
@@ -31,9 +33,13 @@ class CommentRepository
             ELSE c.created_at
         END DESC");
         $statement->execute();
-        return $statement->fetchAll();
-
-
+        $rows =  $statement->fetchAll();
+        $comments = array_map(function ($row) {
+            $comment = new Comment();
+            $comment->fromSql($row);
+            return $comment;
+        }, $rows);
+        return $comments;
     }
 
     public function getValidComments($postId)
@@ -47,9 +53,21 @@ class CommentRepository
         $statement->execute([
             'post_id' => $postId
         ]);
-        $comments = $statement->fetchAll();
-
+        $rows =  $statement->fetchAll();
+        $comments = array_map(function ($row) {
+            $comment = new Comment();
+            $comment->fromSql($row);
+            return $comment;
+        }, $rows);
         return $comments;
+    }
+
+    public function countAllComments()
+    {
+        $statement = $this->connection->getConnection()->prepare('SELECT COUNT(1) AS nb FROM comments');
+        $statement->execute();
+        $row = $statement->fetch();
+        return $row['nb'];
     }
 
     public function getCommentById($commentId)
@@ -61,8 +79,9 @@ class CommentRepository
         $statement->execute([
             'commentId' => $commentId
         ]);
-        $comment = $statement->fetch();
-
+        $row = $statement->fetch();
+        $comment = new Comment();
+        $comment->fromSql($row);
         return $comment;
     }
 
@@ -71,25 +90,55 @@ class CommentRepository
         $insertComment = $this->connection->getConnection()->prepare('INSERT INTO comments(user_id, post_id, content, created_at) 
                 VALUES (:user_id, :post_id, :content, :created_at, :is_enabled)');
 
+        $comment->init(
+            $comment->user_id,
+            $comment->post_id,
+            $comment->content,
+            $comment->is_enabled
+        );
+
         $insertComment->execute([
-            'user_id' => $comment->getAuthor(),
-            'post_id' => $comment->getPostId(),
-            'content' => $comment->getContent(),
-            'created_at' => $comment->getCreatedAt(),
-            'is_enabled' => $comment->getIsEnabled()
+            'user_id' => $comment->user_id,
+            'post_id' => $comment->post_id,
+            'content' => $comment->content,
+            'created_at' => $this->current_time,
+            'is_enabled' => $comment->is_enabled
         ]);
     }
 
-    public function editComment(Comment $comment)
+    public function confirmComment(Comment $comment)
     {
         $confirmComment = $this->connection->getConnection()->prepare('UPDATE comments 
         SET is_enabled = :is_enabled, deleted_at = :deleted_at
         WHERE id = :id ');
 
+        $comment->confirm(
+            $comment->id,
+            $comment->is_enabled
+        );
+
         $confirmComment->execute([
-            'id' => $comment->getCommentId(),
-            'is_enabled' => $comment->getIsEnabled(),
-            'deleted_at' => $comment->getDeletedAt(),
+            'id' => $comment->id,
+            'is_enabled' => $comment->is_enabled,
+            'deleted_at' => null,
+        ]);
+    }
+
+    public function deleteComment(Comment $comment)
+    {
+        $confirmComment = $this->connection->getConnection()->prepare('UPDATE comments 
+        SET is_enabled = :is_enabled, deleted_at = :deleted_at
+        WHERE id = :id ');
+
+        $comment->delete(
+            $comment->id,
+            $comment->is_enabled
+        );
+
+        $confirmComment->execute([
+            'id' => $comment->id,
+            'is_enabled' => $comment->is_enabled,
+            'deleted_at' => $this->current_time,
         ]);
     }
 }

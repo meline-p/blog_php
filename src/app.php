@@ -34,6 +34,9 @@ if ($uri === '/') {
     $postsController = new PostsController($databaseConnection);
     $postsController->getPostById($id);
 
+    $commentsController = new CommentsController($databaseConnection);
+    $commentsController->getValidComments($id);
+
 
 // ----------------- LOGIN / LOGOUT / REGISTER ----------------
 } elseif ($uri === '/connexion') {
@@ -99,7 +102,7 @@ if ($uri === '/') {
 
 } elseif ($uri === '/admin/publication/ajouter/confirmation') {
     $postController = new PostsController($databaseConnection);
-    $postController->postAddPost($user_id, $title, $chapo, $content, $is_published);
+    $postController->postAddPost($_POST);
 
 // ---- POST EDIT ----
 } elseif (1 === preg_match("~^/admin/publication/modifier/(?<id>\d+)$~", $uri, $matches)) {
@@ -110,7 +113,7 @@ if ($uri === '/') {
 } elseif (1 === preg_match("~^/admin/publication/modifier/confirmation/(?<id>\d+)$~", $uri, $matches)) {
     $id = $matches['id'];
     $postController = new PostsController($databaseConnection);
-    $postController->postEditPost($id, $user_id, $title, $chapo, $content, $is_published);
+    $postController->postEditPost($id, $_POST);
 
 // ---- POST DELETE -----
 } elseif (1 === preg_match("~^/admin/publication/supprimer/(?<id>\d+)$~", $uri, $matches)) {

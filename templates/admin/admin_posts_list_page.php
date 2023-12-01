@@ -1,4 +1,3 @@
-<?php session_start(); ?>
 <?php $title = "Admin - Posts" ?>
 
 <?php ob_start(); ?>
@@ -26,39 +25,39 @@
 			</tr>
 		</thead>
 		<tbody>
-			<?php foreach ($allPosts as $allPost) : ?>
+			<?php foreach ($posts as $post) : ?>
 			<tr>
 				<td>
-					<?php if (empty($allPost['deleted_at'])) : ?>
+					<?php if (empty($post->deleted_at)) : ?>
 					<a style="text-decoration:none;" class="" target="_blank"
-						href="/publication/<?= $allPost['id']; ?>"><?= $allPost['title'] ?></a>
+						href="/publication/<?= $post->id; ?>"><?= $post->title ?></a>
 					<?php else : ?>
-					<span class="text-muted"><?= $allPost['title'] ?></span>
+					<span class="text-muted"><?= $post->title ?></span>
 					<?php endif; ?>
 				</td>
-				<td class="<?= $allPost['deleted_at'] ? 'text-muted' : '' ?>">
-					<?= $allPost['user_surname'] ?>
+				<td class="<?= $post->deleted_at ? 'text-muted' : '' ?>">
+					<?= $post->user_surname ?>
 				</td>
 				<td
-					class='<?= $allPost['deleted_at'] ? 'text-muted' : ($allPost['is_published'] ? 'text-success' : 'text-danger') ?>'>
-					<strong><?= $allPost['is_published'] ? '✓' : 'X' ?></strong>
+					class='<?= $post->deleted_at ? 'text-muted' : ($post->is_published ? 'text-success' : 'text-danger') ?>'>
+					<strong><?= $post->is_published ? '✓' : 'X' ?></strong>
 				</td>
-				<td class="<?= $allPost['deleted_at'] ? 'text-muted' : '' ?>">
-					<?= $allPost['created_at'] ?>
+				<td class="<?= $post->deleted_at ? 'text-muted' : '' ?>">
+					<?= $post->created_at ?>
 				</td>
-				<td class="<?= $allPost['deleted_at'] ? 'text-muted' : '' ?>">
-					<?= $allPost['updated_at'] ? $allPost['updated_at'] : '-' ?>
+				<td class="<?= $post->deleted_at ? 'text-muted' : '' ?>">
+					<?= $post->updated_at ? $post->updated_at : '-' ?>
 				</td>
 				<td>
-					<?php if ($allPost['deleted_at']) : ?>
-					<a href="/admin/publication/restaurer/<?= $allPost['id'] ?>" class="btn btn-secondary btn-sm">
+					<?php if ($post->deleted_at) : ?>
+					<a href="/admin/publication/restaurer/<?= $post->id ?>" class="btn btn-secondary btn-sm">
 						<i class="fa-solid fa-rotate-left"></i>
 					</a>
 					<?php else : ?>
-					<a href="/admin/publication/modifier/<?= $allPost['id']; ?>" class="btn btn-primary btn-sm">
+					<a href="/admin/publication/modifier/<?= $post->id; ?>" class="btn btn-primary btn-sm">
 						<i class="fa-solid fa-pen"></i>
 					</a>
-					<a href="/admin/publication/supprimer/<?= $allPost['id']; ?>" class="btn btn-danger btn-sm">
+					<a href="/admin/publication/supprimer/<?= $post->id; ?>" class="btn btn-danger btn-sm">
 						<i class="fa-solid fa-trash"></i>
 					</a>
 					<?php endif; ?>

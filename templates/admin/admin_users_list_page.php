@@ -1,4 +1,3 @@
-<?php session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);?>
 <?php $title = "Admin - Utilisateurs" ?>
@@ -26,22 +25,22 @@ ini_set('display_errors', 1);?>
 			<tr>
 				<td>
 					<?php
-                            $userRoleName = $user['role_name'];
+                            $userRoleName = $user->role_name;
 			    echo $userRoleName;
 			    ?>
 				</td>
-				<td><?= $user['surname'] ?></td>
-				<td><?= $user['last_name'] ?></td>
-				<td><?= $user['first_name'] ?></td>
-				<td><?= $user['email'] ?></td>
-				<td><?= $user['created_at'] ?></td>
+				<td><?= $user->surname ?></td>
+				<td><?= $user->last_name ?></td>
+				<td><?= $user->first_name ?></td>
+				<td><?= $user->email ?></td>
+				<td><?= $user->created_at ?></td>
 				<td>
-					<?php if ($user['deleted_at']) : ?>
-					<a href="/admin/utilisateur/restaurer/<?= $user['id'] ?>" class="btn btn-secondary btn-sm">
+					<?php if ($user->deleted_at) : ?>
+					<a href="/admin/utilisateur/restaurer/<?= $user->id ?>" class="btn btn-secondary btn-sm">
 						<i class="fa-solid fa-rotate-left"></i>
 					</a>
 					<?php else : ?>
-					<a href="/admin/utilisateur/supprimer/<?= $user['id'] ?>" class="btn btn-danger btn-sm">
+					<a href="/admin/utilisateur/supprimer/<?= $user->id ?>" class="btn btn-danger btn-sm">
 						<i class="fa-solid fa-trash"></i>
 					</a>
 					<?php endif; ?>

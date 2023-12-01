@@ -1,4 +1,3 @@
-<?php session_start(); ?>
 <?php $title = "Se Connecter" ?>
 
 <?php ob_start(); ?>

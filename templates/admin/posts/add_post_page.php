@@ -22,13 +22,12 @@
 			</div>
 		</div>
 		<div class="col-lg-4">
-
 			<div class="form-group">
 				<label for="user_id">Auteur :</label>
 				<select name="user_id" id="user_id">
 					<?php foreach ($admins as $admin): ?>
-					<option value="<?= $admin['id']; ?>" <?= ($_SESSION['LOGGED_USER'] === $admin['surname']) ? ' selected' : ''; ?>>
-						<?= $admin['first_name'] . ' ' . $admin['last_name']; ?>
+					<option value="<?= $admin->id; ?>" <?= ($_SESSION['LOGGED_USER'] === $admin->surname) ? ' selected' : ''; ?>>
+						<?= $admin->first_name . ' ' . $admin->last_name; ?>
 					</option>
 					<?php endforeach; ?>
 				</select>
