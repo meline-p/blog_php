@@ -101,7 +101,7 @@ class CommentRepository
             'user_id' => $comment->user_id,
             'post_id' => $comment->post_id,
             'content' => $comment->content,
-            'created_at' => $this->current_time,
+            'created_at' => $this->current_time->format('Y-m-d H:i:s'),
             'is_enabled' => $comment->is_enabled
         ]);
     }
@@ -138,7 +138,7 @@ class CommentRepository
         $confirmComment->execute([
             'id' => $comment->id,
             'is_enabled' => $comment->is_enabled,
-            'deleted_at' => $this->current_time,
+            'deleted_at' => $this->current_time->format('Y-m-d H:i:s'),
         ]);
     }
 }

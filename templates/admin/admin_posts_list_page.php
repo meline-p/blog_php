@@ -1,8 +1,7 @@
-<?php $title = "Admin - Posts" ?>
+<?php $title = "Posts" ?>
 
 <?php ob_start(); ?>
 
-<h1>Posts</h1>
 <a class="btn btn-primary btn-sm" href="/admin/publication/ajouter"><i class="fa-solid fa-plus"></i> Ajouter un post</a>
 
 <div class="col-lg-12 row">

@@ -1,14 +1,13 @@
-<?php $title = "Admin - Modifier un post" ?>
+<?php $title = "Modifier un post" ?>
 
 <?php ob_start(); ?>
 
-<h1>Modifier un post</h1>
 <form action="/admin/publication/modifier/confirmation/<?= $post->id; ?>" method="post">
 	<div class="row">
 		<div class="col-lg-8">
 			<div class="form-group">
 				<label for="title">Titre</label>
-				<input type="text" id="title" name="title" class="form-control" value="<?= $post->title ?>">
+				<input required type="text" id="title" name="title" class="form-control" value="<?= $post->title ?>">
 			</div>
 			<br>
 			<div class="form-group">
@@ -18,7 +17,7 @@
 			<br>
 			<div class="form-group">
 				<label for="content">Contenu</label>
-				<textarea id="content" name="content" rows="15" class="form-control"><?= $post->content ?></textarea>
+				<textarea required id="content" name="content" rows="15" class="form-control"><?= $post->content ?></textarea>
 			</div>
 		</div>
 		<div class="col-lg-4">
@@ -43,7 +42,7 @@
 	</div>
 	<br>
 	<button type="submit" class="btn btn-primary btn-sm">Modifier le post</button>
-	<a class="btn btn-secondary btn-sm" href="../admin_posts_list.php">Annuler</a>
+	<a class="btn btn-secondary btn-sm" href="/admin/publications">Annuler</a>
 
 </form>
 

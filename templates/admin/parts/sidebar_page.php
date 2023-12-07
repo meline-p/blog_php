@@ -3,7 +3,7 @@
 		<a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
 			<span class="fs-4"> Admin</span>
 			<br>
-			<a class="btn btn-secondary btn-sm" href="../index.php">Retour sur le site</a>
+			<a class="btn btn-secondary btn-sm" href="/">Retour sur le site</a>
 		</a>
 		<hr>
 		<ul class="nav nav-pills flex-column mb-auto">

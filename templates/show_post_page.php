@@ -8,6 +8,9 @@
         if($post) {
             ?>
 	<div>
+		<a class="btn btn-dark" href="/publications">Retour à la liste des posts</a>
+		<br>
+		<br>
 		<h3><?= htmlspecialchars($post->title); ?></h3>
 		<p><i>
 				<?php if($post->updated_at === null):?>
@@ -17,33 +20,32 @@
 				<?php endif; ?>
 			</i></p>
 		<p><?= nl2br(htmlspecialchars($post->content)); ?></p>
-		<a class="btn btn-dark" href="/publications">Retour à la liste des posts</a>
 	</div>
 
 	<?php
         } else {
             echo "Aucun post trouvé pour cet ID.";
         }
-?>
-	<br>
-	<hr>
+	?>
 
-	<h4>Commentaires</h4>
-	<br>
-
-	<div class="card-deck">
-		<?php foreach($comments as $comment): ?>
-		<div class="card mb-3">
-			<div class="card-body">
-				<h6 class="card-subtitle mb-2"><?= htmlspecialchars($comment->user_surname); ?></h6>
-				<h6 class="card-subtitle mb-2 text-muted" style="font-weight:normal;"><i>
-						publié le <?= date_format(date_create($comment->created_at), "d/m/Y à H:i"); ?>
-					</i></h6>
-				<p class="card-text"><?= nl2br(htmlspecialchars($comment->content)); ?></p>
+	<?php if(count($comments) > 0): ?>
+		<hr>
+		<h4>Commentaires</h4>
+		<br>
+		<div class="card-deck">
+			<?php foreach($comments as $comment): ?>
+			<div class="card mb-3">
+				<div class="card-body">
+					<h6 class="card-subtitle mb-2"><?= htmlspecialchars($comment->user_surname); ?></h6>
+					<h6 class="card-subtitle mb-2 text-muted" style="font-weight:normal;"><i>
+							publié le <?= date_format(date_create($comment->created_at), "d/m/Y à H:i"); ?>
+						</i></h6>
+					<p class="card-text"><?= nl2br(htmlspecialchars($comment->content)); ?></p>
+				</div>
 			</div>
+			<?php endforeach; ?>
 		</div>
-		<?php endforeach; ?>
-	</div>
+	<?php endif; ?>
 	<hr>
 	<div>
 		<?php include_once('components/comments_form_page.php'); ?>

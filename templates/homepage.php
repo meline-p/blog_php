@@ -3,10 +3,6 @@
 <?php ob_start(); ?>
 
 <div id="content" class="container">
-	<h1>Bienvenue, <?php if(isset($_SESSION['LOGGED_USER'])) {
-	    echo $_SESSION['LOGGED_USER'];
-	} ?></h1>
-
 	<h3>Méline Pischedda</h3>
 	<img>
 	<p>Je suis une phrase d'accroche</p>

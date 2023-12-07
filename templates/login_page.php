@@ -6,12 +6,6 @@
 
 	<?php if(!isset($_SESSION['LOGGED_USER'])): ?>
 
-	<?php if($errorMessage !== ''): ?>
-	<div class="alert alert-danger">
-		<?= $errorMessage ?>
-	</div>
-	<?php endif; ?>
-
 	<h3>Se connecter</h3>
 	<form action="/connexion" method="POST">
 		<div class="mb-3">
