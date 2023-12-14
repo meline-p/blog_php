@@ -4,7 +4,9 @@ use App\Controllers\HomeController;
 use App\Controllers\UsersController;
 use App\controllers\PostsController;
 use App\controllers\CommentsController;
+use App\lib\AlertService;
 use App\lib\DatabaseConnection;
+use App\Model\Entity\User;
 use App\Model\Repository\PostRepository;
 use App\Model\Repository\UserRepository;
 use App\Model\Repository\CommentRepository;
@@ -23,6 +25,10 @@ if ($uri === '/') {
     $homeController = new HomeController($userRepository, $postRepository);
     $homeController->home();
 
+} elseif($uri === '/message-envoye') {
+    $homeController = new HomeController($userRepository, $postRepository);
+    $homeController->sendMessage();
+
 
 // ----------------- POSTS ----------------
 } elseif($uri === '/publications') {
@@ -36,6 +42,12 @@ if ($uri === '/') {
 
     $commentsController = new CommentsController($databaseConnection);
     $commentsController->getValidComments($id);
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if(isset($_SESSION['user']) && isset($_POST['comment'])) {
+            $commentsController->postAddComment($_POST);
+        }
+    }
 
 
 // ----------------- LOGIN / LOGOUT / REGISTER ----------------
@@ -61,6 +73,13 @@ if ($uri === '/') {
 
 
 // ------------------------------- ADMIN -------------------------------
+} elseif (1 === preg_match('~^/admin~', $uri) && !($_SESSION['user'] && $_SESSION['user']->role_name === 'Administrateur')) {
+    AlertService::add('danger', 'Veuillez vous connecter');
+
+    header('location: /connexion');
+    exit;
+
+
 } elseif ($uri === '/admin/dashboard') {
     $userController = new UsersController($databaseConnection);
     $userController->administration();

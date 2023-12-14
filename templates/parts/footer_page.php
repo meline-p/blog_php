@@ -1,7 +1,7 @@
 <footer class="bg-light text-center text-lg-start mt-auto">
 	<div class="text-center p-3">
 
-		<?php if(isset($_SESSION['IS_ADMIN'])): ?>
+		<?php if(isset($_SESSION['user']) && $_SESSION['user']->role_name === 'Administrateur'): ?>
 		<a href="/admin/dashboard">Administration</a>
 		<?php endif ?>
 

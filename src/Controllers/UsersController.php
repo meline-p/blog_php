@@ -54,32 +54,7 @@ class UsersController
         $nbComments = $this->commentRepository->countAllComments();
         $nbUsers = $this->userRepository->countAllUsers();
 
-        $email = "";
-        $surname = "";
-        $loggedIn = false;
-        $loggedUser = [];
         $admins = $this->userRepository->getAdmins();
-
-        if(isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) &&
-        isset($_POST['password']) && !empty($_POST['password'])) {
-            $loggedIn = false;
-            foreach ($admins as $admin) {
-                if ($admin['email'] === $_POST['email'] && $admin['password'] === $_POST['password']) {
-                    $loggedUser = [
-                        'email' => $admin['email'],
-                        'surname' => $admin['surname'],
-                    ];
-                    $loggedIn = true;
-                    $_SESSION['LOGGED_ADMIN'] = $admin['surname'];
-                    break;
-                }
-            }
-
-            if ($loggedIn) {
-                $email = $loggedUser['email'];
-                $surname = $loggedUser['surname'];
-            }
-        }
 
         require_once(__DIR__ . '/../../templates/admin/dashboard_page.php');
     }
@@ -95,33 +70,36 @@ class UsersController
         isset($_POST['password']) && !empty($_POST['password'])) {
 
             $email = $_POST['email'];
-            $password = $_POST['password'];
+            $enteredPassword = $_POST['password'];
 
-            $loggedIn = $this->userRepository->login($email, $password);
+            $user = $this->userRepository->getUserByEmail($email);
 
-            if ($loggedIn) {
-                $userId = $_SESSION['USER_ID'];
-                $user = $this->userRepository->getUserById($userId);
+            $storedHashedPassword = $user->password;
 
-                if($user) {
-                    $surname = $user->surname;
-                    $_SESSION['LOGGED_USER'] = $surname;
-
-                    // Check if user = admin
-                    if (isset($user->role_id) && $user->role_id === 1) {
-                        $_SESSION['IS_ADMIN'] = true;
-                        $_SESSION['LOGGED_ADMIN'] = $surname;
-                    }
-
-                    AlertService::add('success', 'Bienvenue sur le site ' . ($_SESSION['LOGGED_USER'] ?? "") . ' !');
-                    header("location: /");
-                    exit;
-                }
+            if(!$user || !password_verify($enteredPassword, $storedHashedPassword)) {
+                AlertService::add('danger', 'Les informations envoyées ne permettent pas de vous identifier.');
+                header("location: /connexion");
+                exit;
             }
-            AlertService::add('danger', 'Les informations envoyées ne permettent pas de vous identifier.');
+
+            $_SESSION['user'] = $user;
+            $redirectBack = isset($_SESSION['redirect_back']) ? $_SESSION['redirect_back'] : '/';
+
+
+            AlertService::add('success', 'Bienvenue sur le site ' . ($_SESSION['user']->surname ?? "") . ' !');
+            header("location: " . $redirectBack);
+            exit;
+
         }
         require_once(__DIR__ . '/../../templates/login_page.php');
     }
+
+    /*
+    $_SESSION['USER_ID'];
+    $_SESSION['LOGGED_USER'] = $surname;
+    $_SESSION['IS_ADMIN'] = true;
+    $_SESSION['LOGGED_ADMIN'] = $surname;
+     */
 
     public function getLogout()
     {
@@ -130,51 +108,48 @@ class UsersController
         exit;
     }
 
-    public function postLogin($email, $password)
-    {
-        $this->userRepository->login($email, $password);
-        $user = $this->userRepository->getUserByEmail($email);
-        AlertService::add('success', 'Bienvenue ' .$user->surname.' ! Vous êtes bien inscrit !');
-
-            header("location: /");
-            exit;
-    }
-
     public function getRegister()
     {
-        require_once(__DIR__ . '/../../templates/register_page.php'); 
+        require_once(__DIR__ . '/../../templates/register_page.php');
     }
 
     public function postRegister($data)
-{
-    $errorMessage = null;
+    {
+        $errorMessage = null;
 
-    try {
-        $user = new User();
-        $user->init(
-            2,
-            $data['last_name'],
-            $data['first_name'],
-            $data['surname'],
-            $data['email'],
-            $data['password']
-        );
+        $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
 
-        $this->userRepository->addUser($user);
+        try {
+            $user = new User();
+            $user->init(
+                2,
+                $data['last_name'],
+                $data['first_name'],
+                $data['surname'],
+                $data['email'],
+                $hashedPassword
+            );
 
-        $this->postLogin($data['email'], $data['password']);
+            $this->userRepository->addUser($user);
+            $user = $this->userRepository->getUserByEmail($data['email']);
 
-    } catch (\Exception $e) {
-        if (str_contains($e->getMessage(), "Duplicate entry")) {
-            $errorMessage = 'Erreur : ce surnom est déjà utilisé.';
-            AlertService::add('danger', $errorMessage);
-        } else {
-            $errorMessage = 'Une erreur est survenue lors de l\'inscription : ' . $e->getMessage();
-            AlertService::add('danger', $errorMessage);
+            $_SESSION['user'] = $user;
+
+            AlertService::add('success', 'Bienvenue sur le site ' . ($_SESSION['user']->surname ?? "") . ' !');
+            header('location: /');
+            exit;
+
+        } catch (\Exception $e) {
+            if (str_contains($e->getMessage(), "Duplicate entry")) {
+                $errorMessage = 'Erreur : ce surnom est déjà utilisé.';
+                AlertService::add('danger', $errorMessage);
+            } else {
+                $errorMessage = 'Une erreur est survenue lors de l\'inscription : ' . $e->getMessage();
+                AlertService::add('danger', $errorMessage);
+            }
+            require_once(__DIR__ . '/../../templates/register_page.php');
         }
-        require_once(__DIR__ . '/../../templates/register_page.php');
     }
-}
 
     public function getDeleteUser($userId)
     {

@@ -2,9 +2,10 @@
 
 <?php ob_start(); ?>
 
-<h1>Bienvenue, <?php if(isset($_SESSION['IS_ADMIN'])) {
-    echo $_SESSION['LOGGED_ADMIN'];
-} ?></h1>
+<h2>Bienvenue, <?php if($_SESSION['user'] && $_SESSION['user']->role_name === 'Administrateur') {
+    echo $_SESSION['user']->surname;
+} ?>
+</h2>
 
 <div class="col-lg-12 row">
 	<div class="col-lg-4">
