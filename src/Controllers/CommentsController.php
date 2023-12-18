@@ -35,22 +35,24 @@ class CommentsController
         $comments = $this->commentRepository->getValidComments($postId);
     }
 
-    public function postAddComment($data)
+    public function postAddComment($id, $data)
     {
 
-        var_dump(empty($data['content']));
+        var_dump($data);
+        var_dump($id);
+        var_dump($_SESSION['user']);
 
         if (!isset($_SESSION['user'])) {
             AlertService::add('danger', 'Vous devez être connecté pour ajouter un commentaire.');
             return;
         }
 
-        if ($data['content'] == '') {
+        if ($data['comment'] == '') {
             AlertService::add('danger', 'Veuillez remplir le champ commentaire.');
             return;
         }
 
-        if (!ctype_digit($data["post_id"])) {
+        if (!ctype_digit($id)) {
             echo "ID non valide.";
             AlertService::add('danger', 'ID non valide');
             return;
@@ -60,14 +62,12 @@ class CommentsController
 
         $comment->init(
             $_SESSION['user']->id,
-            intval($data['post_id']),
-            nl2br(htmlspecialchars($data['content'])),
+            intval($id),
+            nl2br(htmlspecialchars($data['comment'])),
             null
         );
 
         $this->commentRepository->addComment($comment);
-
-        echo "Votre commentaire a bien été ajouté.";
 
         AlertService::add('success', 'Votre commentaire a bien été ajouté.');
         header("location: /publication/".$comment->post_id);

@@ -4,6 +4,7 @@ use App\Controllers\HomeController;
 use App\Controllers\UsersController;
 use App\controllers\PostsController;
 use App\controllers\CommentsController;
+use App\Controllers\AuthController;
 use App\lib\AlertService;
 use App\lib\DatabaseConnection;
 use App\Model\Entity\User;
@@ -45,29 +46,29 @@ if ($uri === '/') {
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if(isset($_SESSION['user']) && isset($_POST['comment'])) {
-            $commentsController->postAddComment($_POST);
+            $commentsController->postAddComment($id, $_POST);
         }
     }
 
 
 // ----------------- LOGIN / LOGOUT / REGISTER ----------------
 } elseif ($uri === '/connexion') {
-    $userController = new UsersController($databaseConnection);
-    $userController->getLogin();
+    $authController = new AuthController($databaseConnection);
+    $authController->getLogin();
 
 } elseif ($uri === '/deconnexion') {
-    $userController = new UsersController($databaseConnection);
-    $userController->getLogout();
+    $authController = new AuthController($databaseConnection);
+    $authController->getLogout();
 
 } elseif ($uri === '/inscription') {
-    $userController = new UsersController($databaseConnection);
+    $authController = new AuthController($databaseConnection);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if(isset($_POST['surname']) && isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['email']) && isset($_POST['password'])) {
-            $userController->postRegister($_POST);
+            $authController->postRegister($_POST);
         }
     } else {
-        $userController->getRegister();
+        $authController->getRegister();
     }
 
 
@@ -81,8 +82,8 @@ if ($uri === '/') {
 
 
 } elseif ($uri === '/admin/dashboard') {
-    $userController = new UsersController($databaseConnection);
-    $userController->administration();
+    $authController = new AuthController($databaseConnection);
+    $authController->administration();
 
 
 
