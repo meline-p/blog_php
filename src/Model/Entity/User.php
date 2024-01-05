@@ -46,6 +46,15 @@ class User
         $this->created_at = new \DateTime();
     }
 
+    public function update($role_id, $last_name, $first_name, $surname, $email)
+    {
+        $this->role_id = $role_id;
+        $this->last_name = $last_name;
+        $this->first_name = $first_name;
+        $this->surname = $surname;
+        $this->email = $email;
+    }
+
     public function delete($id)
     {
         $this->id = $id;

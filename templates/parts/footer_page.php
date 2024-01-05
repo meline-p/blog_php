@@ -2,7 +2,7 @@
 	<div class="text-center p-3">
 
 		<?php if(isset($_SESSION['user']) && $_SESSION['user']->role_name === 'Administrateur'): ?>
-		<a href="/admin/dashboard">Administration</a>
+		<a class="btn btn-outline-dark space" href="/admin/dashboard">Administration</a>
 		<?php endif ?>
 
 		<p class="text-dark">©<?= date("Y") ?> Copyright: Méline Pischedda</p>

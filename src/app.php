@@ -7,10 +7,11 @@ use App\controllers\CommentsController;
 use App\Controllers\AuthController;
 use App\lib\AlertService;
 use App\lib\DatabaseConnection;
-use App\Model\Entity\User;
 use App\Model\Repository\PostRepository;
 use App\Model\Repository\UserRepository;
 use App\Model\Repository\CommentRepository;
+
+session_start();
 
 $databaseConnection = new DatabaseConnection();
 
@@ -41,13 +42,12 @@ if ($uri === '/') {
     $postsController = new PostsController($databaseConnection);
     $postsController->getPostById($id);
 
-    $commentsController = new CommentsController($databaseConnection);
-    $commentsController->getValidComments($id);
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if(isset($_SESSION['user']) && isset($_POST['comment'])) {
-            $commentsController->postAddComment($id, $_POST);
-        }
+} elseif ((1 === preg_match("/^\/publication\/(?<id>\d+)\/commenter$/", $uri, $matches)) &&
+    $_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = $matches['id'];
+    if(isset($_SESSION['user']) && isset($_POST['comment'])) {
+        $commentsController = new CommentsController($databaseConnection);
+        $commentsController->postAddComment($id, $_POST);
     }
 
 
@@ -91,6 +91,26 @@ if ($uri === '/') {
 } elseif ($uri === '/admin/utilisateurs') {
     $userController = new UsersController($databaseConnection);
     $userController->getUsers();
+
+// ---- USER ADD ----
+} elseif ($uri === '/admin/utilisateur/ajouter') {
+    $userController = new UsersController($databaseConnection);
+    $userController->getAddUser($_POST);
+
+} elseif ($uri === '/admin/utilisateur/ajouter/confirmation') {
+    $userController = new UsersController($databaseConnection);
+    $userController->postAddUser($_POST);
+
+// ---- USER EDIT ----
+} elseif (1 === preg_match("~^/admin/utilisateur/modifier/(?<id>\d+)$~", $uri, $matches)) {
+    $id = $matches['id'];
+    $userController = new UsersController($databaseConnection);
+    $userController->getEditUser($id);
+
+} elseif (1 === preg_match("~^/admin/utilisateur/modifier/confirmation/(?<id>\d+)$~", $uri, $matches)) {
+    $id = $matches['id'];
+    $userController = new UsersController($databaseConnection);
+    $userController->postEditUser($id, $_POST);
 
 // ---- USER DELETE ----
 } elseif (1 === preg_match("~^/admin/utilisateur/supprimer/(?<id>\d+)$~", $uri, $matches)) {
@@ -203,4 +223,3 @@ if ($uri === '/') {
     $commentController = new CommentsController($databaseConnection);
     $commentController->postRestoreComment($id);
 }
-// var_dump('toto');

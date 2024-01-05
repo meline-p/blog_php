@@ -2,6 +2,9 @@
 
 <?php ob_start(); ?>
 
+<a class="btn btn-primary btn-sm" href="/admin/utilisateur/ajouter"><i class="fa-solid fa-plus"></i> Ajouter un utilisateur</a>
+
+
 <div class="col-lg-12 row">
 	<div>Filter</div>
 	<table class="table text-center">
@@ -36,6 +39,9 @@
 						<i class="fa-solid fa-rotate-left"></i>
 					</a>
 					<?php else : ?>
+					<a href="/admin/utilisateur/modifier/<?= $user->id; ?>" class="btn btn-primary btn-sm">
+						<i class="fa-solid fa-pen"></i>
+					</a>
 					<a href="/admin/utilisateur/supprimer/<?= $user->id ?>" class="btn btn-danger btn-sm">
 						<i class="fa-solid fa-trash"></i>
 					</a>

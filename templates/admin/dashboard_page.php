@@ -1,4 +1,4 @@
-<?php $title = "Admin - Dashboard" ?>
+<?php $title = "Dashboard" ?>
 
 <?php ob_start(); ?>
 

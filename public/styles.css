@@ -1,0 +1,125 @@
+
+h1 {
+    padding: 30px 0;
+    text-align: center;
+}
+
+.admin h1 {
+    text-align: left;
+}
+
+h2 {
+    padding: 10px 0 20px;
+}
+
+h3 {
+    padding: 20px 0;
+}
+
+h4 {
+    padding: 10px 0;
+}
+/* HOMPAGE */
+
+.content {
+    margin: 0!important;
+    padding: 0!important;
+    max-width: 100%!important;
+}
+
+.hero {
+    position: relative;
+    height: 90vh;
+    overflow: hidden;
+}
+
+ .hero .img {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin : auto;
+    z-index: 0;
+} 
+.hero .content {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    z-index: 2;
+    color: white;
+}
+
+.about {
+    padding: 60px 50px;
+    background-color: #f9a58c;
+}
+
+.about .img {
+    border-radius: 50%;
+    width: 150px;
+}
+.about h3 {
+    padding-left: 0;
+}
+
+.social-media {
+    padding: 60px 50px;
+    color: #f9a58c;
+}
+.social-media .icons {
+    font-size: 1.7rem;
+}
+.social-media i {
+    transform: scale(1);
+}
+.social-media i:hover {
+    transform: scale(1.2);
+    transition: all 0.3s ease;
+}
+
+.social-media .icons a {
+    color: #f9a58c;
+    padding: 10px;
+}
+.social-media .icons a:hover {
+    color: #f66f69;
+}
+
+.contact {
+    padding: 60px 50px;
+    background-color: #ffd7aa;
+}
+.contact h3 {
+    padding-bottom: 30px;
+}
+.contact .infos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.space {
+    margin: 20px 0!important;
+}
+
+/* POSTS */
+.card-title {
+    padding-bottom: 15px;
+}
+
+.publication .card:hover {
+    background-color: #ffeae4;
+    transition: all 0.3s ease;
+}
+
+.container.with-60 {
+    width: 60%;
+}
+
+.sidebar .nav-link {
+    font-size: 0.8rem;
+}

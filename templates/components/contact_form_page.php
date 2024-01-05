@@ -1,11 +1,12 @@
-<h3>Formulaire de contact</h3>
-<form action="/message-envoye" method="POST">
-	<?php while($alert = \App\lib\AlertService::get()): ?>
-	<div class="alert alert-<?= $alert['type'] ?> alert-dismissible fade show" role="alert">
-		<?= $alert['message'] ?>
-		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<?php
+header('Content-Type: text/html; charset=utf-8');
+?>
+
+<form action="/message-envoye" method="POST" accept-charset="UTF-8">
+	<div class="mb-3">
+		<label for="name" class="form-label">Nom</label>
+		<input type="name" class="form-control" id="name" name="name">
 	</div>
-	<?php endwhile; ?>
 	<div class="mb-3">
 		<label for="email" class="form-label">Email</label>
 		<input type="email" class="form-control" id="email" name="email" aria-describedby="email-help">
@@ -14,5 +15,5 @@
 		<label for="message" class="form-label">Votre message</label>
 		<textarea class="form-control" placeholder="Votre message" id="message" name="message"></textarea>
 	</div>
-	<button type="submit" class="btn btn-primary">Envoyer</button>
+	<button type="submit" class="btn btn-dark">Envoyer</button>
 </form>

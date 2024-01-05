@@ -1,0 +1,51 @@
+<?php $title = "Modifier un utilisateur" ?>
+
+<?php ob_start(); ?>
+
+<form action="/admin/utilisateur/modifier/confirmation/<?= $user->id; ?>" method="post">
+	<div class="row">
+		<div class="row col-lg-6">
+			<div class="form-group">
+				<label for="first_name">Prénom</label>
+				<input value="<?= $user->first_name ?>" type="text" required type="text" id="first_name" name="first_name" class="form-control">
+			</div>
+			<br>
+			<div class="form-group">
+				<label for="last_name">Nom</label>
+				<input value="<?= $user->last_name ?>" type="text" required type="text" id="last_name" name="last_name" class="form-control">
+			</div>
+			<br>
+			<div class="form-group">
+				<label for="surname">Pseudo</label>
+				<input value="<?= $user->surname ?>" type="text" required id="surname" name="surname" class="form-control">
+			</div>
+		</div>
+		<div class="row col-lg-6">
+			<br>
+			<div class="form-group">
+				<label for="email">Email</label>
+				<input value="<?= $user->email ?>" type="email" required id="email" name="email" class="form-control">
+			</div>
+			<div class="form-group">
+				<label for="role_id">Role :</label>
+				<select name="role_id" id="role_id" class="form-select">
+					<?php foreach ($roles as $role): ?>
+					<option value="<?= $role->id ?>" <?= $user->role_id === $role->id ? 'selected' : ''; ?>>
+						<?= $role->name ?>
+					</option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+			<br>
+		</div>
+	</div>
+	<br>
+
+	<button type="submit" class="btn btn-success btn-sm">Modifier un utilisateur</button>
+	<a class="btn btn-secondary btn-sm" href="/admin/utilisateurs">Annuler</a>
+
+</form>
+
+<?php $content = ob_get_clean(); ?>
+
+<?php require('../templates/admin/parts/admin_layout.php') ?>

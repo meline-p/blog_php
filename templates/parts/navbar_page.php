@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 	<div class="container justify-content-between">
-		<a class="navbar-brand" href="/">Blog</a>
+		<a class="navbar-brand" href="/">Méline Pischedda</a>
 		<div>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
 				aria-label="Toggle navigation">
@@ -17,8 +17,9 @@
 					</li>
 					<li class="nav-item">
 						<?php if(isset($_SESSION['user'])): ?>
-						<p class="nav-link"><?= $_SESSION['user']->surname ?> <span> <a id="logout" class="btn btn-dark btn-sm"
-									href="/deconnexion">Se déconnecter</a></span></p>
+						<p class="nav-link"><?= $_SESSION['user']->surname ?>
+							<span><a id="logout" class="btn btn-dark btn-sm" href="/deconnexion">Se déconnecter</a></span>
+						</p>
 						<?php else: ?>
 						<a class="nav-link" href="/connexion">S'inscire / Se connecter</a>
 						<?php endif; ?>
