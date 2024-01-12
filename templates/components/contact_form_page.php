@@ -1,7 +1,3 @@
-<?php
-header('Content-Type: text/html; charset=utf-8');
-?>
-
 <form action="/message-envoye" method="POST" accept-charset="UTF-8">
 	<div class="mb-3">
 		<label for="name" class="form-label">Nom</label>
