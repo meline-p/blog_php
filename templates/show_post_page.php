@@ -4,9 +4,6 @@
 
 <div id="content" class="container with-60">
 
-	<?php
-        if($post) {
-            ?>
 	<div>
 		<a class="btn btn-dark space" href="/publications">Retour à la liste des posts</a>
 		<br>
@@ -21,14 +18,6 @@
 			</i></p>
 		<p><?= nl2br(htmlspecialchars($post->content)); ?></p>
 	</div>
-
-	<?php
-        } else {
-            echo "Aucun post trouvé pour cet ID.";
-        }
-?>
-
-
 
 	<div class="col-lg-12">
 		<?php if(count($comments) > 0): ?>

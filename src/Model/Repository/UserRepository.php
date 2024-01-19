@@ -21,10 +21,7 @@ class UserRepository
      */
     public function __construct(DatabaseConnection $connection)
     {
-        // Set the DatabaseConnection for database interaction
         $this->connection = $connection;
-
-        // Initialize the current time using the DateTime class
         $this->current_time = new \DateTime();
     }
 
@@ -55,7 +52,9 @@ class UserRepository
         $statement = $this->connection->getConnection()->prepare($this->getSimpleSelect()."
         ORDER BY COALESCE(u.deleted_at, u.created_at) ASC");
         $statement->execute();
+
         $rows =  $statement->fetchAll();
+
         $users = array_map(function ($row) {
             $user = new User();
             $user->fromSql($row);
@@ -74,7 +73,9 @@ class UserRepository
         $statement = $this->connection->getConnection()->prepare($this->getSimpleSelect()."
             WHERE role_id = :role_id");
         $statement->execute(['role_id' => 1]);
+
         $rows =  $statement->fetchAll();
+
         $admins = array_map(function ($row) {
             $admin = new User();
             $admin->fromSql($row);
@@ -93,7 +94,9 @@ class UserRepository
     {
         $statement = $this->connection->getConnection()->prepare('SELECT COUNT(1) AS nb FROM users');
         $statement->execute();
+
         $row = $statement->fetch();
+
         return $row['nb'];
     }
 
@@ -107,9 +110,9 @@ class UserRepository
     {
         $statement = $this->connection->getConnection()->prepare($this->getSimpleSelect()." WHERE u.id = :userId");
         $statement->execute(['userId' => $userId]);
+
         $row = $statement->fetch();
 
-        // Check if a user was found
         if (!$row) {
             return null;
         }
@@ -130,9 +133,9 @@ class UserRepository
     {
         $statement = $this->connection->getConnection()->prepare($this->getSimpleSelect()." WHERE email = :userEmail");
         $statement->execute(['userEmail' => $userEmail]);
+
         $row = $statement->fetch();
 
-        // Check if a user was found
         if (!$row) {
             return null;
         }
@@ -154,7 +157,6 @@ class UserRepository
         $insertUser = $this->connection->getConnection()->prepare('INSERT INTO users(role_id, last_name, first_name, surname, email, password, created_at)
             VALUES (:role_id, :last_name, :first_name, :surname, :email, :password, :created_at)');
 
-        // Initialize the user data in the User object
         $user->init(
             $user->role_id,
             $user->last_name,
@@ -164,7 +166,6 @@ class UserRepository
             $user->password
         );
 
-        // Execute the SQL query to insert the user
         $insertUser->execute([
             'role_id' => $user->role_id,
             'last_name' => $user->last_name,
@@ -175,7 +176,6 @@ class UserRepository
             'created_at' => $this->current_time->format('Y-m-d H:i:s')
         ]);
 
-        // Check if the user was successfully added and return the ID
         return $insertUser->rowCount() > 0 ? $this->connection->getConnection()->lastInsertId() : 0;
     }
 
@@ -191,7 +191,6 @@ class UserRepository
             SET role_id = :role_id, last_name = :last_name, first_name = :first_name, surname = :surname, email = :email
             WHERE u.id = :id ');
 
-        // Update the user data in the User object
         $user->update(
             $user->role_id,
             $user->last_name,
@@ -200,7 +199,6 @@ class UserRepository
             $user->email,
         );
 
-        // Execute the SQL query to update the user
         $editUser->execute([
             'id' => $user->id,
             'role_id' => $user->role_id,
@@ -223,10 +221,8 @@ class UserRepository
             SET deleted_at = :deleted_at
             WHERE id = :id');
 
-        // Mark the user as deleted in the User object
         $user->delete($user->id);
 
-        // Execute the SQL query to delete the user
         $deleteUser->execute([
             'id' => $user->id,
             'deleted_at' => $this->current_time->format('Y-m-d H:i:s'),
@@ -246,10 +242,8 @@ class UserRepository
             SET deleted_at = :deleted_at
             WHERE id = :id ');
 
-        // Restore the user in the User object by setting 'deleted_at' to null
         $user->restore($user->id);
 
-        // Execute the SQL query to restore the user
         $restoreUser->execute([
             'id' => $user->id,
             'deleted_at' => null,
@@ -268,35 +262,28 @@ class UserRepository
      */
     public function exists(User $user)
     {
-        // Prepare the SQL query to check for existing users with the same email or surname
         $query = $this->connection->getConnection()->prepare('SELECT email, surname
          FROM users
          WHERE email = :email OR surname = :surname');
 
-        // Execute the query with the user's email and surname as parameters
         $query->execute([
             'email' => $user->email,
             'surname' => $user->surname,
         ]);
 
-        // Fetch the result as an associative array
         $result = $query->fetchAll(\PDO::FETCH_ASSOC);
 
-        // Map over the result and check for conflicts
         return array_map(function ($row) use ($user) {
             $messages = [];
 
-            // Check if the user's email matches the row's email
             if($user->email === $row['email']) {
                 array_push($messages, 'l\'email est déjà utilisé');
             }
 
-            // Check if the user's surname matches the row's surname
             if($user->surname === $row['surname']) {
                 array_push($messages, 'le surname est déjà utilisé');
             }
 
-            // Join the error messages and capitalize the first letter
             return ucfirst(join(' et ', $messages));
         }, $result);
     }

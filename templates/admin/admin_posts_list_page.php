@@ -2,16 +2,10 @@
 
 <?php ob_start(); ?>
 
-<a class="btn btn-primary btn-sm" href="/admin/publication/ajouter"><i class="fa-solid fa-plus"></i> Ajouter un post</a>
+<a class="btn btn-warning btn-sm" href="/admin/publication/ajouter"><i class="fa-solid fa-plus"></i> Ajouter un post</a>
+<hr>
 
 <div class="col-lg-12 row">
-
-	<div>
-		<br>
-		<button class="btn btn-outline-dark btn-sm">Cacher les posts supprimés</button>
-		<br>
-	</div>
-
 	<table class="table text-center">
 		<thead>
 			<tr>
@@ -29,7 +23,7 @@
 				<td>
 					<?php $shortTitle = (strlen($post->title) > 30) ? substr($post->title, 0, 30) . '...' : $post->title;?>
 					<?php if (empty($post->deleted_at)) : ?>
-					<a style="text-decoration:none;" class="" target="_blank"
+					<a style="text-decoration:none;" class="btn btn-outline-dark" type="button" target="_blank"
 						href="/publication/<?= $post->id; ?>"><?= $shortTitle ?></a>
 					<?php else : ?>
 					<span class="text-muted"><?= $shortTitle ?></span>
@@ -57,7 +51,7 @@
 						<i class="fa-solid fa-rotate-left"></i>
 					</a>
 					<?php else : ?>
-					<a href="/admin/publication/modifier/<?= $post->id; ?>" class="btn btn-primary btn-sm">
+					<a href="/admin/publication/modifier/<?= $post->id; ?>" class="btn btn-dark btn-sm">
 						<i class="fa-solid fa-pen"></i>
 					</a>
 					<a href="/admin/publication/supprimer/<?= $post->id; ?>" class="btn btn-danger btn-sm">

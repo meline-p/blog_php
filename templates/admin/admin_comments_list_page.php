@@ -1,9 +1,8 @@
 <?php $title = "Commentaires" ?>
 
 <?php ob_start(); ?>
-
+<hr>
 <div class="col-lg-12 row">
-	<div>Filter</div>
 	<table class="table text-center">
 		<thead>
 			<tr>
@@ -17,28 +16,25 @@
 		<tbody>
 			<?php foreach ($comments as $comment) : ?>
 			<tr>
-				<td
-					class='<?= $comment->is_enabled === null ? "table-active" : '' ?>'>
+				<td class='<?= $comment->is_enabled === null ? "table-active" : '' ?>'>
 					<?php if(strlen($comment->content) > 30): ?>
 					<?= $comment->content = substr($comment->content, 0, 30) . '...'; ?>
 					<?php else: ?>
 					<?= $comment->content ?>
 					<?php  endif;?>
 				</td>
-				<td
-					class='<?= $comment->is_enabled === null ? "table-active" : '' ?>'>
+				<td class='<?= $comment->is_enabled === null ? "table-active" : '' ?>'>
 					<?= $comment->user_surname ?>
 				</td>
-				<td
-					class='<?= $comment->is_enabled === null ? "table-active" : '' ?>'>
-					<a target="_blank" style="text-decoration:none;" href="/publication/<?= $comment->post_id ?>"><?= $comment->post_title ?></a>
+				<td class='<?= $comment->is_enabled === null ? "table-active" : '' ?>'>
+					<?php $shortTitle = (strlen($comment->post_title) > 30) ? substr($comment->post_title, 0, 30) . '...' : $comment->post_title;?>
+					<a target="_blank" style="text-decoration:none;" class="btn btn-outline-dark" type="button"
+						href="/publication/<?= $comment->post_id ?>"><?= $shortTitle ?></a>
 				</td>
-				<td
-					class='<?= $comment->is_enabled === null ? "table-active" : '' ?>'>
+				<td class='<?= $comment->is_enabled === null ? "table-active" : '' ?>'>
 					<?= $comment->created_at ?>
 				</td>
-				<td
-					class='<?= $comment->is_enabled === null ? "table-active" : '' ?>'>
+				<td class='<?= $comment->is_enabled === null ? "table-active" : '' ?>'>
 					<?php if ($comment->is_enabled === null) : ?>
 					<a href="/admin/commentaire/valider/<?= $comment->id ?>" class="btn btn-success btn-sm">
 						<i class="fa-solid fa-check"></i>

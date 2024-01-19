@@ -1,13 +1,14 @@
 <?php $title = "Dashboard" ?>
 
 <?php ob_start(); ?>
+<hr>
 
 <h2>Bienvenue, <?php if($_SESSION['user'] && $_SESSION['user']->role_name === 'Administrateur') {
     echo $_SESSION['user']->surname;
 } ?>
 </h2>
 
-<div class="col-lg-12 row">
+<div class="col-lg-12 row my-4">
 	<div class="col-lg-4">
 		<div class="card">
 			<div class="card-body text-center">

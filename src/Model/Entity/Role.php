@@ -15,6 +15,7 @@ class Role
      * Populate the Role object from a database row.
      *
      * @param  mixed $row Database row representing a role
+     * @return void
      */
     public function fromSql($row)
     {

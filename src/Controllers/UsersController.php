@@ -26,13 +26,10 @@ class UsersController
      */
     public function __construct(DatabaseConnection $connection)
     {
-        // Initialize repositories with the provided database connection
         $this->userRepository = new UserRepository($connection);
         $this->postRepository = new PostRepository($connection);
         $this->commentRepository = new CommentRepository($connection);
         $this->roleRepository = new RoleRepository($connection);
-
-        // Set the current time for the class instance
         $this->currentTime = date('Y-m-d H:i:s');
     }
 
@@ -43,10 +40,7 @@ class UsersController
      */
     public function getUsers()
     {
-        // Retrieve the list of users from the UserRepository
         $users = $this->userRepository->getUsers();
-
-        // Require the admin users list page template for rendering
         require_once(__DIR__ . '/../../templates/admin/admin_users_list_page.php');
     }
 
@@ -57,7 +51,6 @@ class UsersController
      */
     public function getAdmins()
     {
-        // Retrieve the list of administrators
         $admins = $this->userRepository->getAdmins();
     }
 
@@ -69,7 +62,6 @@ class UsersController
      */
     public function getUserById($userId)
     {
-        // Retrieve the user by their ID
         $this->userRepository->getUserById($userId);
     }
 
@@ -81,8 +73,7 @@ class UsersController
      */
     public function getUserByEmail($userEmail)
     {
-        // Retrieve the user by their email address
-        $this->userRepository->getUserById($userEmail);
+        $this->userRepository->getUserByEmail($userEmail);
     }
 
     /**
@@ -93,10 +84,7 @@ class UsersController
      */
     public function getAddUser($data = null)
     {
-        // Retrieve the list of roles from the RoleRepository
         $roles = $this->roleRepository->getRoles();
-
-        // Require the add user page template for rendering
         require(__DIR__.'/../../templates/admin/users/add_user_page.php');
     }
 
@@ -108,22 +96,17 @@ class UsersController
      */
     public function postAddUser($data)
     {
-        // Check if passwords match
         if($data['password'] != $data['confirm_password']) {
-            // Display an error message and redirect to the add user page
             AlertService::add('danger', "Les mots de passe sont différents");
             $this->getAddUser($data);
             exit;
         }
 
-        // Hash the password
         $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
 
-        // Convert names to lowercase
         $last_name = mb_strtolower($data["last_name"], 'UTF-8');
         $fist_name = mb_strtolower($data["first_name"], 'UTF-8');
 
-        // Create a new User instance and initialize it with the form data
         $user = new User();
         $user->init(
             $data["role_id"],
@@ -134,10 +117,8 @@ class UsersController
             $hashedPassword
         );
 
-        // Check if the user already exists
         $messages = $this->userRepository->exists($user);
 
-        // Display error messages and redirect to the add user page if necessary
         if(!empty($messages)) {
             foreach($messages as $message) {
                 AlertService::add('danger', $message);
@@ -146,10 +127,8 @@ class UsersController
             exit;
         }
 
-        // Add the user to the repository
         $this->userRepository->addUser($user);
 
-        // Display success message and redirect to the admin users page
         AlertService::add('success', "L'utilisateur " . $user->surname . " a bien été ajouté.");
         header("location: /admin/utilisateurs");
         exit;
@@ -163,14 +142,16 @@ class UsersController
      */
     public function getEditUser($userId)
     {
-        // Get the user by ID
         $user = $this->userRepository->getUserById($userId);
-
-        // Get the list of roles
         $roles = $this->roleRepository->getRoles();
 
-        // Require the edit user page template for rendering
-        require(__DIR__.'/../../templates/admin/users/edit_user_page.php');
+        if(!$user) {
+            AlertService::add('danger', "Cet utilisateur n'existe pas.");
+            header("location: /admin/utilisateurs");
+            exit;
+        } else {
+            require(__DIR__.'/../../templates/admin/users/edit_user_page.php');
+        }
     }
 
     /**
@@ -182,24 +163,20 @@ class UsersController
      */
     public function postEditUser($userId, $data)
     {
-        // Check if required information is provided
-        if (!isset($userId) || empty($data["last_name"]) || empty($data["first_name"]) || empty($data["surname"]) || empty($data["email"])) {
-            // If not, add an error message and redirect back to the edit user page
+        if (empty($data["last_name"]) || empty($data["first_name"]) || empty($data["surname"]) || empty($data["email"])) {
             AlertService::add('danger', "Veuillez fournir toutes les informations nécessaires.");
             header("location: /admin/utilisateur/modifier/$userId");
             exit;
         }
 
-        // Get the user by ID
         $user = $this->userRepository->getUserById($userId);
 
-        // Check if the user exists
         if(!$user) {
-            echo 'Cet utilisateur n\'existe pas';
-            return;
+            AlertService::add('danger', "Cet utilisateur n'existe pas.");
+            header("location: /admin/utilisateurs");
+            exit;
         }
 
-        // Process the user update
         $last_name = mb_strtolower($data["last_name"], 'UTF-8');
         $fist_name = mb_strtolower($data["first_name"], 'UTF-8');
 
@@ -211,10 +188,8 @@ class UsersController
             mb_strtolower($data["email"], 'UTF-8'),
         );
 
-        // Save the updated user
         $this->userRepository->editUser($user);
 
-        // Add a success message and redirect to the users list page
         AlertService::add('success', "L'utilisateur ". $user->surname ." a bien été modifié.");
         header("location: /admin/utilisateurs");
         exit;
@@ -229,20 +204,21 @@ class UsersController
     */
     public function getDeleteUser($userId)
     {
-        // Get the user by ID
         $user = $this->userRepository->getUserById($userId);
-
-        // Get the list of roles
         $roles = $this->roleRepository->getRoles();
 
-        // Find the role name for the user
+        if(!$user) {
+            AlertService::add('danger', "Cet utilisateur n'existe pas.");
+            header("location: /admin/utilisateurs");
+            exit;
+        }
+
         foreach ($roles as $role) {
             if ($role->id == $user->role_id) {
                 $user->role_name = $role->name;
             }
         }
 
-        // Require the delete user confirmation page for rendering
         require(__DIR__.'/../../templates/admin/users/delete_users_page.php');
     }
 
@@ -254,27 +230,21 @@ class UsersController
      */
     public function postDeleteUser($userId)
     {
-        // Get the user by ID
         $user = $this->userRepository->getUserById($userId);
 
-        if($user) {
-            // Mark the user as deleted
-            $user->delete($userId);
-
-            // Perform the actual deletion in the repository
-            $this->userRepository->deleteUser($user);
-
-            // Display a success message
-            AlertService::add('success', "L'utilisateur ". $user->surname ." a bien été désactivé.");
-
-            // Redirect to the user management page
+        if(!$user) {
+            AlertService::add('danger', "Cet utilisateur n'existe pas.");
             header("location: /admin/utilisateurs");
             exit;
-
-        } else {
-            // Display an error message if the user doesn't exist
-            echo 'Cet utilisateur n\'existe pas';
         }
+
+        $user->delete($userId);
+
+        $this->userRepository->deleteUser($user);
+
+        AlertService::add('success', "L'utilisateur ". $user->surname ." a bien été désactivé.");
+        header("location: /admin/utilisateurs");
+        exit;
     }
 
     /**
@@ -285,20 +255,21 @@ class UsersController
      */
     public function getRestoreUser($userId)
     {
-        // Get the user by ID
         $user = $this->userRepository->getUserById($userId);
-
-        // Get roles for display purposes
         $roles = $this->roleRepository->getRoles();
 
-        // Find and assign the role name to the user for display
+        if(!$user) {
+            AlertService::add('danger', "Cet utilisateur n'existe pas.");
+            header("location: /admin/utilisateurs");
+            exit;
+        }
+
         foreach ($roles as $role) {
             if ($role->id == $user->role_id) {
                 $user->role_name = $role->name;
             }
         }
 
-        // Require the restore users page template for rendering
         require(__DIR__.'/../../templates/admin/users/restore_users_page.php');
     }
 
@@ -310,26 +281,20 @@ class UsersController
      */
     public function postRestoreUser($userId)
     {
-        // Get the user by ID
         $user = $this->userRepository->getUserById($userId);
 
-        if($user) {
-            // Call the restore method to mark the user as active
-            $user->restore($userId);
-
-            // Update the user status in the repository
-            $this->userRepository->restoreUser($user);
-
-            // Display success message
-            AlertService::add('success', "L'utilisateur ". $user->surname ." a bien été restauré.");
-
-            // Redirect to the users administration page
+        if(!$user) {
+            AlertService::add('danger', "Cet utilisateur n'existe pas.");
             header("location: /admin/utilisateurs");
             exit;
-
-        } else {
-            // If the user doesn't exist, display an error message
-            echo 'Cet utilisateur n\'existe pas';
         }
+
+        $user->restore($userId);
+
+        $this->userRepository->restoreUser($user);
+
+        AlertService::add('success', "L'utilisateur ". $user->surname ." a bien été restauré.");
+        header("location: /admin/utilisateurs");
+        exit;
     }
 }

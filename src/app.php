@@ -5,6 +5,7 @@ use App\Controllers\UsersController;
 use App\controllers\PostsController;
 use App\controllers\CommentsController;
 use App\Controllers\AuthController;
+use App\controllers\ErrorController;
 use App\lib\AlertService;
 use App\lib\DatabaseConnection;
 use App\Model\Repository\PostRepository;
@@ -222,4 +223,7 @@ if ($uri === '/') {
     $id = $matches['id'];
     $commentController = new CommentsController($databaseConnection);
     $commentController->postRestoreComment($id);
+} else {
+    $errorController = new ErrorController();
+    $errorController->errorPage();
 }
