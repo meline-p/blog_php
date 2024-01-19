@@ -27,7 +27,7 @@
 			<h3>Hello World <i class="fa-solid fa-mug-hot"></i></h3>
 			<p>Dev web la journée, super-héroïne du code la nuit. Entre deux tasses de thé, je métamorphose les bugs en licornes et les lignes de code en blagues geek. Prête à apporter une touche
 				magique à chaque projet, que ce soit en codant ou en dégustant une tasse de thé!</p>
-			<a class="btn btn-outline-dark btn-sm" href="#">Télécharger le CV</a>
+			<a class="btn btn-outline-dark btn-sm" target="_blank" href="/pdf/Meline_Pischedda_CV.pdf">Télécharger le CV</a>
 		</div>
 	</div>
 </div>
@@ -35,9 +35,9 @@
 <div class="social-media text-center">
 	<h3>Retrouvez-moi sur les réseaux sociaux</h3>
 	<div class="icons">
-		<a href="#"><i class="fa-brands fa-github"></i></a>
-		<a href="#"><i class="fa-brands fa-linkedin"></i></a>
-		<a href="#"><i class="fa-brands fa-instagram"></i></a>
+		<a target="_blank" href="https://github.com/meline-p"><i class="fa-brands fa-github"></i></a>
+		<a target="_blank" href="https://www.linkedin.com/in/melinepischedda/"><i class="fa-brands fa-linkedin"></i></a>
+		<a target="_blank" href="https://www.instagram.com/melinepischedda/"><i class="fa-brands fa-instagram"></i></a>
 	</div>
 </div>
 
