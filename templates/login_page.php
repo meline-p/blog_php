@@ -1,7 +1,6 @@
-<?php     
-    include_once('templates/parts/header_page.php');
-    include_once('templates/parts/navbar_page.php'); 
-?>
+<?php $title = "Se Connecter" ?>
+
+<?php ob_start(); ?>
 
 <div id="content" class="container">
 
@@ -36,6 +35,6 @@
 
 </div>
 
-<?php 
-    include_once('templates/parts/footer_page.php'); 
-?>
+<?php $content = ob_get_clean(); ?>
+
+<?php require('parts/layout.php') ?>

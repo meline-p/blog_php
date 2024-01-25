@@ -40,4 +40,3 @@
     }
 
     require('../../templates/admin/comments/delete_comments_page.php');
-?>

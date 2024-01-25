@@ -18,4 +18,4 @@
     $allPosts = $statement->fetchAll(); 
 
     require('../templates/admin/admin_posts_list_page.php');
-?>
+

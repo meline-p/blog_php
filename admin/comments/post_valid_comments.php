@@ -24,4 +24,4 @@
     ]);
 
     require('../../templates/admin/comments/post_valid_comments_page.php');
-?>
+

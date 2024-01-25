@@ -26,7 +26,7 @@
                 $user_id = $post['user_id'];
                 $user = getUserById($db, $user_id, $users);
                 $user_surname = $user['surname'];
-                
+
                 require('../../templates/admin/posts/delete_post_page.php');
             } else {
                 echo "Le post avec l'ID $postId n'a pas été trouvé.";
@@ -39,4 +39,3 @@
         echo "L'ID n'a pas été transmis dans l'URL.";
     }
 
-?>

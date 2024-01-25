@@ -34,4 +34,4 @@
     $post_id = addPost($db, $user_id, $title, $chapo, $content, $is_published);
 
     require('../../templates/admin/posts/post_add_page.php');
-?>
+

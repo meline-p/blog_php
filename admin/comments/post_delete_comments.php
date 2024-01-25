@@ -24,7 +24,7 @@
     ]);
 
     require('../../templates/admin/comments/post_delete_comments_page.php');
-?>
+
 
 
         

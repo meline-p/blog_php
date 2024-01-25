@@ -16,6 +16,6 @@
 
     
     require('../../templates/admin/users/post_restore_users_page.php');
-?>
+
 
         

@@ -22,4 +22,4 @@
     $allComments = $commentsStatement->fetchAll();
 
     require('../templates/admin/admin_comments_list_page.php');
-?>
+

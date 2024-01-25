@@ -36,4 +36,4 @@
     }
 
     require('../templates/admin/dashboard_page.php');
-?>
+

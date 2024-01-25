@@ -40,4 +40,3 @@
     }
 
     require('../../templates/admin/comments/restore_comments_page.php');
-?>
