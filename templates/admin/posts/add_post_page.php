@@ -23,7 +23,7 @@
 		<div class="col-lg-4">
 			<div class="form-group">
 				<label for="user_id">Auteur :</label>
-				<select name="user_id" id="user_id">
+				<select name="user_id" id="user_id" class="form-select">
 					<?php foreach ($admins as $admin): ?>
 					<option value="<?= $admin->id; ?>" <?= ($_SESSION['user']->id === $admin->id) ? ' selected' : ''; ?>>
 						<?= $admin->first_name . ' ' . $admin->last_name; ?>
@@ -39,7 +39,6 @@
 		</div>
 	</div>
 	<br>
-	<!-- Ajoutez ces champs cachés dans votre formulaire -->
 	<input type="hidden" name="previous_title"
 		value="<?= isset($_POST['title']) ? htmlspecialchars($_POST['title']) : '' ?>">
 	<input type="hidden" name="previous_content"

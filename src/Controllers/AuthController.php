@@ -40,6 +40,11 @@ class AuthController
 
     public function getLogin()
     {
+        if(isset($_SESSION['user'])) {
+            header("location: /");
+            exit;
+        }
+
         $email = "";
         $surname = "";
         $loggedIn = false;
@@ -73,13 +78,6 @@ class AuthController
         require_once(__DIR__ . '/../../templates/login_page.php');
     }
 
-    /*
-    $_SESSION['USER_ID'];
-    $_SESSION['LOGGED_USER'] = $surname;
-    $_SESSION['IS_ADMIN'] = true;
-    $_SESSION['LOGGED_ADMIN'] = $surname;
-     */
-
     public function getLogout()
     {
         session_destroy();
@@ -98,14 +96,17 @@ class AuthController
 
         $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
 
+        $last_name = mb_strtolower($data["last_name"], 'UTF-8');
+        $fist_name = mb_strtolower($data["first_name"], 'UTF-8');
+
         try {
             $user = new User();
             $user->init(
                 2,
-                $data['last_name'],
-                $data['first_name'],
-                $data['surname'],
-                $data['email'],
+                ucfirst($last_name),
+                ucfirst($fist_name),
+                mb_strtolower($data["surname"], 'UTF-8'),
+                mb_strtolower($data["email"], 'UTF-8'),
                 $hashedPassword
             );
 

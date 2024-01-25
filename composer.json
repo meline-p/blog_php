@@ -12,5 +12,7 @@
             "name": "Meline",
             "email": "meline.pischedda@gmail.com"
         }
-    ]
+    ],
+    "require": {
+    }
 }

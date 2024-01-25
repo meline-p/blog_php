@@ -60,6 +60,85 @@ class UsersController
         require(__DIR__.'/../../templates/admin/users/delete_users_page.php');
     }
 
+    public function getAddUser($data = null)
+    {
+        $roles = $this->roleRepository->getRoles();
+        require(__DIR__.'/../../templates/admin/users/add_user_page.php');
+    }
+
+    public function postAddUser($data)
+    {
+        if($data['password'] != $data['confirm_password']) {
+            AlertService::add('danger', "Les mots de passe sont différents");
+            $this->getAddUser($data);
+            exit;
+        }
+
+        $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
+        $last_name = mb_strtolower($data["last_name"], 'UTF-8');
+        $fist_name = mb_strtolower($data["first_name"], 'UTF-8');
+
+        $user = new User();
+        $user->init(
+            $data["role_id"],
+            ucfirst($last_name),
+            ucfirst($fist_name),
+            mb_strtolower($data["surname"], 'UTF-8'),
+            mb_strtolower($data["email"], 'UTF-8'),
+            $hashedPassword
+        );
+
+        $this->userRepository->addUser($user);
+
+        AlertService::add('success', "L'utilisateur' " . $user->surname . " a bien été ajouté.");
+
+        header("location: /admin/utilisateurs");
+        exit;
+    }
+
+    public function getEditUser($userId)
+    {
+        $user = $this->userRepository->getUserById($userId);
+        $roles = $this->roleRepository->getRoles();
+        require(__DIR__.'/../../templates/admin/users/edit_user_page.php');
+    }
+
+    public function postEditUser($id, $data)
+    {
+        if (!isset($id) || empty($data["last_name"]) || empty($data["first_name"]) || empty($data["surname"]) || empty($data["email"])) {
+            AlertService::add('danger', "Veuillez fournir toutes les informations nécessaires.");
+
+            header("location: /admin/utilisateur/modifier/$id");
+            exit;
+        }
+
+        $user = $this->userRepository->getUserById($id);
+
+        if(!$user) {
+            echo 'Cet utilisateur n\'existe pas';
+            return;
+        }
+
+        $last_name = mb_strtolower($data["last_name"], 'UTF-8');
+        $fist_name = mb_strtolower($data["first_name"], 'UTF-8');
+
+        $user->update(
+            $data["role_id"],
+            ucfirst($last_name),
+            ucfirst($fist_name),
+            mb_strtolower($data["surname"], 'UTF-8'),
+            mb_strtolower($data["email"], 'UTF-8'),
+        );
+
+        $this->userRepository->editUser($user);
+
+        AlertService::add('success', "L'utilisateur ". $user->surname ." a bien été modifié.");
+
+        header("location: /admin/utilisateurs");
+        exit;
+
+    }
+
     public function postDeleteUser($id)
     {
         $user = $this->userRepository->getUserById($id);

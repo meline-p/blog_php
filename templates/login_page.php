@@ -2,7 +2,7 @@
 
 <?php ob_start(); ?>
 
-<div id="content" class="container">
+<div id="content" class="container with-60">
 
 	<?php ;
 $_SESSION['redirect_back'] = $_SERVER["HTTP_REFERER"];

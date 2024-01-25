@@ -16,7 +16,8 @@ class UserRepository
         $this->current_time = new \DateTime();
     }
 
-    private function getSimpleSelect() {
+    private function getSimpleSelect()
+    {
         return "SELECT u.*, r.name AS role_name
         FROM users u
         LEFT JOIN roles r ON u.role_id = r.id";
@@ -60,7 +61,7 @@ class UserRepository
 
     public function getUserById($userId)
     {
-        $statement = $this->connection->getConnection()->prepare($this->getSimpleSelect()." WHERE id = :userId");
+        $statement = $this->connection->getConnection()->prepare($this->getSimpleSelect()." WHERE u.id = :userId");
         $statement->execute(['userId' => $userId]);
         $row = $statement->fetch();
         $user = new User();
@@ -103,6 +104,30 @@ class UserRepository
         ]);
 
         return $this->connection->getConnection()->lastInsertId();
+    }
+
+    public function editUser(User $user)
+    {
+        $editUser = $this->connection->getConnection()->prepare('UPDATE users u
+            SET role_id = :role_id, last_name = :last_name, first_name = :first_name, surname = :surname, email = :email
+            WHERE u.id = :id ');
+
+        $user->update(
+            $user->role_id,
+            $user->last_name,
+            $user->first_name,
+            $user->surname,
+            $user->email,
+        );
+
+        $editUser->execute([
+            'id' => $user->id,
+            'role_id' => $user->role_id,
+            'last_name' => $user->last_name,
+            'first_name' => $user->first_name,
+            'surname' => $user->surname,
+            'email' => $user->email,
+        ]);
     }
 
     public function deleteUser(User $user)

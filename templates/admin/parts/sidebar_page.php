@@ -1,4 +1,4 @@
-<div class="sticky-top">
+<div class="sticky-top sidebar">
 	<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="height:100vh;">
 		<a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
 			<span class="fs-4"> Admin</span>
@@ -8,7 +8,7 @@
 		<hr>
 		<ul class="nav nav-pills flex-column mb-auto">
 			<li class="nav-item">
-				<a href="/admin/dashboard" class="nav-link text-white active" aria-current="page">
+				<a href="/admin/dashboard" class="nav-link text-white" aria-current="page">
 					<i class="fa-solid fa-chart-simple"></i> Dashboard
 				</a>
 			</li>
