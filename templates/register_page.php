@@ -35,7 +35,7 @@
 			<input required type="password" class="form-control" id="password" name="password" aria-describedby="password-help">
 		</div>
 		<input required type="hidden" class="form-control" id="role_id" name="role_id" aria-describedby="role-help">
-		<button type="submit" class="btn btn-primary">S'inscrire</button>
+		<button type="submit" class="btn btn-warning">S'inscrire</button>
 	</form>
 
 </div>

@@ -107,21 +107,19 @@ class CommentsController
     }
 
     /**
-     * Allow an administrator to confirm the validation of a comment.
+     * Get comment details by ID and associate user and post information.
      *
-     * Displays a page allowing the administrator to confirm the validation of a comment.
-     *
-     * @param mixed $commentId The identifier of the comment to be confirmed for validation.
-     * @return void
+     * @param int $commentId The ID of the comment.
+     * @return Comment|null The comment object with associated user and post details, or null if the comment does not exist.
      */
-    public function getConfirmComment($commentId)
+    private function getCommentDetails($commentId)
     {
         $comment = $this->commentRepository->getCommentById($commentId);
 
         $posts = $this->postRepository->getAllPosts();
         $users = $this->userRepository->getUsers();
 
-        if(!$comment) {
+        if (!$comment) {
             AlertService::add('danger', "Ce commentaire n'existe pas.");
             header("location: /admin/commentaires");
             exit;
@@ -140,6 +138,20 @@ class CommentsController
             }
         }
 
+        return $comment;
+    }
+
+    /**
+     * Allow an administrator to confirm the validation of a comment.
+     *
+     * Displays a page allowing the administrator to confirm the validation of a comment.
+     *
+     * @param mixed $commentId The identifier of the comment to be confirmed for validation.
+     * @return void
+     */
+    public function getConfirmComment($commentId)
+    {
+        $comment = $this->getCommentDetails($commentId);
         require(__DIR__.'/../../templates/admin/comments/valid_comments_page.php');
     }
 
@@ -168,8 +180,6 @@ class CommentsController
         AlertService::add('success', "Le commentaire de ". $comment->user_surname ." a bien été validé.");
         header("location: /admin/commentaires");
         exit;
-
-
     }
 
 
@@ -184,30 +194,7 @@ class CommentsController
      */
     public function getDeleteComment($commentId)
     {
-        $comment = $this->commentRepository->getCommentById($commentId);
-
-        $posts = $this->postRepository->getAllPosts();
-        $users = $this->userRepository->getUsers();
-
-        if(!$comment) {
-            AlertService::add('danger', "Ce commentaire n'existe pas.");
-            header("location: /admin/commentaires");
-            exit;
-        }
-
-        foreach ($users as $user) {
-            if ($user->id == $comment->user_id) {
-                $comment->user_surname = $user->surname;
-            }
-        }
-
-        foreach ($posts as $post) {
-            if ($post->id == $comment->post_id) {
-                $comment->post_title = $post->title;
-                $comment->post_content = $post->content;
-            }
-        }
-
+        $comment = $this->getCommentDetails($commentId);
         require(__DIR__.'/../../templates/admin/comments/delete_comments_page.php');
     }
 
@@ -217,6 +204,7 @@ class CommentsController
     * This function retrieves a comment based on its identifier and proceeds to mark it for deletion.
     *
     * @param mixed $commentId The identifier of the comment to be marked for deletion.
+    * @return void
     */
     public function postDeleteComment($commentId)
     {
@@ -249,30 +237,7 @@ class CommentsController
      */
     public function getRestoreComment($commentId)
     {
-        $comment = $this->commentRepository->getCommentById($commentId);
-
-        $posts = $this->postRepository->getAllPosts();
-        $users = $this->userRepository->getUsers();
-
-        if(!$comment) {
-            AlertService::add('danger', "Ce commentaire n'existe pas.");
-            header("location: /admin/commentaires");
-            exit;
-        }
-
-        foreach ($users as $user) {
-            if ($user->id == $comment->user_id) {
-                $comment->user_surname = $user->surname;
-            }
-        }
-
-        foreach ($posts as $post) {
-            if ($post->id == $comment->post_id) {
-                $comment->post_title = $post->title;
-                $comment->post_content = $post->content;
-            }
-        }
-
+        $comment = $this->getCommentDetails($commentId);
         require(__DIR__.'/../../templates/admin/comments/restore_comments_page.php');
     }
 
