@@ -4,7 +4,10 @@
 
 <div id="content" class="container">
 
-	<?php if(!isset($_SESSION['LOGGED_USER'])): ?>
+	<?php ;
+$_SESSION['redirect_back'] = $_SERVER["HTTP_REFERER"];
+$redirectPath = parse_url($_SESSION['redirect_back'], PHP_URL_PATH);
+?>
 
 	<h3>Se connecter</h3>
 	<form action="/connexion" method="POST">
@@ -20,12 +23,6 @@
 	</form>
 	<hr>
 	<a class="btn btn-dark" href="/inscription">S'inscrire</a>
-
-	<?php else: ?>
-	<div class="alert alert-success" role="alert">
-		Bonjour <strong><?= $_SESSION['LOGGED_USER']; ?></strong> et bienvenue sur le site !
-	</div>
-	<?php endif; ?>
 
 </div>
 

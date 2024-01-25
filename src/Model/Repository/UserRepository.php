@@ -16,11 +16,15 @@ class UserRepository
         $this->current_time = new \DateTime();
     }
 
+    private function getSimpleSelect() {
+        return "SELECT u.*, r.name AS role_name
+        FROM users u
+        LEFT JOIN roles r ON u.role_id = r.id";
+    }
+
     public function getUsers()
     {
-        $statement = $this->connection->getConnection()->prepare("SELECT u.*, r.name AS role_name
-        FROM users u
-        LEFT JOIN roles r ON u.role_id = r.id
+        $statement = $this->connection->getConnection()->prepare($this->getSimpleSelect()."
         ORDER BY COALESCE(u.deleted_at, u.created_at) ASC");
         $statement->execute();
         $rows =  $statement->fetchAll();
@@ -34,9 +38,8 @@ class UserRepository
 
     public function getAdmins()
     {
-        $statement = $this->connection->getConnection()->prepare('SELECT id, first_name, last_name, surname 
-            FROM users 
-            WHERE role_id = :role_id');
+        $statement = $this->connection->getConnection()->prepare($this->getSimpleSelect()."
+            WHERE role_id = :role_id");
         $statement->execute(['role_id' => 1]);
         $rows =  $statement->fetchAll();
         $admins = array_map(function ($row) {
@@ -57,7 +60,7 @@ class UserRepository
 
     public function getUserById($userId)
     {
-        $statement = $this->connection->getConnection()->prepare('SELECT * FROM users WHERE id = :userId');
+        $statement = $this->connection->getConnection()->prepare($this->getSimpleSelect()." WHERE id = :userId");
         $statement->execute(['userId' => $userId]);
         $row = $statement->fetch();
         $user = new User();
@@ -65,28 +68,14 @@ class UserRepository
         return $user;
     }
 
-    public function getUserByEmail($userEmail){
-        $statement = $this->connection->getConnection()->prepare('SELECT * FROM users WHERE email = :userEmail');
+    public function getUserByEmail($userEmail)
+    {
+        $statement = $this->connection->getConnection()->prepare($this->getSimpleSelect()." WHERE email = :userEmail");
         $statement->execute(['userEmail' => $userEmail]);
         $row = $statement->fetch();
         $user = new User();
         $user->fromSql($row);
         return $user;
-    }
-
-    public function login($email, $password)
-    {
-        $statement = $this->connection->getConnection()->prepare('SELECT * FROM users WHERE email = :email AND password = :password');
-        $statement->execute(['email' => $email, 'password' => $password]);
-        $user = $statement->fetch();
-
-        if ($user) {
-            $_SESSION['LOGGED_USER'] = $user['surname'];
-            $_SESSION['USER_ID'] = $user['id'];
-            return true;
-        }
-
-        return false;
     }
 
     public function addUser(User $user)

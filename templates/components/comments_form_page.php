@@ -1,6 +1,6 @@
 <h5>Laisser un commentaire</h5>
-<?php if(isset($_SESSION['LOGGED_USER'])): ?>
-<form action="parts/post_add_comments.php?id=<?= $post->id ?>" method="POST">
+<?php if(isset($_SESSION['user'])): ?>
+<form action="/publication/<?= $post->id ?>" method="POST">
 	<div class="mb-3">
 		<label for="comment" class="form-label">Votre commentaire</label>
 		<textarea class="form-control" placeholder="Votre commentaire" id="comment" name="comment"></textarea>

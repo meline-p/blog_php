@@ -27,13 +27,17 @@
 			<?php foreach ($posts as $post) : ?>
 			<tr>
 				<td>
+					<?php $shortTitle = (strlen($post->title) > 30) ? substr($post->title, 0, 30) . '...' : $post->title;?>
 					<?php if (empty($post->deleted_at)) : ?>
 					<a style="text-decoration:none;" class="" target="_blank"
-						href="/publication/<?= $post->id; ?>"><?= $post->title ?></a>
+						href="/publication/<?= $post->id; ?>"><?= $shortTitle ?></a>
 					<?php else : ?>
-					<span class="text-muted"><?= $post->title ?></span>
+					<span class="text-muted"><?= $shortTitle ?></span>
 					<?php endif; ?>
+
 				</td>
+
+
 				<td class="<?= $post->deleted_at ? 'text-muted' : '' ?>">
 					<?= $post->user_surname ?>
 				</td>

@@ -25,4 +25,30 @@ class DatabaseConnection
 
         return $this->db;
     }
+
+    public function getUserDataFromDatabase(int $userId): array
+    {
+        // Query to retrieve serialized user data from the database
+        $stmt = $this->getConnection()->prepare("SELECT * FROM users WHERE user_id = ?");
+        $stmt->execute([$userId]);
+
+        // Fetch the serialized data
+        $serializedUserData = $stmt->fetchColumn();
+
+        // Initialize session data
+        $sessionData = [];
+
+        // Check if data is found in the database
+        if ($serializedUserData !== false) {
+            // Unserialize the data
+            $sessionData = unserialize($serializedUserData);
+
+            // Ensure it is an array
+            if (!is_array($sessionData)) {
+                $sessionData = [];
+            }
+        }
+
+        return $sessionData;
+    }
 }

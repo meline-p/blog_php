@@ -16,11 +16,16 @@ class PostRepository
         $this->current_time = new \DateTime();
     }
 
+    private function getSimpleSelect()
+    {
+        return "SELECT p.*, u.surname AS user_surname
+        FROM posts p
+        LEFT JOIN users u ON p.user_id = u.id";
+    }
+
     public function getAllPosts()
     {
-        $statement = $this->connection->getConnection()->prepare("SELECT p.*, u.surname AS user_surname
-        FROM posts p
-        LEFT JOIN users u ON p.user_id = u.id
+        $statement = $this->connection->getConnection()->prepare($this->getSimpleSelect()."
         ORDER BY 
         CASE
             WHEN p.deleted_at IS NOT NULL THEN 2
@@ -48,7 +53,8 @@ class PostRepository
 
     public function getPublishedPosts()
     {
-        $statement = $this->connection->getConnection()->prepare("SELECT * FROM posts WHERE is_published = 1 ORDER BY created_at DESC");
+        $statement = $this->connection->getConnection()->prepare($this->getSimpleSelect()."
+            WHERE p.is_published = 1 ORDER BY created_at DESC");
         $statement->execute();
         $rows =  $statement->fetchAll();
         $posts = array_map(function ($row) {
@@ -61,7 +67,7 @@ class PostRepository
 
     public function getPostById($postId)
     {
-        $statement = $this->connection->getConnection()->prepare("SELECT * FROM posts WHERE id = :postId");
+        $statement = $this->connection->getConnection()->prepare($this->getSimpleSelect()." WHERE p.id = :postId");
         $statement->execute(['postId' => $postId]);
         $row = $statement->fetch();
         $post = new Post();

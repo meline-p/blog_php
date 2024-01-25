@@ -16,8 +16,8 @@
 						<a class="nav-link" href="/publications">Posts</a>
 					</li>
 					<li class="nav-item">
-						<?php if(isset($_SESSION['LOGGED_USER'])): ?>
-						<p class="nav-link"><?= $_SESSION['LOGGED_USER'] ?> <span> <a id="logout" class="btn btn-dark btn-sm"
+						<?php if(isset($_SESSION['user'])): ?>
+						<p class="nav-link"><?= $_SESSION['user']->surname ?> <span> <a id="logout" class="btn btn-dark btn-sm"
 									href="/deconnexion">Se déconnecter</a></span></p>
 						<?php else: ?>
 						<a class="nav-link" href="/connexion">S'inscire / Se connecter</a>
