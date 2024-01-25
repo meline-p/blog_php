@@ -2,8 +2,8 @@
 
 namespace App\controllers;
 
-use Repository\UserRepository;
-use Repository\PostRepository;
+use App\Model\Repository\UserRepository;
+use App\Model\Repository\PostRepository;
 
 class HomeController
 {
@@ -25,11 +25,11 @@ class HomeController
             $userId = $_SESSION['USER_ID'];
             $user = $this->userRepository->getUserById($userId);
             if ($user) {
-                $surname = $user['surname'];
+                $surname = $user->surname;
                 $_SESSION['LOGGED_USER'] = $surname;
 
                 // check if user = admin
-                if (isset($user['role_id']) && $user['role_id'] === 1) {
+                if (isset($user->role_id) && $user->role_id === 1) {
                     $_SESSION['IS_ADMIN'] = true;
                 }
             } else {
@@ -37,8 +37,8 @@ class HomeController
             }
         }
 
-        $allPosts = $this->postRepository->getAllPosts();
+        $posts = $this->postRepository->getAllPosts();
 
-        require_once(__DIR__ . '/../../public/templates/homepage.php');
+        require_once(__DIR__ . '/../../templates/homepage.php');
     }
 }

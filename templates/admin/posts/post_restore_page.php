@@ -1,4 +1,3 @@
-
 <?php $title = "Admin - Post restauré" ?>
 
 <?php ob_start(); ?>
@@ -9,4 +8,4 @@
 
 <?php $content = ob_get_clean(); ?>
 
-<?php require('../../templates/admin/parts/admin_layout.php') ?>
+<?php require('../templates/admin/parts/admin_layout.php') ?>

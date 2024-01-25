@@ -1,118 +1,60 @@
 <?php
 
-namespace Entity;
+namespace App\Model\Entity;
+
+use DateTime;
 
 class User
 {
     // properties
-    private $id;
-    private $role_id;
-    private $last_name;
-    private $first_name;
-    private $surname;
-    private $email;
-    private $password;
-    private $created_at;
-    private $deleted_at;
+    public $id;
+    public $role_id;
+    public $last_name;
+    public $first_name;
+    public $surname;
+    public $email;
+    public $password;
+    public $created_at;
+    public $deleted_at;
+
+    public $role_name;
 
     // getters and setters
-
-    // id
-    public function setId($id)
+    public function fromSql($row)
     {
-        $this->id = $id;
+        $this->id = $row['id'];
+        $this->role_id = $row['role_id'];
+        $this->last_name = $row['last_name'];
+        $this->first_name = $row['first_name'];
+        $this->surname = $row['surname'];
+        $this->email = $row['email'];
+        $this->password = $row['password'];
+        $this->created_at = $row['created_at'];
+        $this->deleted_at = $row['deleted_at'];
+
+        $this->role_name = $row['role_name'];
     }
 
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    // role_id
-    public function setRoleId($role_id)
+    public function init($role_id, $last_name, $first_name, $surname, $email, $password)
     {
         $this->role_id = $role_id;
-    }
-
-    public function getRoleId()
-    {
-        return $this->role_id;
-    }
-
-    // last_name
-    public function setLastName($last_name)
-    {
         $this->last_name = $last_name;
-    }
-
-    public function getLastName()
-    {
-        return $this->last_name;
-    }
-
-    // first_name
-    public function setFirstName($first_name)
-    {
         $this->first_name = $first_name;
-    }
-
-    public function getFirstName()
-    {
-        return $this->first_name;
-    }
-
-    // surname
-    public function setSurname($surname)
-    {
         $this->surname = $surname;
-    }
-
-    public function getSurname()
-    {
-        return $this->surname;
-    }
-
-    // email
-    public function setEmail($email)
-    {
         $this->email = $email;
-    }
-
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    // password
-    public function setPassword($password)
-    {
         $this->password = $password;
+        $this->created_at = new \DateTime();
     }
 
-    public function getPassword()
+    public function delete($id)
     {
-        return $this->password;
+        $this->id = $id;
+        $this->deleted_at = new \DateTime();
     }
 
-    // created_at
-    public function setCreatedAt($created_at)
+    public function restore($id)
     {
-        $this->created_at = $created_at;
-    }
-
-    public function getCreatedAt()
-    {
-        return $this->created_at;
-    }
-
-    //deleted_at
-    public function setDeletedAt($deleted_at)
-    {
-        $this->deleted_at = $deleted_at;
-    }
-
-    public function getDeletedAt()
-    {
-        return $this->deleted_at;
+        $this->id = $id;
+        $this->deleted_at = null;
     }
 }

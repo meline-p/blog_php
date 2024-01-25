@@ -1,10 +1,12 @@
 <?php
 
+namespace App\lib;
+
 class DatabaseConnection
 {
-    public ?PDO $db = null;
+    public ?\PDO $db = null;
 
-    public function getConnection(): PDO
+    public function getConnection(): \PDO
     {
         if ($this->db === null) {
             $host = 'localhost';
@@ -13,11 +15,11 @@ class DatabaseConnection
             $username = 'root';
             $password = 'root';
 
-            $this->db = new PDO(
+            $this->db = new \PDO(
                 "mysql:host=$host;dbname=$dbname;charset=$charset",
                 $username,
                 $password,
-                [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION],
+                [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION],
             );
         }
 
