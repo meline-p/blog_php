@@ -29,14 +29,11 @@ class RoleRepository
      */
     public function getRoles()
     {
-        // Prepare and execute a SQL statement to fetch all roles from the database
         $statement = $this->connection->getConnection()->prepare("SELECT * FROM roles");
         $statement->execute();
 
-        // Fetch all rows from the result set
         $rows =  $statement->fetchAll();
 
-        // Map each row to a Role object and store them in an array
         $roles = array_map(function ($row) {
             $role = new Role();
             $role->fromSql($row);

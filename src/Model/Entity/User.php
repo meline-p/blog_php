@@ -27,6 +27,7 @@ class User
      * Populate the User object from a database row.
      *
      * @param  mixed $row Database row representing a user
+     * @return void
      */
     public function fromSql($row)
     {
@@ -52,6 +53,7 @@ class User
      * @param  mixed $surname       Surname of the user
      * @param  mixed $email         Email address of the user
      * @param  mixed $password      Password of the user
+     * @return void
      */
     public function init($role_id, $last_name, $first_name, $surname, $email, $password)
     {
@@ -72,6 +74,7 @@ class User
      * @param  mixed $first_name    First name of the user
      * @param  mixed $surname       Surname of the user
      * @param  mixed $email         Email address of the user
+     * @return void
      */
     public function update($role_id, $last_name, $first_name, $surname, $email)
     {
@@ -86,6 +89,7 @@ class User
      * Mark the user as deleted.
      *
      * @param  mixed $id User ID
+     * @return void
      */
     public function delete($id)
     {
@@ -97,6 +101,7 @@ class User
      * Restore a deleted user.
      *
      * @param  mixed $id User ID
+     * @return void
      */
     public function restore($id)
     {

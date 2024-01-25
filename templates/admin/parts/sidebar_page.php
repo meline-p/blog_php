@@ -1,8 +1,7 @@
 <div class="sticky-top sidebar">
 	<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="height:100vh;">
 		<a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-			<span class="fs-4"> Admin</span>
-			<br>
+			<span class="fs-4 my-4"> Admin</span>
 			<a class="btn btn-secondary btn-sm" href="/">Retour sur le site</a>
 		</a>
 		<hr>

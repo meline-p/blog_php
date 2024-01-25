@@ -19,7 +19,7 @@ $redirectBack = parse_url($_SESSION['redirect_back'], PHP_URL_PATH);
 			<label for="password" class="form-label">Mot de passe</label>
 			<input type="password" class="form-control" id="password" name="password" aria-describedby="password-help">
 		</div>
-		<button type="submit" class="btn btn-primary">Se connecter</button>
+		<button type="submit" class="btn btn-warning">Se connecter</button>
 	</form>
 	<hr>
 	<a class="btn btn-dark" href="/inscription">S'inscrire</a>

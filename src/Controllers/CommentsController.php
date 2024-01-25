@@ -29,16 +29,9 @@ class CommentsController
      */
     public function __construct(DatabaseConnection $connection)
     {
-        // Initialize CommentRepository with the provided database connection
         $this->commentRepository = new CommentRepository($connection);
-
-        // Initialize UserRepository with the provided database connection
         $this->userRepository = new UserRepository($connection);
-
-        // Initialize PostRepository with the provided database connection
         $this->postRepository = new PostRepository($connection);
-
-        // Set the current time for the controller
         $this->currentTime = date('Y-m-d H:i:s');
     }
 
@@ -51,10 +44,7 @@ class CommentsController
      */
     public function getComments()
     {
-        // Retrieve all comments
         $comments = $this->commentRepository->getComments();
-
-        // Require the admin comments list page template for rendering
         require(__DIR__.'/../../templates/admin/admin_comments_list_page.php');
     }
 
@@ -69,7 +59,6 @@ class CommentsController
      */
     public function getValidComments($postId)
     {
-        // Retrieve all validated comments for the specified post
         $comments = $this->commentRepository->getValidComments($postId);
     }
 
@@ -86,29 +75,23 @@ class CommentsController
      */
     public function postAddComment($postId, $data)
     {
-        // Check if the user is logged in
         if (!isset($_SESSION['user'])) {
             AlertService::add('danger', 'Vous devez être connecté pour ajouter un commentaire.');
             return;
         }
 
-        // Validate comment data
         if ($data['comment'] == '') {
             AlertService::add('danger', 'Veuillez remplir le champ commentaire.');
             return;
         }
 
-        // Validate post ID
         if (!ctype_digit($postId)) {
-            echo "ID non valide.";
             AlertService::add('danger', 'ID non valide');
             return;
         }
 
-        // Create a new Comment instance
         $comment = new Comment();
 
-        // Initialize the comment with user ID, post ID, and comment content
         $comment->init(
             $_SESSION['user']->id,
             intval($postId),
@@ -124,6 +107,41 @@ class CommentsController
     }
 
     /**
+     * Get comment details by ID and associate user and post information.
+     *
+     * @param int $commentId The ID of the comment.
+     * @return Comment|null The comment object with associated user and post details, or null if the comment does not exist.
+     */
+    private function getCommentDetails($commentId)
+    {
+        $comment = $this->commentRepository->getCommentById($commentId);
+
+        $posts = $this->postRepository->getAllPosts();
+        $users = $this->userRepository->getUsers();
+
+        if (!$comment) {
+            AlertService::add('danger', "Ce commentaire n'existe pas.");
+            header("location: /admin/commentaires");
+            exit;
+        }
+
+        foreach ($users as $user) {
+            if ($user->id == $comment->user_id) {
+                $comment->user_surname = $user->surname;
+            }
+        }
+
+        foreach ($posts as $post) {
+            if ($post->id == $comment->post_id) {
+                $comment->post_title = $post->title;
+                $comment->post_content = $post->content;
+            }
+        }
+
+        return $comment;
+    }
+
+    /**
      * Allow an administrator to confirm the validation of a comment.
      *
      * Displays a page allowing the administrator to confirm the validation of a comment.
@@ -133,29 +151,7 @@ class CommentsController
      */
     public function getConfirmComment($commentId)
     {
-        // Retrieve the comment based on the provided identifier
-        $comment = $this->commentRepository->getCommentById($commentId);
-
-        // Retrieve all posts and users for additional information
-        $posts = $this->postRepository->getAllPosts();
-        $users = $this->userRepository->getUsers();
-
-        // Associate user information with the comment
-        foreach ($users as $user) {
-            if ($user->id == $comment->user_id) {
-                $comment->user_surname = $user->surname;
-            }
-        }
-
-        // Associate post information with the comment
-        foreach ($posts as $post) {
-            if ($post->id == $comment->post_id) {
-                $comment->post_title = $post->title;
-                $comment->post_content = $post->content;
-            }
-        }
-
-        // Require the valid comments page template for rendering
+        $comment = $this->getCommentDetails($commentId);
         require(__DIR__.'/../../templates/admin/comments/valid_comments_page.php');
     }
 
@@ -165,31 +161,25 @@ class CommentsController
      * This function retrieves a comment based on its identifier and proceeds to confirm its validation.
      *
      * @param mixed $commentId The identifier of the comment to be confirmed for validation.
+     * @return void
      */
     public function postConfirmComment($commentId)
     {
-        // Retrieve the comment based on the provided identifier
         $comment = $this->commentRepository->getCommentById($commentId);
 
-        // Check if the comment exists
-        if($comment) {
-            // Confirm the validation of the comment
-            $comment->confirm($commentId, 1);
-
-            // Update the comment in the repository
-            $this->commentRepository->confirmComment($comment);
-
-            // Add a success alert message indicating the successful validation of the comment
-            AlertService::add('success', "Le commentaire de ". $comment->user_surname ." a bien été validé.");
-
-            // Redirect to the admin comments page
+        if(!$comment) {
+            AlertService::add('danger', "Ce commentaire n'existe pas.");
             header("location: /admin/commentaires");
             exit;
-
-        } else {
-            // Display an error message if the comment does not exist
-            echo 'Ce commentaire n\'existe pas';
         }
+
+        $comment->confirm($commentId, 1);
+
+        $this->commentRepository->confirmComment($comment);
+
+        AlertService::add('success', "Le commentaire de ". $comment->user_surname ." a bien été validé.");
+        header("location: /admin/commentaires");
+        exit;
     }
 
 
@@ -200,32 +190,11 @@ class CommentsController
      * It associates the user and post information with the comment for display on the deletion page.
      *
      * @param mixed $commentId The identifier of the comment for which the deletion page is displayed.
+     * @return void
      */
     public function getDeleteComment($commentId)
     {
-        // Retrieve the comment based on the provided identifier
-        $comment = $this->commentRepository->getCommentById($commentId);
-
-        // Retrieve all posts and users for additional information
-        $posts = $this->postRepository->getAllPosts();
-        $users = $this->userRepository->getUsers();
-
-        // Associate user information with the comment
-        foreach ($users as $user) {
-            if ($user->id == $comment->user_id) {
-                $comment->user_surname = $user->surname;
-            }
-        }
-
-        // Associate post information with the comment
-        foreach ($posts as $post) {
-            if ($post->id == $comment->post_id) {
-                $comment->post_title = $post->title;
-                $comment->post_content = $post->content;
-            }
-        }
-
-        // Require the deletion comments page template for rendering
+        $comment = $this->getCommentDetails($commentId);
         require(__DIR__.'/../../templates/admin/comments/delete_comments_page.php');
     }
 
@@ -235,32 +204,26 @@ class CommentsController
     * This function retrieves a comment based on its identifier and proceeds to mark it for deletion.
     *
     * @param mixed $commentId The identifier of the comment to be marked for deletion.
+    * @return void
     */
     public function postDeleteComment($commentId)
     {
-        // Retrieve the comment based on the provided identifier
         $comment = $this->commentRepository->getCommentById($commentId);
 
-        // Check if the comment exists
-        if($comment) {
-
-            // Mark the comment for deletion
-            $comment->delete($commentId, 0);
-
-            // Update the comment in the repository
-            $this->commentRepository->deleteComment($comment);
-
-            // Add a success alert message indicating the successful deletion of the comment
-            AlertService::add('success', "Le commentaire de ". $comment->user_surname ." a bien été suprimé.");
-
-            // Redirect to the admin comments page
+        if(!$comment) {
+            AlertService::add('danger', "Ce commentaire n'existe pas.");
             header("location: /admin/commentaires");
             exit;
-
-        } else {
-            // Display an error message if the comment does not exist
-            echo 'Ce commentaire n\'existe pas';
         }
+
+        $comment->delete($commentId, 0);
+
+        $this->commentRepository->deleteComment($comment);
+
+        AlertService::add('success', "Le commentaire de ". $comment->user_surname ." a bien été suprimé.");
+        header("location: /admin/commentaires");
+        exit;
+
     }
 
     /**
@@ -270,32 +233,11 @@ class CommentsController
      * It associates the user and post information with the comment for display on the restoration page.
      *
      * @param mixed $commentId The identifier of the comment for which the restoration page is displayed.
+     * @return void
      */
     public function getRestoreComment($commentId)
     {
-        // Retrieve the comment based on the provided identifier
-        $comment = $this->commentRepository->getCommentById($commentId);
-
-        // Retrieve all posts and users for additional information
-        $posts = $this->postRepository->getAllPosts();
-        $users = $this->userRepository->getUsers();
-
-        // Associate user information with the comment
-        foreach ($users as $user) {
-            if ($user->id == $comment->user_id) {
-                $comment->user_surname = $user->surname;
-            }
-        }
-
-        // Associate post information with the comment
-        foreach ($posts as $post) {
-            if ($post->id == $comment->post_id) {
-                $comment->post_title = $post->title;
-                $comment->post_content = $post->content;
-            }
-        }
-
-        // Require the restoration comments page template for rendering
+        $comment = $this->getCommentDetails($commentId);
         require(__DIR__.'/../../templates/admin/comments/restore_comments_page.php');
     }
 
@@ -305,32 +247,24 @@ class CommentsController
      * This function retrieves a comment based on its identifier and proceeds to confirm its restoration.
      *
      * @param mixed $commentId The identifier of the comment to be restored.
+     * @return void
      */
     public function postRestoreComment($commentId)
     {
-        // Retrieve the comment based on the provided identifier
         $comment = $this->commentRepository->getCommentById($commentId);
 
-        // Check if the comment exists
-        if($comment) {
-            // Confirm the restoration of the comment
-            $comment->confirm($commentId, 1);
-
-            // Update the comment in the repository
-            $this->commentRepository->confirmComment($comment);
-
-            // Add a success alert message indicating the successful restoration of the comment
-            AlertService::add('success', "Le commentaire de ". $comment->user_surname ." a bien été restauré.");
-
-            // Redirect to the admin comments page
+        if(!$comment) {
+            AlertService::add('danger', "Ce commentaire n'existe pas.");
             header("location: /admin/commentaires");
             exit;
-
-        } else {
-            // Display an error message if the comment does not exist
-            echo 'Ce commentaire n\'existe pas';
         }
+
+        $comment->confirm($commentId, 1);
+
+        $this->commentRepository->confirmComment($comment);
+
+        AlertService::add('success', "Le commentaire de ". $comment->user_surname ." a bien été restauré.");
+        header("location: /admin/commentaires");
+        exit;
     }
-
-
 }

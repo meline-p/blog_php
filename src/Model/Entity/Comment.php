@@ -23,6 +23,7 @@ class Comment
      * Populate the Comment object from a database row.
      *
      * @param  mixed $row Database row representing a comment
+     * @return void
      */
     public function fromSql($row)
     {
@@ -46,6 +47,7 @@ class Comment
      * @param  mixed $post_id Post ID associated with the comment
      * @param  mixed $content Content of the comment
      * @param  mixed $is_enabled Status of the comment (enabled or disabled)
+     * @return void
      */
     public function init($user_id, $post_id, $content, $is_enabled)
     {
@@ -61,6 +63,7 @@ class Comment
      *
      * @param  mixed $id Comment ID
      * @param  mixed $is_enabled Status of the comment (enabled or disabled)
+     * @return void
      */
     public function confirm($id, $is_enabled)
     {
@@ -74,6 +77,7 @@ class Comment
      *
      * @param  mixed $id Comment ID
      * @param  mixed $is_enabled Status of the comment (enabled or disabled)
+     * @return void
      */
     public function delete($id, $is_enabled)
     {

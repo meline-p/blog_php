@@ -24,6 +24,7 @@ class Post
      * Populate the Post object from a database row.
      *
      * @param  mixed $row Database row representing a post
+     * @return void
      */
     public function fromSql($row)
     {
@@ -48,6 +49,7 @@ class Post
      * @param  mixed $content       Content of the post
      * @param  mixed $user_id       User ID associated with the post
      * @param  mixed $isPublished   Status of the post (published or not)
+     * @return void
      */
     public function init($title, $chapo, $content, $user_id, $isPublished)
     {
@@ -68,6 +70,7 @@ class Post
      * @param  mixed $content       New content of the post
      * @param  mixed $user_id       New user ID associated with the post
      * @param  mixed $isPublished   New status of the post (published or not)
+     * @return void
      */
     public function update($title, $chapo, $content, $user_id, $isPublished)
     {
@@ -84,6 +87,7 @@ class Post
      *
      * @param  mixed $id            Post ID
      * @param  mixed $isPublished   Status of the post (published or not)
+     * @return void
      */
     public function delete($id, $isPublished)
     {
@@ -97,6 +101,7 @@ class Post
      * Restore a deleted post.
      *
      * @param  mixed $id Post ID
+     * @return void
      */
     public function restore($id)
     {

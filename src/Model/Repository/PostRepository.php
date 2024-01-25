@@ -21,10 +21,7 @@ class PostRepository
      */
     public function __construct(DatabaseConnection $connection)
     {
-        // Set the database connection
         $this->connection = $connection;
-
-        // Initialize the current time to the current date and time
         $this->current_time = new \DateTime();
     }
 
@@ -38,7 +35,6 @@ class PostRepository
      */
     private function getSimpleSelect()
     {
-        // Construct and return the SELECT query for posts with user surname
         return "SELECT p.*, u.surname AS user_surname
                 FROM posts p
                 LEFT JOIN users u ON p.user_id = u.id";
@@ -54,7 +50,6 @@ class PostRepository
      */
     public function getAllPosts()
     {
-        // Prepare and execute the SQL query for retrieving posts
         $statement = $this->connection->getConnection()->prepare($this->getSimpleSelect()."
         ORDER BY 
         CASE
@@ -65,7 +60,6 @@ class PostRepository
         COALESCE(p.updated_at, p.deleted_at) DESC");
         $statement->execute();
 
-        // Fetch the rows and map them to Post objects
         $rows =  $statement->fetchAll();
         $posts = array_map(function ($row) {
             $post = new Post();
@@ -85,12 +79,11 @@ class PostRepository
      */
     public function countAllPosts()
     {
-        // Prepare and execute the SQL query for counting posts
         $statement = $this->connection->getConnection()->prepare('SELECT COUNT(1) AS nb FROM posts');
         $statement->execute();
 
-        // Fetch the row and return the total number of posts
         $row = $statement->fetch();
+
         return $row['nb'];
     }
 
@@ -103,12 +96,10 @@ class PostRepository
      */
     public function getPublishedPosts()
     {
-        // Prepare and execute the SQL query for retrieving published posts
         $statement = $this->connection->getConnection()->prepare($this->getSimpleSelect()."
             WHERE p.is_published = 1 ORDER BY created_at DESC");
         $statement->execute();
 
-        // Fetch the rows and map them to Post objects
         $rows =  $statement->fetchAll();
         $posts = array_map(function ($row) {
             $post = new Post();
@@ -129,11 +120,9 @@ class PostRepository
      */
     public function getPostById($postId)
     {
-        // Prepare and execute the SQL query for retrieving a post by its ID
         $statement = $this->connection->getConnection()->prepare($this->getSimpleSelect()." WHERE p.id = :postId");
         $statement->execute(['postId' => $postId]);
 
-        // Fetch the row and create a Post object
         $row = $statement->fetch();
         $post = ($row !== false) ? new Post() : null;
 
@@ -154,11 +143,9 @@ class PostRepository
      */
     public function addPost(Post $post)
     {
-        // Prepare and execute the SQL query for inserting a new post
         $insertPost = $this->connection->getConnection()->prepare('INSERT INTO posts(user_id, title, chapo, content, is_published, created_at, updated_at) 
             VALUES (:user_id, :title, :chapo, :content, :is_published, :created_at, :updated_at)');
 
-        // Initialize the post data in the Post object
         $post->init(
             $post->title,
             $post->chapo,
@@ -167,7 +154,6 @@ class PostRepository
             $post->is_published
         );
 
-        // Execute the query with the post data
         $insertPost->execute([
             'user_id' => $post->user_id,
             'title' => $post->title,
@@ -190,12 +176,10 @@ class PostRepository
      */
     public function editPost(Post $post)
     {
-        // Prepare and execute the SQL query for updating an existing post
         $editPost = $this->connection->getConnection()->prepare('UPDATE posts 
             SET user_id = :user_id, title = :title, chapo = :chapo, content = :content, is_published = :is_published, updated_at = :updated_at
             WHERE id = :id ');
 
-        // Update the post data in the Post object
         $post->update(
             $post->title,
             $post->chapo,
@@ -204,7 +188,6 @@ class PostRepository
             $post->is_published,
         );
 
-        // Execute the query with the updated post data
         $editPost->execute([
             'id' => $post->id,
             'user_id' => $post->user_id,
@@ -226,18 +209,15 @@ class PostRepository
      */
     public function deletePost(Post $post)
     {
-        // Prepare and execute the SQL query for marking a post as deleted
         $deletePost = $this->connection->getConnection()->prepare('UPDATE posts 
             SET deleted_at = :deleted_at, is_published = 0, updated_at = :updated_at
             WHERE id = :id ');
 
-        // Update the post data in the Post object
         $post->delete(
             $post->id,
             $post->is_published,
         );
 
-        // Execute the query with the updated post data
         $deletePost->execute([
             'id' => $post->id,
             'deleted_at' => $this->current_time->format('Y-m-d H:i:s'),
@@ -255,17 +235,14 @@ class PostRepository
      */
     public function restorePost(Post $post)
     {
-        // Prepare and execute the SQL query for restoring a deleted post
         $restorePost = $this->connection->getConnection()->prepare('UPDATE posts 
             SET deleted_at = NULL, updated_at = :updated_at
             WHERE id = :id ');
 
-        // Update the post data in the Post object
         $post->restore(
             $post->id,
         );
 
-        // Execute the query with the updated post data
         $restorePost->execute([
             'id' => $post->id,
             'updated_at' => $this->current_time->format('Y-m-d H:i:s')
