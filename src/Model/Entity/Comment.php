@@ -12,9 +12,9 @@ class Comment
     public $is_enabled;
     public $created_at;
     public $deleted_at;
-
     public $user_surname;
     public $post_title;
+    public $post_content;
 
     // getters and setters
     public function fromSql($row)
@@ -29,6 +29,7 @@ class Comment
 
         $this->user_surname = $row['user_surname'];
         $this->post_title = $row['post_title'];
+        $this->post_content = $row['post_content'];
     }
 
     public function init($user_id, $post_id, $content, $is_enabled)

@@ -65,6 +65,15 @@ class UserRepository
         return $user;
     }
 
+    public function getUserByEmail($userEmail){
+        $statement = $this->connection->getConnection()->prepare('SELECT * FROM users WHERE email = :userEmail');
+        $statement->execute(['userEmail' => $userEmail]);
+        $row = $statement->fetch();
+        $user = new User();
+        $user->fromSql($row);
+        return $user;
+    }
+
     public function login($email, $password)
     {
         $statement = $this->connection->getConnection()->prepare('SELECT * FROM users WHERE email = :email AND password = :password');
@@ -101,7 +110,7 @@ class UserRepository
             'surname' => $user->surname,
             'email' => $user->email,
             'password' => $user->password,
-            'created_at' => $this->current_time
+            'created_at' => $this->current_time->format('Y-m-d H:i:s')
         ]);
 
         return $this->connection->getConnection()->lastInsertId();
@@ -117,7 +126,7 @@ class UserRepository
 
         $deleteUser->execute([
             'id' => $user->id,
-            'deleted_at' => $this->current_time,
+            'deleted_at' => $this->current_time->format('Y-m-d H:i:s'),
         ]);
     }
 

@@ -49,8 +49,14 @@ if ($uri === '/') {
 
 } elseif ($uri === '/inscription') {
     $userController = new UsersController($databaseConnection);
-    $userController->getRegister();
 
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if(isset($_POST['surname']) && isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['email']) && isset($_POST['password'])) {
+            $userController->postRegister($_POST);
+        }
+    } else {
+        $userController->getRegister();
+    }
 
 
 
@@ -150,7 +156,7 @@ if ($uri === '/') {
     $commentController = new CommentsController($databaseConnection);
     $commentController->getConfirmComment($id);
 
-} elseif (1 === preg_match("~^/admin/commentaire/restaurer/confirmation/(?<id>\d+)$~", $uri, $matches)) {
+} elseif (1 === preg_match("~^/admin/commentaire/valider/confirmation/(?<id>\d+)$~", $uri, $matches)) {
     $id = $matches['id'];
     $commentController = new CommentsController($databaseConnection);
     $commentController->postConfirmComment($id);
@@ -177,3 +183,4 @@ if ($uri === '/') {
     $commentController = new CommentsController($databaseConnection);
     $commentController->postRestoreComment($id);
 }
+// var_dump('toto');

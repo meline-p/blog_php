@@ -1,9 +1,7 @@
-<?php $title = "Admin - Post ajouté" ?>
+<?php $title = "Post ajouté" ?>
 
 
 <?php ob_start(); ?>
-
-<h1>Post ajouté</h1>
 
 <div class="card">
 	<div class="card-body">

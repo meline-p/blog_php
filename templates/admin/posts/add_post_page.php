@@ -1,14 +1,13 @@
-<?php $title = "Admin - Ajouter un post" ?>
+<?php $title = "Ajouter un post" ?>
 
 <?php ob_start(); ?>
 
-<h1>Ajouter un post</h1>
 <form action="/admin/publication/ajouter/confirmation" method="post">
 	<div class="row">
 		<div class="col-lg-8">
 			<div class="form-group">
 				<label for="title">Titre</label>
-				<input type="text" id="title" name="title" class="form-control">
+				<input required type="text" id="title" name="title" class="form-control">
 			</div>
 			<br>
 			<div class="form-group">
@@ -18,7 +17,7 @@
 			<br>
 			<div class="form-group">
 				<label for="content">Contenu</label>
-				<textarea id="content" name="content" rows="15" class="form-control"></textarea>
+				<textarea required id="content" name="content" rows="15" class="form-control"></textarea>
 			</div>
 		</div>
 		<div class="col-lg-4">
@@ -40,6 +39,12 @@
 		</div>
 	</div>
 	<br>
+	<!-- Ajoutez ces champs cachés dans votre formulaire -->
+	<input type="hidden" name="previous_title"
+		value="<?= isset($_POST['title']) ? htmlspecialchars($_POST['title']) : '' ?>">
+	<input type="hidden" name="previous_content"
+		value="<?= isset($_POST['content']) ? htmlspecialchars($_POST['content']) : '' ?>">
+
 	<button type="submit" class="btn btn-success btn-sm">Ajouter un post</button>
 	<a class="btn btn-secondary btn-sm" href="/admin/publications">Annuler</a>
 

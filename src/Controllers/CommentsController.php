@@ -2,6 +2,7 @@
 
 namespace App\controllers;
 
+use App\lib\AlertService;
 use App\Model\Repository\CommentRepository;
 use App\Model\Repository\UserRepository;
 use App\Model\Repository\PostRepository;
@@ -22,7 +23,6 @@ class CommentsController
         $this->postRepository = new PostRepository($connection);
         $this->currentTime = date('Y-m-d H:i:s');
     }
-
 
     public function getComments()
     {
@@ -70,20 +70,37 @@ class CommentsController
     public function getConfirmComment($commentId)
     {
         $comment = $this->commentRepository->getCommentById($commentId);
-        require(__DIR__.'/../../templates/admin/comments/valid_comment_page.php');
+        $posts = $this->postRepository->getAllPosts();
+        $users = $this->userRepository->getUsers();
+
+        foreach ($users as $user) {
+            if ($user->id == $comment->user_id) {
+                $comment->user_surname = $user->surname;
+            }
+        }
+        foreach ($posts as $post) {
+            if ($post->id == $comment->post_id) {
+                $comment->post_title = $post->title;
+                $comment->post_content = $post->content;
+            }
+        }
+        require(__DIR__.'/../../templates/admin/comments/valid_comments_page.php');
     }
 
-    public function postConfirmComment($data)
+    public function postConfirmComment($id)
     {
-        $comment = $this->commentRepository->getCommentById($data["id"]);
+        $comment = $this->commentRepository->getCommentById($id);
 
         if($comment) {
 
-            $comment->confirm($data["id"], 1);
+            $comment->confirm($id, 1);
 
             $this->commentRepository->confirmComment($comment);
 
-            require(__DIR__.'/../../templates/admin/admin_comments_list_page.php');
+            AlertService::add('success', "Le commentaire de ". $comment->user_surname ." a bien été validé.");
+
+            header("location: /admin/commentaires");
+            exit;
 
         } else {
             echo 'Ce commentaire n\'existe pas';
@@ -93,22 +110,39 @@ class CommentsController
     // Delete
     public function getDeleteComment($commentId)
     {
-
         $comment = $this->commentRepository->getCommentById($commentId);
-        require(__DIR__.'/../../templates/admin/comments/delete_comment_page.php');
+        $posts = $this->postRepository->getAllPosts();
+        $users = $this->userRepository->getUsers();
+
+        foreach ($users as $user) {
+            if ($user->id == $comment->user_id) {
+                $comment->user_surname = $user->surname;
+            }
+        }
+        foreach ($posts as $post) {
+            if ($post->id == $comment->post_id) {
+                $comment->post_title = $post->title;
+                $comment->post_content = $post->content;
+            }
+        }
+
+        require(__DIR__.'/../../templates/admin/comments/delete_comments_page.php');
     }
 
-    public function postDeleteComment($data)
+    public function postDeleteComment($id)
     {
-        $comment = $this->commentRepository->getCommentById($data["id"]);
+        $comment = $this->commentRepository->getCommentById($id);
 
         if($comment) {
 
-            $comment->delete($data["id"], 0);
+            $comment->delete($id, 0);
 
             $this->commentRepository->deleteComment($comment);
 
-            require(__DIR__.'/../../templates/admin/admin_comments_list_page.php');
+            AlertService::add('success', "Le commentaire de ". $comment->user_surname ." a bien été suprimé.");
+
+            header("location: /admin/commentaires");
+            exit;
 
         } else {
             echo 'Ce commentaire n\'existe pas';
@@ -119,19 +153,36 @@ class CommentsController
     public function getRestoreComment($commentId)
     {
         $comment = $this->commentRepository->getCommentById($commentId);
-        require(__DIR__.'/../../templates/admin/comments/restore_comment_page.php');
+        $posts = $this->postRepository->getAllPosts();
+        $users = $this->userRepository->getUsers();
+
+        foreach ($users as $user) {
+            if ($user->id == $comment->user_id) {
+                $comment->user_surname = $user->surname;
+            }
+        }
+        foreach ($posts as $post) {
+            if ($post->id == $comment->post_id) {
+                $comment->post_title = $post->title;
+                $comment->post_content = $post->content;
+            }
+        }
+        require(__DIR__.'/../../templates/admin/comments/restore_comments_page.php');
     }
 
-    public function postRestoreComment($data)
+    public function postRestoreComment($id)
     {
-        $comment = $this->commentRepository->getCommentById($data["id"]);
+        $comment = $this->commentRepository->getCommentById($id);
 
         if($comment) {
-            $comment->confirm($data["id"], 1);
+            $comment->confirm($id, 1);
 
             $this->commentRepository->confirmComment($comment);
 
-            require(__DIR__.'/../../templates/admin/admin_comments_list_page.php');
+            AlertService::add('success', "Le commentaire de ". $comment->user_surname ." a bien été restauré.");
+
+            header("location: /admin/commentaires");
+            exit;
 
         } else {
             echo 'Ce commentaire n\'existe pas';

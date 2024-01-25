@@ -1,8 +1,6 @@
-<?php $title = "Admin - Commentaires" ?>
+<?php $title = "Commentaires" ?>
 
 <?php ob_start(); ?>
-
-<h1>Commentaires</h1>
 
 <div class="col-lg-12 row">
 	<div>Filter</div>

@@ -2,6 +2,7 @@
 
 namespace App\controllers;
 
+use App\lib\AlertService;
 use App\Model\Repository\PostRepository;
 use App\Model\Repository\CommentRepository;
 use App\Model\Repository\UserRepository;
@@ -52,12 +53,6 @@ class PostsController
 
     public function postAddPost($data)
     {
-        if (!isset($data["title"]) || !isset($data["content"])) {
-            echo "Veuillez remplir les champs Titre et Contenu.";
-            return;
-        }
-
-
         $user = $this->userRepository->getUserById($data["user_id"]);
 
         $post = new Post();
@@ -71,9 +66,11 @@ class PostsController
 
         $this->postRepository->addPost($post);
 
-        require(__DIR__.'/../../templates/admin/posts/post_add_page.php');
-    }
+        AlertService::add('success', "La publication " . $post->title . " a bien été ajoutée.");
 
+        header("location: /admin/publications");
+        exit;
+    }
 
     public function getEditPost($postId)
     {
@@ -82,54 +79,72 @@ class PostsController
         require(__DIR__.'/../../templates/admin/posts/edit_post_page.php');
     }
 
-    public function postEditPost($data)
+    public function postEditPost($id, $data)
     {
+        if (!isset($id) || empty($data["user_id"]) || empty($data["title"]) || empty($data["content"])) {
+            AlertService::add('danger', "Veuillez fournir toutes les informations nécessaires.");
 
-        if (!isset($data["post_id"]) || !isset($data["user_id"]) || !isset($data["title"]) || !isset($data["content"])) {
-            echo "Veuillez fournir toutes les informations nécessaires.";
+            header("location: /admin/publication/modifier/$id");
+            exit;
+        }
+
+        $post = $this->postRepository->getPostById($id);
+
+        if(!$post) {
+            echo 'Ce post n\'existe pas';
             return;
         }
 
-        $post = $this->postRepository->getPostById($data["post_id"]);
+        $post->update(
+            $data["title"],
+            $data["chapo"],
+            $data["content"],
+            $data["user_id"],
+            isset($data["is_published"]) ? 1 : 0
+        );
 
-        if ($post) {
-            $post->update(
-                $data["title"],
-                $data["chapo"],
-                $data["content"],
-                $data["user_id"],
-                isset($data["is_published"]) ? 1 : 0
-            );
+        $this->postRepository->editPost($post);
 
-            $this->postRepository->editPost($post);
+        AlertService::add('success', "La publication ". $data["title"] ." a bien été modifiée.");
 
-            require(__DIR__.'/../../templates/admin/admin_posts_list_page.php');
-        } else {
-            echo 'Ce post n\'existe pas';
-        }
+        header("location: /admin/publications");
+        exit;
+
     }
 
     public function getDeletedPost($postId)
     {
         $post = $this->postRepository->getPostById($postId);
+        $admins = $this->userRepository->getAdmins();
+
+        foreach ($admins as $admin) {
+            if ($admin->id == $post->user_id) {
+                $post->user_surname = $admin->surname;
+            }
+        }
+
         require(__DIR__.'/../../templates/admin/posts/delete_post_page.php');
     }
 
-    public function postDeletePost($data)
+
+    public function postDeletePost($id)
     {
-        if (!isset($data["post_id"])) {
+        if (!isset($id)) {
             echo "Veuillez fournir l'identifiant du post.";
             return;
         }
 
-        $post = $this->postRepository->getPostById($data["post_id"]);
+        $post = $this->postRepository->getPostById($id);
 
         if($post) {
-            $post->delete($data["post_id"], 0);
+            $post->delete($id, 0);
 
             $this->postRepository->deletePost($post);
 
-            require(__DIR__.'/../../templates/admin/admin_posts_list_page.php');
+            AlertService::add('success', "La publication ". $post->title ." a bien été supprimée.");
+
+            header("location: /admin/publications");
+            exit;
 
         } else {
             echo 'Ce post n\'existe pas';
@@ -139,19 +154,29 @@ class PostsController
     public function getRestorePost($postId)
     {
         $post = $this->postRepository->getPostById($postId);
+        $admins = $this->userRepository->getAdmins();
+
+        foreach ($admins as $admin) {
+            if ($admin->id == $post->user_id) {
+                $post->user_surname = $admin->surname;
+            }
+        }
         require(__DIR__.'/../../templates/admin/posts/restore_post_page.php');
     }
 
-    public function postRestorePost($data)
+    public function postRestorePost($id)
     {
-        $post = $this->postRepository->getPostById($data["post_id"]);
+        $post = $this->postRepository->getPostById($id);
 
         if($post) {
-            $post->restore($data["post_id"]);
+            $post->restore($id);
 
             $this->postRepository->restorePost($post);
 
-            require(__DIR__.'/../../templates/admin/admin_posts_list_page.php');
+            AlertService::add('success', "La publication ". $post->title ." a bien été restaurée.");
+
+            header("location: /admin/publications");
+            exit;
         } else {
             echo 'Ce post n\'existe pas';
         }
