@@ -6,7 +6,7 @@
 
 	<?php ;
 $_SESSION['redirect_back'] = $_SERVER["HTTP_REFERER"];
-$redirectPath = parse_url($_SESSION['redirect_back'], PHP_URL_PATH);
+$redirectBack = parse_url($_SESSION['redirect_back'], PHP_URL_PATH);
 ?>
 
 	<h3>Se connecter</h3>

@@ -87,7 +87,7 @@ class CommentRepository
 
     public function addComment(Comment $comment)
     {
-        $insertComment = $this->connection->getConnection()->prepare('INSERT INTO comments(user_id, post_id, content, created_at) 
+        $insertComment = $this->connection->getConnection()->prepare('INSERT INTO comments(user_id, post_id, content, created_at, is_enabled) 
                 VALUES (:user_id, :post_id, :content, :created_at, :is_enabled)');
 
         $comment->init(
