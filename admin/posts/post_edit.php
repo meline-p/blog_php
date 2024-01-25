@@ -1,74 +1,49 @@
-<?php session_start(); ?>
-<?php include_once('../../parts/header.php'); ?>
-
 <?php 
-    include_once('../../php/functions.php');
-    include_once('../../sql/pdo.php');
+    session_start();
+    require('../../sql/pdo.php');
+    require('../../src/models/post.php');
+    require('../../src/models/user.php');
 
-if (isset($_GET['id'])) {
-    $postId = $_GET['id'];
-} else {
-    echo "L'ID n'a pas été transmis dans l'URL.";
-    return;
-}
+    $users = getUsers($db);
 
+    $sqlQuery = "SELECT p.*, u.surname AS user_surname
+            FROM posts p
+            LEFT JOIN users u ON p.user_id = u.id";
+    $statement = $db->prepare($sqlQuery);
+    $statement->execute();
+    $allPosts = $statement->fetchAll(); 
 
-if (
-    !isset($_POST['title']) || empty($_POST['title']) ||
-    !isset($_POST['content']) || empty($_POST['content'])
-) {
-    echo "Veuillez remplir les champs Titre et Contenu.";
-    return;
-}
+    if (
+        !isset($_POST['title']) || empty($_POST['title']) ||
+        !isset($_POST['content']) || empty($_POST['content'])
+    ) {
+        echo "Veuillez remplir les champs Titre et Contenu.";
+        return;
+    }
 
-$postId = $_GET['id'];
-$title = $_POST['title'];
-$chapo = $_POST['chapo'];
-$content = $_POST['content'];
-$user_id = $_POST['author'];
-$is_published = isset($_POST['is_published']) ? 1 : 0;
+    if (isset($_GET['id'])) {
+        $postId = $_GET['id'];
 
-$insertPost = $db->prepare('UPDATE posts 
-SET user_id = :user_id, title = :title, chapo = :chapo, content = :content, is_published = :is_published, updated_at = :updated_at
-WHERE id = :id ');
+        if (ctype_digit($postId)) {
+            $postId = intval($postId); 
 
-$currentTime = date('Y-m-d H:i:s');
+            $title = $_POST['title'];
+            $chapo = $_POST['chapo'];
+            $content = $_POST['content'];
+            $is_published = isset($_POST['is_published']) ? 1 : 0;
 
-$insertPost->execute([
-    'id' => $postId,
-    'user_id' => $user_id,
-    'title' => $title,
-    'chapo' => $chapo,
-    'content' => $content,
-    'is_published' => $is_published,
-    'updated_at' => $currentTime
-]);
-$updated_at = $currentTime;
+            $user_id = $_POST['user_id'];
+            $user = getUserById($db, $user_id, $users);
+            $user_surname = $user['surname'];
+        
+            $post_id = editPost($db, $postId, $user_id, $title, $chapo, $content, $is_published);
+    
+            $currentTime = date('Y-m-d H:i:s');
+            $updated_at = $currentTime;
+        }
+    }
+
+  
+    require('../../templates/admin/posts/post_edit_page.php');
 ?>
-
-<div class="col-lg-12 row">
-    <div class="col-lg-3">
-        <?php include_once('../parts/sidebar.php'); ?>
-    </div>
-
-    <div id="content" class="container col-lg-9">
-
-        <h1>Post modifié</h1>
-            
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title"><?= $title ?></h5>
-                    <p class="card-text"><b>Chapo</b> : <?= $chapo ?></p>
-                    <p class="card-text"><b>Contenu</b> : <?= strip_tags($content); ?></p>
-                    <p class="card-text"><b>Auteur</b> : <?= $user_id ?></p>
-                    <p class="card-text"><b>Publié</b> : <?= $is_published === 1 ? 'Oui' : 'Non' ?></p>
-                    <p class="card-text"><b>Mis à jour </b> : <?= $updated_at ?></p>
-                </div>
-            </div>
-
-            <br>
-            <a class="btn btn-secondary btn-sm" href="../admin_posts_list.php">Revenir aux posts</a>
-
-    </div>
-</div>
         

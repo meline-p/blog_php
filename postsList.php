@@ -1,45 +1,19 @@
-<?php session_start(); ?>
-<?php include_once('parts/header.php'); ?>
-<?php include_once('parts/navbar.php'); ?>
+<?php 
 
-<div id="content" class="container">
+    session_start(); 
 
-    <h1>Affichage des posts</h1>
+    require('sql/pdo.php');
+    require('src/models/post.php');
 
-    <?php 
-    include_once('php/functions.php');
-    include_once('sql/pdo.php');
+    $db = new PDO(
+        'mysql:host=localhost;dbname=blog_php;charset=utf8', 
+        'root', 
+        'root',
+        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+    );
 
-    $sqlQuery = "SELECT * FROM posts
-    WHERE is_published = 1 
-    ORDER BY created_at DESC";
-    $postsStatement = $db->prepare($sqlQuery);
-    $postsStatement->execute();
-    $posts = $postsStatement->fetchAll();
-    ?>
+    $posts = getPublishedPosts($db);
 
-    <div class="card-deck">
-        <?php foreach ($posts as $post): ?>
-           
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title"><?= $post['title']; ?></h5>
-                        <h6 class="card-subtitle mb-2 text-muted" style="font-weight:normal;"><i>
-                            <?php if($post['updated_at'] === null):?>
-                               publié le <?= date_format(date_create($post['created_at']), "d/m/Y à H:i");?>
-                            <?php else:?>
-                                mis à jour le <?= date_format(date_create($post['updated_at']), "d/m/Y à H:i");?>
-                            <?php endif; ?>  
-                        </i></h6>
-                        <p class="card-text"><i><?= $post['chapo']; ?></i></p>
-                        <p class="card-text"><?= (strlen($post['content']) > 300) ? substr($post['content'], 0, 300) . '...' : $post['content']; ?></p>
-                        <a class="btn btn-outline-dark btn-sm" href="showPost.php?id=<?= $post['id']; ?>">voir la suite</a>
-                    </div>
-                </div>
-         
-        <?php endforeach; ?>
-    </div>
+    require('templates/posts_list_page.php');
+?>
 
-</div>
-
-<?php include_once('parts/footer.php'); ?>
