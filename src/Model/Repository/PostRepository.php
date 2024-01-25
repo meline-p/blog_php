@@ -5,26 +5,56 @@ namespace App\Model\Repository;
 use App\lib\DatabaseConnection;
 use App\Model\Entity\Post;
 
+/**
+ * Class representing Post repository.
+ */
 class PostRepository
 {
     private DatabaseConnection $connection;
     public $current_time;
 
+    /**
+     * Constructor for the PostRepository class.
+     *
+     * @param  DatabaseConnection $connection The database connection object.
+     * @return void
+     */
     public function __construct(DatabaseConnection $connection)
     {
+        // Set the database connection
         $this->connection = $connection;
+
+        // Initialize the current time to the current date and time
         $this->current_time = new \DateTime();
     }
 
+    /**
+     * Private helper method to get a simple SELECT query for posts.
+     *
+     * This method constructs a SQL SELECT query to retrieve post data along with the surname of the user who created the post.
+     * It includes a LEFT JOIN with the users table.
+     *
+     * @return string The constructed SELECT query.
+     */
     private function getSimpleSelect()
     {
+        // Construct and return the SELECT query for posts with user surname
         return "SELECT p.*, u.surname AS user_surname
-        FROM posts p
-        LEFT JOIN users u ON p.user_id = u.id";
+                FROM posts p
+                LEFT JOIN users u ON p.user_id = u.id";
     }
 
+    /**
+     * Get all posts with user surnames.
+     *
+     * This method retrieves all posts from the database along with the surname of the user who created each post.
+     * It uses the getSimpleSelect method to construct the base SELECT query and adds additional ordering conditions.
+     *
+     * @return array An array of Post objects representing the retrieved posts.
+     */
     public function getAllPosts()
     {
+        // Prepare and execute the SQL query for retrieving posts
         $statement = $this->connection->getConnection()->prepare($this->getSimpleSelect()."
         ORDER BY 
         CASE
@@ -34,52 +64,101 @@ class PostRepository
         END, 
         COALESCE(p.updated_at, p.deleted_at) DESC");
         $statement->execute();
+
+        // Fetch the rows and map them to Post objects
         $rows =  $statement->fetchAll();
         $posts = array_map(function ($row) {
             $post = new Post();
             $post->fromSql($row);
             return $post;
         }, $rows);
+
         return $posts;
     }
 
+    /**
+     * Count all posts in the database.
+     *
+     * This method prepares and executes a SQL query to count the number of posts in the "posts" table.
+     *
+     * @return int The total number of posts in the database.
+     */
     public function countAllPosts()
     {
+        // Prepare and execute the SQL query for counting posts
         $statement = $this->connection->getConnection()->prepare('SELECT COUNT(1) AS nb FROM posts');
         $statement->execute();
+
+        // Fetch the row and return the total number of posts
         $row = $statement->fetch();
         return $row['nb'];
     }
 
+    /**
+     * Get all published posts from the database.
+     *
+     * This method prepares and executes a SQL query to retrieve all published posts from the "posts" table.
+     *
+     * @return array An array of Post objects representing the published posts.
+     */
     public function getPublishedPosts()
     {
+        // Prepare and execute the SQL query for retrieving published posts
         $statement = $this->connection->getConnection()->prepare($this->getSimpleSelect()."
             WHERE p.is_published = 1 ORDER BY created_at DESC");
         $statement->execute();
+
+        // Fetch the rows and map them to Post objects
         $rows =  $statement->fetchAll();
         $posts = array_map(function ($row) {
             $post = new Post();
             $post->fromSql($row);
             return $post;
         }, $rows);
+
         return $posts;
     }
 
+    /**
+     * Get a post by its ID from the database.
+     *
+     * This method prepares and executes a SQL query to retrieve a post by its ID from the "posts" table.
+     *
+     * @param  mixed $postId The ID of the post to retrieve.
+     * @return Post|null A Post object representing the retrieved post, or null if the post is not found.
+     */
     public function getPostById($postId)
     {
+        // Prepare and execute the SQL query for retrieving a post by its ID
         $statement = $this->connection->getConnection()->prepare($this->getSimpleSelect()." WHERE p.id = :postId");
         $statement->execute(['postId' => $postId]);
+
+        // Fetch the row and create a Post object
         $row = $statement->fetch();
-        $post = new Post();
-        $post->fromSql($row);
+        $post = ($row !== false) ? new Post() : null;
+
+        if ($post !== null) {
+            $post->fromSql($row);
+        }
+
         return $post;
     }
 
+    /**
+     * Add a new post to the database.
+     *
+     * This method prepares and executes a SQL query to insert a new post into the "posts" table.
+     *
+     * @param  Post $post  The Post object representing the post to be added.
+     * @return void
+     */
     public function addPost(Post $post)
     {
+        // Prepare and execute the SQL query for inserting a new post
         $insertPost = $this->connection->getConnection()->prepare('INSERT INTO posts(user_id, title, chapo, content, is_published, created_at, updated_at) 
             VALUES (:user_id, :title, :chapo, :content, :is_published, :created_at, :updated_at)');
 
+        // Initialize the post data in the Post object
         $post->init(
             $post->title,
             $post->chapo,
@@ -88,6 +167,7 @@ class PostRepository
             $post->is_published
         );
 
+        // Execute the query with the post data
         $insertPost->execute([
             'user_id' => $post->user_id,
             'title' => $post->title,
@@ -100,12 +180,22 @@ class PostRepository
     }
 
 
+    /**
+     * Edit an existing post in the database.
+     *
+     * This method prepares and executes a SQL query to update an existing post in the "posts" table.
+     *
+     * @param  Post $post The Post object representing the post to be edited.
+     * @return void
+     */
     public function editPost(Post $post)
     {
+        // Prepare and execute the SQL query for updating an existing post
         $editPost = $this->connection->getConnection()->prepare('UPDATE posts 
             SET user_id = :user_id, title = :title, chapo = :chapo, content = :content, is_published = :is_published, updated_at = :updated_at
             WHERE id = :id ');
 
+        // Update the post data in the Post object
         $post->update(
             $post->title,
             $post->chapo,
@@ -114,6 +204,7 @@ class PostRepository
             $post->is_published,
         );
 
+        // Execute the query with the updated post data
         $editPost->execute([
             'id' => $post->id,
             'user_id' => $post->user_id,
@@ -125,17 +216,28 @@ class PostRepository
         ]);
     }
 
+    /**
+     * Delete a post from the database.
+     *
+     * This method prepares and executes a SQL query to mark a post as deleted in the "posts" table.
+     *
+     * @param  Post $post The Post object representing the post to be deleted.
+     * @return void
+     */
     public function deletePost(Post $post)
     {
+        // Prepare and execute the SQL query for marking a post as deleted
         $deletePost = $this->connection->getConnection()->prepare('UPDATE posts 
             SET deleted_at = :deleted_at, is_published = 0, updated_at = :updated_at
             WHERE id = :id ');
 
+        // Update the post data in the Post object
         $post->delete(
             $post->id,
             $post->is_published,
         );
 
+        // Execute the query with the updated post data
         $deletePost->execute([
             'id' => $post->id,
             'deleted_at' => $this->current_time->format('Y-m-d H:i:s'),
@@ -143,16 +245,27 @@ class PostRepository
         ]);
     }
 
+    /**
+     * Restore a deleted post in the database.
+     *
+     * This method prepares and executes a SQL query to restore a deleted post in the "posts" table.
+     *
+     * @param Post $post The Post object representing the post to be restored.
+     * @return void
+     */
     public function restorePost(Post $post)
     {
+        // Prepare and execute the SQL query for restoring a deleted post
         $restorePost = $this->connection->getConnection()->prepare('UPDATE posts 
             SET deleted_at = NULL, updated_at = :updated_at
             WHERE id = :id ');
 
+        // Update the post data in the Post object
         $post->restore(
             $post->id,
         );
 
+        // Execute the query with the updated post data
         $restorePost->execute([
             'id' => $post->id,
             'updated_at' => $this->current_time->format('Y-m-d H:i:s')

@@ -2,6 +2,9 @@
 
 namespace App\Model\Entity;
 
+/**
+ * Class representing Post entity.
+ */
 class Post
 {
     // properties
@@ -17,8 +20,11 @@ class Post
 
     public $user_surname;
 
-    // getters and setters
-
+    /**
+     * Populate the Post object from a database row.
+     *
+     * @param  mixed $row Database row representing a post
+     */
     public function fromSql($row)
     {
         $this->id = $row['id'];
@@ -34,6 +40,15 @@ class Post
         $this->user_surname = $row['user_surname'];
     }
 
+    /**
+     * Initialize a new post with provided data.
+     *
+     * @param  mixed $title         Title of the post
+     * @param  mixed $chapo         Brief summary or introduction of the post
+     * @param  mixed $content       Content of the post
+     * @param  mixed $user_id       User ID associated with the post
+     * @param  mixed $isPublished   Status of the post (published or not)
+     */
     public function init($title, $chapo, $content, $user_id, $isPublished)
     {
         $this->title = $title;
@@ -45,6 +60,15 @@ class Post
         $this->updated_at = new \DateTime();
     }
 
+    /**
+     * Update the post with new data.
+     *
+     * @param  mixed $title         New title of the post
+     * @param  mixed $chapo         New brief summary or introduction of the post
+     * @param  mixed $content       New content of the post
+     * @param  mixed $user_id       New user ID associated with the post
+     * @param  mixed $isPublished   New status of the post (published or not)
+     */
     public function update($title, $chapo, $content, $user_id, $isPublished)
     {
         $this->title = $title;
@@ -55,6 +79,12 @@ class Post
         $this->updated_at = new \DateTime();
     }
 
+    /**
+     * Mark the post as deleted.
+     *
+     * @param  mixed $id            Post ID
+     * @param  mixed $isPublished   Status of the post (published or not)
+     */
     public function delete($id, $isPublished)
     {
         $this->id = $id;
@@ -63,6 +93,11 @@ class Post
         $this->deleted_at = new \DateTime();
     }
 
+    /**
+     * Restore a deleted post.
+     *
+     * @param  mixed $id Post ID
+     */
     public function restore($id)
     {
         $this->id = $id;
