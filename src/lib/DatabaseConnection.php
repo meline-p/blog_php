@@ -2,6 +2,8 @@
 
 namespace App\lib;
 
+use Dotenv\Dotenv;
+
 /**
  * Class representing database connection.
  *
@@ -26,12 +28,16 @@ class DatabaseConnection
     {
         // Check if the PDO instance is not already created
         if ($this->db === null) {
-            // Database connection details
-            $host = 'localhost';
-            $dbname = 'blog_php';
+            // Load environment variables from .env
+            $dotenv = Dotenv::createImmutable(__DIR__.'/../../');
+            $dotenv->load();
+
+            // Database connection details from .env
+            $host = $_ENV['DB_HOST'] ?? 'localhost';
+            $dbname = $_ENV['DB_NAME'] ?? 'blog_php';
             $charset = 'utf8';
-            $username = 'root';
-            $password = 'root';
+            $username = $_ENV['DB_USERNAME'] ?? 'root';
+            $password = $_ENV['DB_PASSWORD'] ?? 'root';
 
             // Create a new PDO instance
             $this->db = new \PDO(

@@ -18,5 +18,8 @@
         "allow-plugins": {
             "symfony/flex": false
         }
+    },
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
     }
 }
