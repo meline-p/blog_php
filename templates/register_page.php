@@ -34,6 +34,10 @@
 			<label for="password" class="form-label">Mot de passe</label>
 			<input required type="password" class="form-control" id="password" name="password" aria-describedby="password-help">
 		</div>
+		<div class="mb-3">
+			<label for="confirm_password">Confirmer le mot de passe</label>
+			<input type="password" required id="confirm_password" name="confirm_password" class="form-control" aria-describedby="password-help">
+		</div>
 		<input required type="hidden" class="form-control" id="role_id" name="role_id" aria-describedby="role-help">
 		<button type="submit" class="btn btn-warning">S'inscrire</button>
 	</form>
