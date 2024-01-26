@@ -129,6 +129,7 @@ class AuthController
     /**
      * Display the registration page.
      *
+     * @param  mixed $data Optional data to pre-fill the form fields.
      * @return void
      */
     public function getRegister($data = null)
