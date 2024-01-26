@@ -67,6 +67,7 @@ class PostsController
     public function getPostById($postId)
     {
         $post = $this->postRepository->getPostById($postId);
+        $user = $this->userRepository->getUserById($post->user_id);
         $comments = $this->commentRepository->getValidComments($post->id);
 
         if(!$post) {

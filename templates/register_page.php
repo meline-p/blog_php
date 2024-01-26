@@ -37,6 +37,8 @@
 		<input required type="hidden" class="form-control" id="role_id" name="role_id" aria-describedby="role-help">
 		<button type="submit" class="btn btn-warning">S'inscrire</button>
 	</form>
+	<hr>
+	<a class="btn btn-dark" href="/connexion">Se connecter</a>
 
 </div>
 

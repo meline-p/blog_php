@@ -89,13 +89,43 @@ class CommentRepository
     }
 
     /**
-     * Counts the total number of comments in the database.
+     * Counts the total number of comments in the database that have not been deleted.
      *
      * @return int The total number of comments.
      */
     public function countAllComments()
     {
-        $statement = $this->connection->getConnection()->prepare('SELECT COUNT(1) AS nb FROM comments');
+        $statement = $this->connection->getConnection()->prepare('SELECT COUNT(1) AS nb FROM comments WHERE deleted_at IS NULL');
+        $statement->execute();
+
+        $row = $statement->fetch();
+
+        return $row['nb'];
+    }
+
+    /**
+     * Counts the comments awaiting approval in the database.
+     *
+     * @return int The pending comments.
+     */
+    public function countPendingComments()
+    {
+        $statement = $this->connection->getConnection()->prepare('SELECT COUNT(1) AS nb FROM comments WHERE is_enabled IS NULL');
+        $statement->execute();
+
+        $row = $statement->fetch();
+
+        return $row['nb'];
+    }
+
+    /**
+     * Counts the valid comments in the database.
+     *
+     * @return int The valid comments.
+     */
+    public function countValidComments()
+    {
+        $statement = $this->connection->getConnection()->prepare('SELECT COUNT(1) AS nb FROM comments WHERE is_enabled = 1');
         $statement->execute();
 
         $row = $statement->fetch();

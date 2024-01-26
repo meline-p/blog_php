@@ -9,13 +9,15 @@
 		<br>
 		<br>
 		<h3><?= htmlspecialchars($post->title); ?></h3>
-		<p><i>
-				<?php if($post->updated_at === null):?>
-				publié le <?= date_format(date_create($post->created_at), "d/m/Y à H:i");?>
-				<?php else:?>
-				mis à jour le <?= date_format(date_create($post->updated_at), "d/m/Y à H:i");?>
-				<?php endif; ?>
-			</i></p>
+		<p class="text-secondary"><i><small>Auteur : <?= $user->first_name ?>
+					<?= $user->last_name ?> |
+					<?php if($post->updated_at === null):?>
+					publié le <?= date_format(date_create($post->created_at), "d/m/Y à H:i");?>
+					<?php else:?>
+					mis à jour le <?= date_format(date_create($post->updated_at), "d/m/Y à H:i");?>
+					<?php endif; ?>
+				</small></i></p>
+		<p><i><?= nl2br(htmlspecialchars($post->chapo)); ?></i></p>
 		<p><?= nl2br(htmlspecialchars($post->content)); ?></p>
 	</div>
 

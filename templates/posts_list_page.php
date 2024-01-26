@@ -20,10 +20,7 @@
 							mis à jour le <?= date_format(date_create($post->updated_at), "d/m/Y à H:i");?>
 							<?php endif; ?>
 						</i></h6>
-					<p class="card-text"><i><?= htmlspecialchars($post->chapo); ?></i></p>
-					<p class="card-text">
-						<?= (strlen($post->content) > 300) ? htmlspecialchars(substr($post->content, 0, 300)) . '...' : htmlspecialchars($post->content); ?>
-					</p>
+					<p class="card-text"><?= htmlspecialchars($post->chapo); ?></p>
 					<a class="btn btn-warning btn-sm" href="/publication/<?= $post->id; ?>">voir la suite</a>
 				</div>
 			</div>

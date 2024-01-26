@@ -46,8 +46,17 @@ class AuthController
     public function administration()
     {
         $nbPosts = $this->postRepository->countAllPosts();
+        $nbPublishedPosts = $this->postRepository->countPublishedPosts();
+        $nbDraftPosts = $this->postRepository->countDraftPosts();
+
         $nbComments = $this->commentRepository->countAllComments();
-        $nbUsers = $this->userRepository->countAllUsers();
+        $nbPendingComments = $this->commentRepository->countPendingComments();
+        $nbValidComments = $this->commentRepository->countValidComments();
+
+        $nbAllUsers = $this->userRepository->countAllUsers();
+        $nbActiveAccounts = $this->userRepository->countActiveAccounts();
+        $nbAdmins = $this->userRepository->countAdmins();
+        $nbUsers = $this->userRepository->countUsers();
 
         $admins = $this->userRepository->getAdmins();
 
@@ -88,6 +97,12 @@ class AuthController
             $_SESSION['user'] = $user;
 
             $redirectBack = isset($_SESSION['redirect_back']) ? $_SESSION['redirect_back'] : '/';
+
+            $url = "http://localhost:8080";
+
+            if ($_SESSION['redirect_back'] == $url.'/inscription' || $_SESSION['redirect_back'] == $url.'/connexion') {
+                $redirectBack = '/';
+            }
 
             AlertService::add('success', 'Bienvenue sur le site ' . ($_SESSION['user']->surname ?? "") . ' !');
             header("location: " . $redirectBack);

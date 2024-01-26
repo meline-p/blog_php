@@ -71,7 +71,7 @@ class PostRepository
     }
 
     /**
-     * Count all posts in the database.
+     * Count all posts in the database that have not been deleted.
      *
      * This method prepares and executes a SQL query to count the number of posts in the "posts" table.
      *
@@ -79,7 +79,41 @@ class PostRepository
      */
     public function countAllPosts()
     {
-        $statement = $this->connection->getConnection()->prepare('SELECT COUNT(1) AS nb FROM posts');
+        $statement = $this->connection->getConnection()->prepare('SELECT COUNT(1) AS nb FROM posts WHERE deleted_at IS NULL');
+        $statement->execute();
+
+        $row = $statement->fetch();
+
+        return $row['nb'];
+    }
+
+    /**
+     * Count published posts in the database.
+     *
+     * This method prepares and executes a SQL query to count the number of published posts in the "posts" table.
+     *
+     * @return int The total number of published posts in the database.
+     */
+    public function countPublishedPosts()
+    {
+        $statement = $this->connection->getConnection()->prepare('SELECT COUNT(1) AS nb FROM posts WHERE is_published = 1');
+        $statement->execute();
+
+        $row = $statement->fetch();
+
+        return $row['nb'];
+    }
+
+    /**
+     * Count draft posts in the database.
+     *
+     * This method prepares and executes a SQL query to count the number of draft posts in the "posts" table.
+     *
+     * @return int The total number of draft posts in the database.
+     */
+    public function countDraftPosts()
+    {
+        $statement = $this->connection->getConnection()->prepare('SELECT COUNT(1) AS nb FROM posts WHERE is_published = 0 AND deleted_at IS NULL');
         $statement->execute();
 
         $row = $statement->fetch();

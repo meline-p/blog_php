@@ -14,7 +14,7 @@
 				<p class="card-text"><b>Contenu</b> : <?= $comment->content ?></p>
 				<p class="card-text"><b>Auteur du commentaire</b> : <?= $comment->user_surname ?? ''; ?></p>
 				<p class="card-text"><b>Titre du Post</b> : <?= $comment->post_title ?? '' ?></p>
-				<p class="card-text"><b>Contenu du Post</b>
+				<p class="card-text"><b>Contenu du Post</b> :
 					<?php if(strlen($comment->post_content) > 400): ?>
 					<?= $comment->post_content = substr($comment->post_content, 0, 400) . '...'; ?>
 					<?php else: ?>

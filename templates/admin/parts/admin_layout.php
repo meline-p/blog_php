@@ -15,19 +15,19 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-	<div class="col-lg-12 row">
-		<div class="col-lg-2 col-md-2 col-sm-2">
+	<div class="col-lg-12 row" style="margin: 0;">
+		<div class="col-xl-2 col-lg-3 col-md-3 col-sm-4" style="margin: 0; padding:0;">
 			<?php include_once('sidebar_page.php') ?>
 		</div>
-		<div id="content" class="container admin col-lg-10 col-md-10 col-sm-10">
-			<h1><?= $title ?></h1>
+		<div id="content" class="container admin col-xl-10 col-lg-9 col-md-9 col-sm-8" style="margin: 0; padding:10px;">
+			<h1 style="margin: 10px; padding:10px;"><?= $title ?></h1>
 			<?php while($alert = \App\lib\AlertService::get()): ?>
 			<div class="alert alert-<?= $alert['type'] ?> alert-dismissible fade show" role="alert">
 				<?= $alert['message'] ?>
 				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 			</div>
 			<?php endwhile; ?>
-			<div><?= $content ?></div>
+			<div style="margin: 10px; padding:10px;"><?= $content ?></div>
 		</div>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"

@@ -2,8 +2,8 @@
 
 <?php ob_start(); ?>
 <hr>
-<div class="col-lg-12 row">
-	<table class="table text-center">
+<div class="col-lg-12 row table-responsive table-container">
+	<table class="table">
 		<thead>
 			<tr>
 				<th scope="col">Commentaire</th>

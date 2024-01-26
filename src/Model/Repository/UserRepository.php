@@ -101,6 +101,51 @@ class UserRepository
     }
 
     /**
+     * Count active accounts in the system.
+     *
+     * @return int The active accounts in the system.
+     */
+    public function countActiveAccounts()
+    {
+        $statement = $this->connection->getConnection()->prepare('SELECT COUNT(1) AS nb FROM users WHERE deleted_at IS NULL');
+        $statement->execute();
+
+        $row = $statement->fetch();
+
+        return $row['nb'];
+    }
+
+    /**
+     * Count the users who have an administrator role in the system.
+     *
+     * @return int The admins in the system.
+     */
+    public function countAdmins()
+    {
+        $statement = $this->connection->getConnection()->prepare("SELECT COUNT(1) AS nb FROM users INNER JOIN roles ON roles.id = users.role_id WHERE roles.name = 'Administrateur'");
+        $statement->execute();
+
+        $row = $statement->fetch();
+
+        return $row['nb'];
+    }
+
+    /**
+    * Count the users who have a user role in the system.
+    *
+    * @return int The users in the system.
+    */
+    public function countUsers()
+    {
+        $statement = $this->connection->getConnection()->prepare("SELECT COUNT(1) AS nb FROM users INNER JOIN roles ON roles.id = users.role_id WHERE roles.name = 'Utilisateur'");
+        $statement->execute();
+
+        $row = $statement->fetch();
+
+        return $row['nb'];
+    }
+
+    /**
      * Get a user by their ID.
      *
      * @param  mixed $userId The ID of the user to retrieve.
