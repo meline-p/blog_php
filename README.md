@@ -18,13 +18,15 @@ composer install
 
 ### XAMPP
 
-Install XAMPP: https://www.apachefriends.org/download.html
+Install XAMPP: https://www.apachefriends.org/download.html.
 Start Apache and MySQL using the XAMPP control panel.
 
 ### Database
 
 Access PhpMyAdmin admin via the XAMPP control panel.
 Import the provided SQL file from the /database/blog_php.sql directory into PhpMyAdmin.
+
+Change the environment variables DB_USERNAME and DB_PASSWORD according to your PhpMyAdmin configuration in the .env file.
 
 ---
 
