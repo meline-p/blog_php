@@ -1,4 +1,4 @@
-<?php $title = htmlspecialchars($post->title); ?>
+<?php $title = strip_tags($post->title); ?>
 
 <?php ob_start(); ?>
 
@@ -31,11 +31,11 @@
 			<div class="mb-3 col-lg-6">
 				<div class="card ">
 					<div class="card-body">
-						<h6 class="card-subtitle mb-2"><?= htmlspecialchars($comment->user_surname); ?></h6>
+						<h6 class="card-subtitle mb-2"><?= strip_tags($comment->user_surname); ?></h6>
 						<h6 class="card-subtitle mb-2 text-muted" style="font-weight:normal;"><i>
 								publié le <?= date_format(date_create($comment->created_at), "d/m/Y à H:i"); ?>
 							</i></h6>
-						<p class="card-text"><?= nl2br(htmlspecialchars($comment->content)); ?></p>
+						<p class="card-text"><?= strip_tags($comment->content); ?></p>
 					</div>
 				</div>
 			</div>

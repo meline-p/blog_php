@@ -131,7 +131,7 @@ class AuthController
      *
      * @return void
      */
-    public function getRegister()
+    public function getRegister($data = null)
     {
         require_once(__DIR__ . '/../../templates/register_page.php');
     }
@@ -145,6 +145,12 @@ class AuthController
     public function postRegister($data)
     {
         $errorMessage = null;
+
+        if($data['password'] != $data['confirm_password']) {
+            AlertService::add('danger', "Les mots de passe sont différents");
+            $this->getRegister($data);
+            exit;
+        }
 
         $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
 

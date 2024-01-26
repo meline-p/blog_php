@@ -8,6 +8,10 @@
 
 	<div class="publication row col-lg-12">
 
+		<?php if(count($posts) == 0) :?>
+		<p class="text-center">Encore un peu de patience, les publications arrivent !</p>
+
+		<?php else :?>
 		<?php foreach ($posts as $post): ?>
 		<div class="col-lg-4">
 			<div class="card mb-3">
@@ -26,6 +30,8 @@
 			</div>
 		</div>
 		<?php endforeach; ?>
+
+		<?php endif; ?>
 
 	</div>
 

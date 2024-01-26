@@ -1,60 +1,60 @@
 # Blog PHP
 
-Bienvenue sur mon blog PHP !
+Welcome to my PHP blog!
 
 ---
 
 ## Installation
 
+Download the ZIP from Github.
+
 ### Composer
 
-Assurez-vous d'avoir Composer installé.
+Install all components by running the following command:
 
 ```jsx
 composer install
 ```
 
-### Base de Données
+### XAMPP
 
-Importez le fichier SQL fourni dans le répertoire database/.
+Install XAMPP: https://www.apachefriends.org/download.html
+Start Apache and MySQL using the XAMPP control panel.
 
-```jsx
-mysql -u VOTRE_UTILISATEUR -p VOTRE_MOT_DE_PASSE < database/nom_du_fichier.sql
-```
+### Database
 
-### Xampp
-
-Assurez-vous que Xampp est installé sur votre machine.
-Lancez Apache et MySQL via le panneau de contrôle Xampp.
+Access PhpMyAdmin admin via the XAMPP control panel.
+Import the provided SQL file from the /database/blog_php.sql directory into PhpMyAdmin.
 
 ---
 
-## Utilisation
+## Usage
 
-### Terminal 1 : Lancer le site web
+### Terminal 1 : Launch the website
 
 ```jsx
 php -S localhost:8080 -t public
 ```
 
-Accédez au site à l'adresse http://localhost:8080/.
+Access the site at http://localhost:8080/.
 
-### Terminal 2 : Lancer MailDev
+### Terminal 2 : Launch MailDev
 
 ```jsx
 maildev
 ```
 
-Accédez à l'interface MailDev à http://localhost:1080/.
+Access the MailDev interface at http://localhost:1080/.
 
 ---
 
 ## Documentation
 
-Pour générer la documentation, utilisez phpDocumentor.
+To generate documentation, use phpDocumentor:
 
 ```jsx
 php phpDocumentor.phar run -d ./src -t docs/
 ```
 
-Accédez à la documentation générée dans le répertoire docs/.
+Access the generated documentation in the docs/index.html directory. 
+Launch Go Live on Visual Studio Code and access the online documentation at this address: http://localhost:8080/docs/index.html

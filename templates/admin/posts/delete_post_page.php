@@ -10,9 +10,9 @@
 
 		<div class="card">
 			<div class="card-body">
-				<h5 class="card-title"><?= $post->title ?></h5>
-				<p class="card-text"><b>Chapo</b> : <?= $post->chapo ?></p>
-				<p class="card-text"><b>Contenu</b> : <?= strip_tags($post->content); ?></p>
+				<h5 class="card-title"><?= strip_tags($post->title) ?></h5>
+				<p class="card-text"><b>Chapo</b> : <?= strip_tags($post->chapo) ?></p>
+				<p class="card-text"><b>Contenu</b> : <?= strip_tags(($post->content)); ?></p>
 				<p class="card-text"><b>Auteur</b> : <?= $post->user_surname ?? '';  ?></p>
 			</div>
 		</div>
