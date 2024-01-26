@@ -5,8 +5,8 @@
 <a class="btn btn-warning btn-sm" href="/admin/utilisateur/ajouter"><i class="fa-solid fa-plus"></i> Ajouter un utilisateur</a>
 <hr>
 
-<div class="col-lg-12 row">
-	<table class="table text-center">
+<div class="col-lg-12 row table-responsive table-container">
+	<table class="table">
 		<thead>
 			<tr>
 				<th scope="col">Rôle</th>
