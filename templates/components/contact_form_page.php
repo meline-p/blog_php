@@ -1,4 +1,5 @@
 <form action="/message-envoye" method="POST" accept-charset="UTF-8">
+	<input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
 	<div class="mb-3">
 		<label for="name" class="form-label">Nom</label>
 		<input type="name" class="form-control" id="name" name="name">

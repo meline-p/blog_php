@@ -4,13 +4,14 @@
 
 <div id="content" class="container with-60">
 
-	<?php ;
+	<?php
 $_SESSION['redirect_back'] = $_SERVER["HTTP_REFERER"];
 $redirectBack = parse_url($_SESSION['redirect_back'], PHP_URL_PATH);
 ?>
 
 	<h3>Se connecter</h3>
 	<form action="/connexion" method="POST">
+		<input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
 		<div class="mb-3">
 			<label for="email" class="form-label">Email</label>
 			<input type="email" class="form-control" id="email" name="email" aria-describedby="email-help">

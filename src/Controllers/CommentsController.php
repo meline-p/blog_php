@@ -90,6 +90,11 @@ class CommentsController
             return;
         }
 
+        if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+            require_once(__DIR__ . '/../../templates/error_page.php');
+            exit;
+        }
+
         $comment = new Comment();
 
         $comment->init(

@@ -6,7 +6,11 @@ Welcome to my PHP blog!
 
 ## Installation
 
-Download the ZIP from Github.
+Download the ZIP from Github or clone the project :
+
+```jsx
+git clone "https://github.com/meline-p/blog_php"
+```
 
 ### Composer
 
@@ -52,7 +56,9 @@ Access the MailDev interface at http://localhost:1080/.
 
 ## Documentation
 
-To generate documentation, use phpDocumentor:
+To generate documentation, use phpDocumentor.
+You can download the latest PHAR file from https://phpdoc.org/phpDocumentor.phar.
+After downloading, execute this command:
 
 ```jsx
 php phpDocumentor.phar run -d ./src -t docs/

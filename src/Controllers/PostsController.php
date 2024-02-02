@@ -70,6 +70,9 @@ class PostsController
         $user = $this->userRepository->getUserById($post->user_id);
         $comments = $this->commentRepository->getValidComments($post->id);
 
+        $csrfToken = bin2hex(random_bytes(32));
+        $_SESSION['csrf_token'] = $csrfToken;
+
         if(!$post) {
             require_once(__DIR__ . '/../../templates/error_page.php');
         } else {

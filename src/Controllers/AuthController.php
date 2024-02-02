@@ -70,9 +70,19 @@ class AuthController
      */
     public function getLogin()
     {
+        $csrfToken = bin2hex(random_bytes(32));
+        $_SESSION['csrf_token'] = $csrfToken;
+
         if(isset($_SESSION['user'])) {
             header("location: /");
             exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+                require_once(__DIR__ . '/../../templates/error_page.php');
+                exit;
+            }
         }
 
         $email = "";
@@ -134,6 +144,9 @@ class AuthController
      */
     public function getRegister($data = null)
     {
+        $csrfToken = bin2hex(random_bytes(32));
+        $_SESSION['csrf_token'] = $csrfToken;
+
         require_once(__DIR__ . '/../../templates/register_page.php');
     }
 
@@ -146,6 +159,11 @@ class AuthController
     public function postRegister($data)
     {
         $errorMessage = null;
+
+        if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+            require_once(__DIR__ . '/../../templates/error_page.php');
+            exit;
+        }
 
         if($data['password'] != $data['confirm_password']) {
             AlertService::add('danger', "Les mots de passe sont différents");
