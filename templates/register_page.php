@@ -6,6 +6,7 @@
 
 	<h3>S'inscrire</h3>
 	<form action="/inscription" method="POST">
+		<input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
 		<div class="mb-3">
 			<label for="surname" class="form-label">Pseudo</label>
 			<input required

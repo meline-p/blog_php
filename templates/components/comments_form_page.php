@@ -2,6 +2,7 @@
 <div class="comment">
 	<?php if(isset($_SESSION['user'])): ?>
 	<form action="/publication/<?= $post->id ?>/commenter" method="POST">
+		<input type="hidden" name="csrf_token" value="<?= $csrfToken ?>">
 		<div class="mb-3">
 			<label for="comment" class="form-label">Votre commentaire</label>
 			<textarea class="form-control" placeholder="Votre commentaire" id="comment" name="comment"></textarea>
