@@ -20,17 +20,21 @@ Install all components by running the following command:
 composer install
 ```
 
-### XAMPP
-
-Install XAMPP: https://www.apachefriends.org/download.html.
-Start Apache and MySQL using the XAMPP control panel.
-
 ### Database
 
-Access PhpMyAdmin admin via the XAMPP control panel.
-Import the provided SQL file from the /database/blog_php.sql directory into PhpMyAdmin.
+Import the provided SQL file from the /database/blog_php.sql directory.
 
-Change the environment variables DB_USERNAME and DB_PASSWORD according to your PhpMyAdmin configuration in the .env file.
+Change the environment variables DB_USERNAME, DB_PASSWORD and DB_UNIX_SOCKET according to your SQL configuration in the .env file.
+
+### MailDev
+
+MailDev installation : https://github.com/maildev/maildev
+
+Install MailDev with npm :
+
+```jsx
+npm install -g maildev
+```
 
 ---
 
@@ -57,12 +61,12 @@ Access the MailDev interface at http://localhost:1080/.
 ## Documentation
 
 To generate documentation, use phpDocumentor.
-You can download the latest PHAR file from https://phpdoc.org/phpDocumentor.phar.
-After downloading, execute this command:
+You can download the latest PHAR file from https://phpdoc.org/phpDocumentor.phar and put it at the root of the project.
+Execute this command:
 
 ```jsx
 php phpDocumentor.phar run -d ./src -t docs/
 ```
 
 Access the generated documentation in the docs/index.html directory. 
-Launch Go Live on Visual Studio Code and access the online documentation at this address: http://localhost:8080/docs/index.html
+Launch Go Live on Visual Studio Code and access the online documentation in the docs directory.

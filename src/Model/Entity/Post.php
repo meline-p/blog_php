@@ -38,7 +38,7 @@ class Post
         $this->updated_at = $row['updated_at'];
         $this->deleted_at = $row['deleted_at'];
 
-        $this->user_surname = $row['user_surname'];
+        $this->user_surname = $row['user_surname'] ?? '';
     }
 
     /**

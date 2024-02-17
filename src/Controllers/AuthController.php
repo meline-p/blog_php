@@ -3,6 +3,7 @@
 namespace App\controllers;
 
 use App\lib\AlertService;
+use App\lib\CsrfService;
 use App\Model\Repository\UserRepository;
 use App\Model\Repository\PostRepository;
 use App\Model\Repository\CommentRepository;
@@ -70,20 +71,14 @@ class AuthController
      */
     public function getLogin()
     {
-        $csrfToken = bin2hex(random_bytes(32));
-        $_SESSION['csrf_token'] = $csrfToken;
+        $csrfToken = CsrfService::getCsrfToken();
 
         if(isset($_SESSION['user'])) {
             header("location: /");
             exit;
         }
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-                require_once(__DIR__ . '/../../templates/error_page.php');
-                exit;
-            }
-        }
+        CsrfService::redirectIfInvalid();
 
         $email = "";
         $surname = "";
@@ -144,8 +139,7 @@ class AuthController
      */
     public function getRegister($data = null)
     {
-        $csrfToken = bin2hex(random_bytes(32));
-        $_SESSION['csrf_token'] = $csrfToken;
+        $csrfToken = CsrfService::getCsrfToken();
 
         require_once(__DIR__ . '/../../templates/register_page.php');
     }
@@ -160,10 +154,7 @@ class AuthController
     {
         $errorMessage = null;
 
-        if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-            require_once(__DIR__ . '/../../templates/error_page.php');
-            exit;
-        }
+        CsrfService::redirectIfInvalid();
 
         if($data['password'] != $data['confirm_password']) {
             AlertService::add('danger', "Les mots de passe sont différents");
@@ -209,7 +200,7 @@ class AuthController
 
         } catch (\Exception $e) {
             if (str_contains($e->getMessage(), "Duplicate entry")) {
-                $errorMessage = 'Erreur : ce surnom est déjà utilisé.';
+                $errorMessage = 'Erreur : ce pseudo est déjà utilisé.';
                 AlertService::add('danger', $errorMessage);
             } else {
                 $errorMessage = 'Une erreur est survenue lors de l\'inscription : ' . $e->getMessage();

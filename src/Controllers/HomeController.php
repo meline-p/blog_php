@@ -3,6 +3,7 @@
 namespace App\controllers;
 
 use App\lib\AlertService;
+use App\lib\CsrfService;
 use App\Model\Repository\UserRepository;
 use App\Model\Repository\PostRepository;
 
@@ -36,8 +37,7 @@ class HomeController
      */
     public function home()
     {
-        $csrfToken = bin2hex(random_bytes(32));
-        $_SESSION['csrf_token'] = $csrfToken;
+        $csrfToken = CsrfService::getCsrfToken();
 
         require_once(__DIR__ . '/../../templates/homepage.php');
     }
@@ -49,11 +49,7 @@ class HomeController
      */
     public function sendMessage()
     {
-
-        if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-            require_once(__DIR__ . '/../../templates/error_page.php');
-            exit;
-        }
+        CsrfService::redirectIfInvalid();
 
         if(
             (!isset($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))

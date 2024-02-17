@@ -3,6 +3,7 @@
 namespace App\controllers;
 
 use App\lib\AlertService;
+use App\lib\CsrfService;
 use App\Model\Repository\PostRepository;
 use App\Model\Repository\CommentRepository;
 use App\Model\Repository\UserRepository;
@@ -70,8 +71,7 @@ class PostsController
         $user = $this->userRepository->getUserById($post->user_id);
         $comments = $this->commentRepository->getValidComments($post->id);
 
-        $csrfToken = bin2hex(random_bytes(32));
-        $_SESSION['csrf_token'] = $csrfToken;
+        $csrfToken = CsrfService::getCsrfToken();
 
         if(!$post) {
             require_once(__DIR__ . '/../../templates/error_page.php');

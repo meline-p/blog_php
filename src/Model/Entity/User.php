@@ -41,7 +41,7 @@ class User
         $this->created_at = $row['created_at'];
         $this->deleted_at = $row['deleted_at'];
 
-        $this->role_name = $row['role_name'];
+        $this->role_name = $row['role_name'] ?? '';
     }
 
     /**

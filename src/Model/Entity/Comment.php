@@ -35,9 +35,9 @@ class Comment
         $this->created_at = $row['created_at'];
         $this->deleted_at = $row['deleted_at'];
 
-        $this->user_surname = $row['user_surname'];
-        $this->post_title = $row['post_title'];
-        $this->post_content = $row['post_content'];
+        $this->user_surname = $row['user_surname'] ?? '';
+        $this->post_title = $row['post_title'] ?? '';
+        $this->post_content = $row['post_content'] ?? '';
     }
 
     /**
