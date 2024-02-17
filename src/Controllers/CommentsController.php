@@ -3,6 +3,7 @@
 namespace App\controllers;
 
 use App\lib\AlertService;
+use App\lib\CsrfService;
 use App\Model\Repository\CommentRepository;
 use App\Model\Repository\UserRepository;
 use App\Model\Repository\PostRepository;
@@ -90,10 +91,7 @@ class CommentsController
             return;
         }
 
-        if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-            require_once(__DIR__ . '/../../templates/error_page.php');
-            exit;
-        }
+        CsrfService::redirectIfInvalid();
 
         $comment = new Comment();
 

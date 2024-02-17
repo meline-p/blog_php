@@ -326,7 +326,7 @@ class UserRepository
             }
 
             if($user->surname === $row['surname']) {
-                array_push($messages, 'le surname est déjà utilisé');
+                array_push($messages, 'le pseudo est déjà utilisé');
             }
 
             return ucfirst(join(' et ', $messages));
