@@ -332,4 +332,42 @@ class UserRepository
             return ucfirst(join(' et ', $messages));
         }, $result);
     }
+
+    /**
+     * Validates a password based on multiple criteria.
+     *
+     * @param string $password The password to be checked.
+     * @return array An array containing a boolean indicating whether the password is valid and
+     * an error message or an array of error messages in case of invalidity.
+     */
+    public function checkPassword($password)
+    {
+        $errors = [];
+
+        if(strlen($password) < 8) {
+            $errors[] = "Le mot de passe doit contenir au moins 8 caractères";
+        }
+
+        if (!preg_match('/[A-Z]/', $password)) {
+            $errors[] = "Le mot de passe doit contenir au moins une majuscule";
+        }
+
+        if (!preg_match('/[a-z]/', $password)) {
+            $errors[] = "Le mot de passe doit contenir au moins une minuscule";
+        }
+
+        if (!preg_match('/[0-9]/', $password)) {
+            $errors[] = "Le mot de passe doit contenir au moins un chiffre";
+        }
+
+        if (!preg_match('/[^a-zA-Z0-9]/', $password)) {
+            $errors[] = "Le mot de passe doit contenir au moins un caractère spécial";
+        }
+
+        if (!empty($errors)) {
+            return [false, $errors];
+        }
+
+        return [true, "Mot de passe valide"];
+    }
 }
