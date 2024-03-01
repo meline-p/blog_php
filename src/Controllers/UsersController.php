@@ -102,6 +102,16 @@ class UsersController
             exit;
         }
 
+        $validationResult = $this->userRepository->checkPassword($data['password']);
+
+        if (!$validationResult[0]) {
+            foreach ($validationResult[1] as $message) {
+                AlertService::add('danger', $message);
+            }
+            $this->getAddUser($data);
+            exit;
+        }
+
         $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
 
         $last_name = mb_strtolower($data["last_name"], 'UTF-8');
